@@ -8,10 +8,8 @@
     {
         public WorkflowProcessCompleted() { }
 
-        public WorkflowProcessCompleted(Workflow workflow)
-            : base(workflow, null)
-        {
-
-        }
+        public WorkflowProcessCompleted(Workflow workflow, Stage stage)
+            : base(workflow, stage)
+        { }
     }
 }

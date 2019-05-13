@@ -1,14 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
-using RaraAvis.Sprocket.Tests.Entities;
-using RaraAvis.Sprocket.Tests.Entities.Commands.PersonCommands;
+﻿using RaraAvis.Sprocket.Parts.Elements;
+using RaraAvis.Sprocket.Tests.Fakes.Entities;
+using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.System;
 using RaraAvis.Sprocket.WorkflowEngine;
-using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
+using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    [TestClass]
     public class LogicalOperators
     {
         private static RunCommand rc = null;
@@ -20,8 +18,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         private static Person p = null;
         private static FalseCommand fc = null;
 
-        [ClassInitialize]
-        public static void Init(TestContext tc)
+
+        public LogicalOperators()
         {
             rc = new RunCommand();
             wc = new WalkCommand();
@@ -29,168 +27,163 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             re = new RuleElement<Person>();
             st = new SerializeTest();
             fc = new FalseCommand();
-        }
 
-        [TestInitialize]
-        public void InitTest()
-        {
             p = new Person();
             st.BeginSerialize();
         }
 
-        [TestCleanup]
-        public void EndTest()
+        public void Dispose()
         {
             st.EndSerialize();
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void AndAlsoAIsTrue()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void AndAlsoATrue()
         {
             op = (rc + wc) & (rc + wc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 6 && res.resultMatch, "'And' operator (&) is not true.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(p.DistanceTravelled == 6 && res, "'And' operator (&) is not true.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void AndAlsoIsFalse()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void AndAlsoFalse()
         {
             op = (rc + wc) & !(rc + wc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 6 && !res.resultMatch, "'And' operator (&) is not false.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.True(p.DistanceTravelled == 6 && !res, "'And' operator (&) is not false.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void AndIsTrue()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void AndTrue()
         {
             op = (rc + wc) && (rc + wc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 6 && res.resultMatch, "'And' operator (&&) is false.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(p.DistanceTravelled == 6 && res, "'And' operator (&&) is false.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void AndIsFalse()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void AndFalse()
         {
             op = !(rc + wc) && (rc + wc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 3 && !res.resultMatch, "'And' operator (&&) is true.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.True(p.DistanceTravelled == 3 && !res, "'And' operator (&&) is true.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void OrElseIsTrue()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void OrElseTrue()
         {
             op = (rc + wc) | (rc + wc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 6 && res.resultMatch, "'Or' operator (|) is true.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(p.DistanceTravelled == 6 && res, "'Or' operator (|) is true.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void OrIsTrue()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void OrTrue()
         {
             op = (rc + wc) || (rc + wc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 3 && res.resultMatch, "'Or' operator (||) is true.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(p.DistanceTravelled == 3 && res, "'Or' operator (||) is true.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void OrIsFalse()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void OrFalse()
         {
             op = !(rc + wc) || !(rc + wc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 6 && !res.resultMatch, "'Or' operator (||) is false.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.True(p.DistanceTravelled == 6 && !res, "'Or' operator (||) is false.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void OperatorIfThenElseTrue()
+        {
+            op = (dc < 10) % (rc);
+
+            var res = st.Match(op, p);
+
+            Assert.True(p.DistanceTravelled == 2, "Incorrect distance travelled.");
+            Assert.True(res, "'IfThenElse' operator %(x)+(y-z) is false.");
+        }
+
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
         public void IfThenElseTrue()
         {
             op = (true) % ((rc + wc) / fc);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 3, "Incorrect distance travelled.");
-            Assert.IsTrue(res.resultMatch, "'IfThenElse' operator %(x)+(y-z) is false.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(p.DistanceTravelled == 3, "Incorrect distance travelled.");
+            Assert.True(res, "'IfThenElse' operator %(x)+(y-z) is false.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
         public void IfThenElseFalse()
         {
             op = (false) % ((rc + wc) / (rc + wc));
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 3, "Incorrect distance travelled.");
-            Assert.IsFalse(res.resultMatch, "'IfThenElse' operator %(x)+(y-z) is true.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.True(p.DistanceTravelled == 3, "Incorrect distance travelled.");
+            Assert.False(res, "'IfThenElse' operator %(x)+(y-z) is true.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
         public void IfThenTrue()
         {
             op = (true) % ((rc + wc));
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 3, "Incorrect distance travelled.");
-            Assert.IsTrue(res.resultMatch, "'IfThen' operator %(x)+(y) is false.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(p.DistanceTravelled == 3, "Incorrect distance travelled.");
+            Assert.True(res, "'IfThen' operator %(x)+(y) is false.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
         public void IfThenFalse()
         {
             op = (false) % ((rc + wc));
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 0, "Incorrect distance travelled.");
-            Assert.IsTrue(!res.resultMatch, "'IfThen' operator (x)%(y) is true.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.True(p.DistanceTravelled == 0, "Incorrect distance travelled.");
+            Assert.True(!res, "'IfThen' operator (x)%(y) is true.");
         }
 
-        [TestCategory("LogicalOperators")]
-        [TestMethod]
-        public void LoopIsTrue()
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void LoopTrue()
         {
             op = (dc < 10) * ((rc + wc));
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(p.DistanceTravelled == 12, "Incorrect distance travelled.");
-            Assert.IsTrue(res.resultMatch, "'Loop' operator %(x)*(y) is false.");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(p.DistanceTravelled == 12, "Incorrect distance travelled.");
+            Assert.True(res, "'Loop' operator %(x)*(y) is false.");
         }
     }
 }

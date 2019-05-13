@@ -1,6 +1,7 @@
 ﻿using RaraAvis.Sprocket.Parts.Interfaces;
 using RaraAvis.Sprocket.Services;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Composition.Convention;
 using System.Composition.Hosting;
@@ -17,8 +18,13 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         where T : IElement
     {
         #region ·   Fields  ·
-        private static Dictionary<string, IRuleEngineService<T>> ruleEngineCache = new Dictionary<string, IRuleEngineService<T>>();
+        private ConcurrentDictionary<string, IRuleEngineService<T>> ruleEngineCache = null;
         #endregion
+
+        public RuleEngineActivatorService()
+        {
+            ruleEngineCache = new ConcurrentDictionary<string, IRuleEngineService<T>>();
+        }
 
         #region ·   Methods ·
         /// <summary>
@@ -37,26 +43,33 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         public IRuleEngineService<T> GetRuleEngine(string assemblyRuleEngine)
         {
             IRuleEngineService<T> engine = null;
-            try
+
+            lock (typeof(RuleEngineActivatorService<T>))
             {
-                engine = ruleEngineCache[assemblyRuleEngine];
-            }
-            catch (KeyNotFoundException)
-            {
-                var conventions = new ConventionBuilder();
-                conventions.ForTypesDerivedFrom<IRuleEngineService<T>>().Export<IRuleEngineService<T>>().Shared();
-
-                var configuration = new ContainerConfiguration();
-                var assemblyName = AssemblyLoadContext.GetAssemblyName(assemblyRuleEngine);
-                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
-
-                configuration = configuration.WithAssembly(assembly, conventions);
-
-                using (var container = configuration.CreateContainer())
+                if (!ruleEngineCache.TryGetValue(assemblyRuleEngine, out engine))
                 {
-                    engine = container.GetExport<IRuleEngineService<T>>();
+                    var conventions = new ConventionBuilder();
+                    conventions.ForTypesDerivedFrom<IRuleEngineService<T>>().Export<IRuleEngineService<T>>().Shared();
+
+                    var configuration = new ContainerConfiguration();
+                    var assemblyName = AssemblyLoadContext.GetAssemblyName(assemblyRuleEngine);
+                    var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
+
+                    configuration = configuration.WithAssembly(assembly, conventions);
+
+                    using (var container = configuration.CreateContainer())
+                    {
+                        engine = container.GetExport<IRuleEngineService<T>>();
+                    }
+                    try
+                    {
+                        ruleEngineCache.TryAdd(assemblyRuleEngine, engine);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception($"Can not add assembly {assemblyRuleEngine}", e);
+                    }
                 }
-                ruleEngineCache.Add(assemblyRuleEngine, engine);
             }
             return engine;
         }

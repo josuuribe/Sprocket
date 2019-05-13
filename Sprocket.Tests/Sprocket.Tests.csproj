@@ -1,50 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;net47</TargetFrameworks>
-    <AssemblyName>RaraAvis.Sprocket.Tests</AssemblyName>    
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <AssemblyName>RaraAvis.Sprocket.Tests</AssemblyName>
+
     <RootNamespace>RaraAvis.Sprocket.Tests</RootNamespace>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.0|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
   <ItemGroup>
-    <Compile Remove="Entities\Commands\DynamicDataCommands\**" />
-    <Compile Remove="Entities\Commands\WorkflowCommands\**" />
-    <Compile Remove="ExtendedRuleEngine\**" />
-    <EmbeddedResource Remove="Entities\Commands\DynamicDataCommands\**" />
-    <EmbeddedResource Remove="Entities\Commands\WorkflowCommands\**" />
-    <EmbeddedResource Remove="ExtendedRuleEngine\**" />
-    <None Remove="Entities\Commands\DynamicDataCommands\**" />
-    <None Remove="Entities\Commands\WorkflowCommands\**" />
-    <None Remove="ExtendedRuleEngine\**" />
+    <Compile Remove="Fakes\System\SprocketSystem.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Entities\Commands\PersonCommands\DistanceFunction.cs" />
-    <Compile Remove="Entities\FakeCreateAudit.cs" />
-    <Compile Remove="Entities\FakeDynamicData.cs" />
-    <Compile Remove="Entities\Tribe.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="1.1.11" />
-    <PackageReference Include="MSTest.TestFramework" Version="1.1.11" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Sprocket\Sprocket.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
   </ItemGroup>
 
 </Project>

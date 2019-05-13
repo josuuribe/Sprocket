@@ -1,15 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RaraAvis.Sprocket.Parts.Elements;
+﻿using RaraAvis.Sprocket.Parts.Elements;
 using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
-using RaraAvis.Sprocket.Tests.Entities;
-using RaraAvis.Sprocket.Tests.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.Entities;
+using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.System;
 using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
 using System;
+using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    [TestClass]
+    
     public class ExpressionOperators
     {
         private static Person p = null;
@@ -18,134 +19,120 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         private static Operator<Person> op = null;
         private static SerializeTest st = null;
 
-        [ClassInitialize]
-        public static void Init(TestContext tc)
+        
+        public ExpressionOperators()
         {
             dc = new DistanceCommand();
             st = new SerializeTest();
-        }
-
-        [TestInitialize]
-        public void InitTest()
-        {
             p = new Person();
             st.BeginSerialize();
         }
 
-        [TestCleanup]
-        public void EndTest()
+        public void Dispose()
         {
             st.EndSerialize();
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericGreaterThanIsTrue()
+        [Trait("RuleEngine","ArithmeticOperators")]
+        [Fact]
+        public void NumericGreaterThanTrue()
         {
             p.DistanceTravelled = 10;
 
             op = (dc > 0);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(res.resultMatch, "'>' is false");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(res, "'>' is false");
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericGreaterThanIsFalse()
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericGreaterThanFalse()
         {
             p.DistanceTravelled = 10;
 
             op = (dc > 10);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsFalse(res.resultMatch, "'>' is true");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.False(res, "'>' is true");
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericGreaterThanOrEqualsIsTrue()
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericGreaterThanOrEqualsTrue()
         {
             p.DistanceTravelled = 10;
 
             op = (dc >= 10);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(res.resultMatch, "'>=' is false");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(res, "'>=' is false");
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericGreaterThanOrEqualsIsFalse()
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericGreaterThanOrEqualsFalse()
         {
             p.DistanceTravelled = 10;
 
             op = (dc > 11);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsFalse(res.resultMatch, "'>=' is true");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.False(res, "'>=' is true");
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericLessThanIsTrue()
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericLessThanTrue()
         {
             p.DistanceTravelled = 10;
 
             op = (dc < 20);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(res.resultMatch, "'<' is false");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(res, "'<' is false");
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericLessThanIsFalse()
+        [Trait("RuleEngine","ArithmeticOperators")]
+        [Fact]
+        public void NumericLessThanFalse()
         {
             p.DistanceTravelled = 10;
 
             op = (dc < 10);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsFalse(res.resultMatch, "'>' is true");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.False(res, "'>' is true");
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericLessThanOrEqualsIsTrue()
+        [Trait("RuleEngine","ArithmeticOperators")]
+        [Fact]
+        public void NumericLessThanOrEqualsTrue()
         {
             p.DistanceTravelled = 10;
 
             op = (dc <= 10);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(res.resultMatch, "'<=' is false");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(res, "'<=' is false");
         }
 
-        [TestCategory("ArithmeticOperators")]
-        [TestMethod]
-        public void NumericLessThanOrEqualsIsFalse()
+        [Trait("RuleEngine","ArithmeticOperators")]
+        [Fact]
+        public void NumericLessThanOrEqualsFalse()
         {
             p.DistanceTravelled = 10;
 
             op = (dc <= 9);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsFalse(res.resultMatch, "'<=' is true");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.False(res, "'<=' is true");
         }
 
-        [TestCategory("Wrapps")]
-        [TestMethod]
-        public void WrapBoolCommandIsTrue()
+        [Trait("RulEngine","Wrapps")]
+        [Fact]
+        public void WrapBoolCommandTrue()
         {
             Person son = new Person();
             p.Family.Add(son);
@@ -154,15 +141,14 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             isFamily.Person = son;
 
             op = (isFamily);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(res.resultMatch, "'WrapBool' is false");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(res, "'WrapBool' is false");
         }
 
-        [TestCategory("Wrapps")]
-        [TestMethod]
-        public void WrapBoolCommandIsFalse()
+        [Trait("RuleEngine", "Wrapps")]
+        [Fact]
+        public void WrapBoolCommandFalse()
         {
             Person son = new Person();
             son.Id = Guid.NewGuid();
@@ -172,41 +158,38 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             isFamily.Person = p;
 
             op = (isFamily);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsFalse(res.resultMatch, "'WrapBool' is false");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.False(res, "'WrapBool' is false");
         }
 
-        [TestCategory("Casts")]
-        [TestMethod]
-        public void CastBoolCommandAsBooleanOperateIsTrue()
+        [Trait("RuleEngine", "Casts")]
+        [Fact]
+        public void CastBoolCommandAsBooleanOperateTrue()
         {
             EatCommand ec = new EatCommand();
 
             op = (ec) & (ec);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(res.resultMatch, "'Cast bool command' is false");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(res, "'Cast bool command' is false");
         }
 
-        [TestCategory("Casts")]
-        [TestMethod]
-        public void CastBoolCommandAsBooleanOperateIsFalse()
+        [Trait("RuleEngine", "Casts")]
+        [Fact]
+        public void CastBoolCommandAsBooleanOperateFalse()
         {
             EatCommand ec = new EatCommand();
 
             var op = (ec) & !(ec);
 
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsFalse(res.resultMatch, "'Cast bool command' is true");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.FAILED);
+            Assert.False(res, "'Cast bool command' is true");
         }
 
-        [TestCategory("Functions")]
-        [TestMethod]
+        [Trait("RuleEngine", "Functions")]
+        [Fact]
         public void NestedCallFunction()
         {
             Person son1 = new Person();
@@ -219,10 +202,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             GetNameFunction gn = new GetNameFunction();
 
             op = (gn - (sc - 1) == "Get:" + son2.Name);
-            var res = st.ExecuteWorkflow(op, p);
+            var res = st.Match(op, p);
 
-            Assert.IsTrue(res.resultMatch, "'Nested Call' is true");
-            Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
+            Assert.True(res, "'Nested Call' is true");
         }
     }
 }

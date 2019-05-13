@@ -22,7 +22,7 @@ namespace RaraAvis.Sprocket.Services
         /// <param name="workflow">Workflow to execute.</param>
         /// <param name="stages">Woorkflow stages.</param>
         /// <param name="stags">Element to process.</param>
-        void Init(Workflow worfklow, IList<Stage> stages, T element);
+        RuleElement<T> Init(Workflow worfklow, IList<Stage> stages, T element);
         /// <summary>
         /// Continue a workflow pending.
         /// </summary>
@@ -30,7 +30,7 @@ namespace RaraAvis.Sprocket.Services
         /// <param name="stages">Stages belonging this workflow.</param>
         /// <param name="stage">Init stage.</param>
         /// <param name="element">Element to process.</param>
-        void Continue(Workflow workflow, IList<Stage> stages, Stage stage, T element);
+        RuleElement<T> Continue(Workflow workflow, IList<Stage> stages, Stage stage, T element);
         /// <summary>
         /// Serializes one rule.
         /// </summary>
@@ -41,7 +41,7 @@ namespace RaraAvis.Sprocket.Services
         /// <summary>
         /// Stores individual result by workflow.
         /// </summary>
-        IList<RuleElement<T>> WorkflowResults { get; }
+        //IList<RuleElement<T>> WorkflowResults { get; }
         ExecutionEngineResult ExecutionEngineResult { get; }
     }
 }

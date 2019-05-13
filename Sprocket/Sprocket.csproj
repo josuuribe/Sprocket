@@ -1,77 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.0;net47</TargetFrameworks>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>RaraAvis.Sprocket</RootNamespace>
     <AssemblyName>RaraAvis.Sprocket</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp2.0|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp2.0|AnyCPU'">
-    <LangVersion>latest</LangVersion>
-  </PropertyGroup>
-
   <ItemGroup>
-    <Compile Remove="Audit\**" />
-    <Compile Remove="Parts\Elements\Commands\Constants\**" />
-    <Compile Remove="Parts\Elements\Commands\Variables\**" />
-    <Compile Remove="Parts\Elements\Functions\Interfaces\**" />
-    <Compile Remove="Parts\Elements\Functions\Interfaces\**" />
-    <Compile Remove="Parts\Elements\Wrappers\**" />
-    <Compile Remove="Parts\Elements\Operators\ExpressionOperators\ExtendedOperators\**" />
-    <Compile Remove="WorkflowEngine\Workflows\Interfaces\**" />
-    <EmbeddedResource Remove="Audit\**" />
-    <EmbeddedResource Remove="Parts\Elements\Commands\Constants\**" />
-    <EmbeddedResource Remove="Parts\Elements\Commands\Variables\**" />
-    <EmbeddedResource Remove="Parts\Elements\Functions\Interfaces\**" />
-    <EmbeddedResource Remove="Parts\Elements\Functions\Interfaces\**" />
-    <EmbeddedResource Remove="Parts\Elements\Wrappers\**" />
-    <EmbeddedResource Remove="Parts\Elements\Operators\ExpressionOperators\ExtendedOperators\**" />
-    <EmbeddedResource Remove="WorkflowEngine\Workflows\Interfaces\**" />
-    <None Remove="Audit\**" />
-    <None Remove="Parts\Elements\Commands\Constants\**" />
-    <None Remove="Parts\Elements\Commands\Variables\**" />
-    <None Remove="Parts\Elements\Functions\Interfaces\**" />
-    <None Remove="Parts\Elements\Functions\Interfaces\**" />
-    <None Remove="Parts\Elements\Wrappers\**" />
-    <None Remove="Parts\Elements\Operators\ExpressionOperators\ExtendedOperators\**" />
-    <None Remove="WorkflowEngine\Workflows\Interfaces\**" />
+    <Compile Remove="WorkflowEngine\Workflows\Events\WorkflowProcessResponses\**" />
+    <EmbeddedResource Remove="WorkflowEngine\Workflows\Events\WorkflowProcessResponses\**" />
+    <None Remove="WorkflowEngine\Workflows\Events\WorkflowProcessResponses\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="Parts\Elements\Functions\Kernel\IOperate.cs" />
-    <Compile Remove="Parts\Elements\Functions\Function.cs" />
-    <Compile Remove="Parts\Elements\Functions\Kernel\GetAction.cs" />
-    <Compile Remove="Parts\Elements\Functions\Kernel\GetNextStage.cs" />
-    <Compile Remove="Parts\Elements\Functions\Method.cs" />
-    <Compile Remove="Parts\Elements\Functions\NestedMethod.cs" />
-    <Compile Remove="Parts\Elements\Functions\OutputFunction.cs" />
-    <Compile Remove="Parts\Elements\Commands\NumericOperate.cs" />
-    <Compile Remove="Parts\Elements\Functions\SetAction.cs" />
-    <Compile Remove="Parts\Elements\Functions\SetNextStage.cs" />
-    <Compile Remove="Parts\Elements\Functions\SetResultString.cs" />
-    <Compile Remove="Parts\Elements\Operators\ExpressionOperators\ExtendedOperator.cs" />
-    <Compile Remove="Parts\Elements\Operators\ExpressionOperators\UnaryOperators\Ignore.cs" />
-    <Compile Remove="Program.cs" />
-    <Compile Remove="WorkflowEngine\Workflows\WorkflowCommand.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="Parts\Elements\Wrappers\BooleanCommandWrapper.cs" />
-    <Compile Include="Parts\Elements\Wrappers\CommandWrapper.cs" />
-    <Compile Include="Parts\Elements\Wrappers\FunctionWrapper.cs" />
-    <Compile Include="Parts\Elements\Wrappers\LogicalWrapper.cs" />
-    <Compile Include="Parts\Elements\Wrappers\BooleanFunctionWrapper.cs" />
-    <Compile Include="Parts\Elements\Wrappers\ValueWrapper.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.0" />
-    <PackageReference Include="System.Composition" Version="1.1.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="System.Composition" Version="1.2.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 

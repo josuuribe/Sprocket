@@ -33,13 +33,14 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         /// <summary>
         /// Stores individual result by workflow.
         /// </summary>
-        public IList<RuleElement<T>> WorkflowResults { get; private set; }
+        //public IList<RuleElement<T>> WorkflowResults { get; private set; }
+        public Stage LastExecutedStage { get; private set; }
         #endregion
 
         #region ·   Constructor ·
         public EngineManager()
         {
-            this.WorkflowResults = new List<RuleElement<T>>();
+            //this.WorkflowResults = new List<RuleElement<T>>();
             this.serializationEngine = new SerializationManager<T>();
         }
         #endregion
@@ -65,9 +66,9 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         /// </summary>
         /// <param name="workflows">Workflows to execute.</param>
         /// <param name="element">Element  to process.</param>
-        public void Init(Workflow workflow, IList<Stage> stages, T element)
+        public RuleElement<T> Init(Workflow workflow, IList<Stage> stages, T element)
         {
-            Continue(workflow, stages, stages.First(), element);
+            return Continue(workflow, stages, stages.First(), element);
         }
         /// <summary>
         /// Continue a workflow pending.
@@ -76,30 +77,34 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         /// <param name="stages">Stages belonging this workflow.</param>
         /// <param name="stage">Init stage.</param>
         /// <param name="element">Element to process.</param>
-        public void Continue(Workflow workflow, IList<Stage> stages, Stage stage, T element)
+        public RuleElement<T> Continue(Workflow workflow, IList<Stage> stages, Stage stage, T element)
         {
-            this.WorkflowResults.Clear();
-            this.ExecutionEngineResult = Workflows.Enums.ExecutionEngineResult.NONE;
+            //this.WorkflowResults.Clear();
+            this.ExecutionEngineResult = ExecutionEngineResult.NONE;
 
-            switch (Process(stages, stage, element).StageResult)
-            {
+            var re = Process(stages, stage, element);
+
+            switch (re.StageStatus)
+            {//Workflow end result
                 case StageResult.POSITIVE:
-                    ExecutionEngineResult = ExecutionEngineResult.COMPLETED;
-                    workflow.Completed();
+                    ExecutionEngineResult = ExecutionEngineResult.OK;
+                    //workflow.Completed(stage);
                     break;
                 case StageResult.NEGATIVE:
-                    ExecutionEngineResult = ExecutionEngineResult.FAILED;
-                    workflow.Failed(stage);
+                    ExecutionEngineResult = ExecutionEngineResult.KO;
+                    //workflow.Incompleted(stage);
                     break;
                 case StageResult.ERROR:
                     ExecutionEngineResult = ExecutionEngineResult.ERROR;
-                    workflow.Failed(stage);
+                    //workflow.Failed(stage);
                     break;
-                case StageResult.EXITED:
+                case StageResult.EXIT:
                     ExecutionEngineResult = ExecutionEngineResult.EXIT;
-                    workflow.Exited(stage);
+                    //workflow.Exited(stage);
                     break;
             }
+            LastExecutedStage = stage;
+            return re;
         }
         /// <summary>
         /// Process one workflow element given.
@@ -122,8 +127,13 @@ namespace RaraAvis.Sprocket.WorkflowEngine
 
                         if (logicalOperator.Match(ruleElement))
                         {
-                            switch (ruleElement.StageStatus)
+                            switch (ruleElement.StageAction)
                             {
+                                case StageStatus.CONTINUE:
+                                    {
+                                        ruleElement.StageStatus = StageResult.POSITIVE;
+                                    }
+                                    break;
                                 case StageStatus.JMP:
                                     {
                                         stagesEnumerator.Reset();
@@ -131,22 +141,22 @@ namespace RaraAvis.Sprocket.WorkflowEngine
                                     }
                                 case StageStatus.BREAK:
                                     {
-                                        ruleElement.StageResult = StageResult.EXITED;
-                                        WorkflowResults.Add(ruleElement);
+                                        ruleElement.StageStatus = StageResult.EXIT;
+                                        //WorkflowResults.Add(ruleElement);
                                         return ruleElement;
                                     }
                                 default:
                                     {
-                                        ruleElement.StageResult = StageResult.POSITIVE;
-                                        WorkflowResults.Add(ruleElement);
+                                        ruleElement.StageStatus = StageResult.NONE;
+                                        //WorkflowResults.Add(ruleElement);
                                     }
                                     break;
                             }
                         }
                         else
                         {
-                            ruleElement.StageResult = StageResult.NEGATIVE;
-                            WorkflowResults.Add(ruleElement);
+                            ruleElement.StageStatus = StageResult.NEGATIVE;
+                            //WorkflowResults.Add(ruleElement);
                             return ruleElement;
                         }
                     }
@@ -154,7 +164,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
             }
             catch (Exception)
             {
-                ruleElement.StageResult = StageResult.ERROR;
+                ruleElement.StageStatus = StageResult.ERROR;
             }
             return ruleElement;
         }

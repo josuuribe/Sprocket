@@ -1,12 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Tests.Entities;
-using RaraAvis.Sprocket.Tests.Entities.Commands.PersonCommands;
+﻿using RaraAvis.Sprocket.Parts.Elements;
+using RaraAvis.Sprocket.Tests.Fakes.Entities;
+using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.System;
 using RaraAvis.Sprocket.WorkflowEngine;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    [TestClass]
     public class Functions
     {
         private static Person p = null;
@@ -15,38 +14,18 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         private static Operator<Person> op = null;
         private static SerializeTest st = null;
 
-        [ClassInitialize]
-        public static void Init(TestContext tc)
+        
+        public Functions()
         {
             drf = new DistanceRemainingFunction();
             st = new SerializeTest();
-        }
-
-        [TestInitialize]
-        public void InitTest()
-        {
             p = new Person();
             st.BeginSerialize();
         }
 
-        [TestCleanup]
-        public void EndTest()
+        public void Dispose()
         {
             st.EndSerialize();
-        }
-
-
-        [TestCategory("Functions")]
-        [TestMethod]
-        public void GreatherThanTrue()
-        {
-            //op = a > 10;
-
-            //op = (+(drf));
-            //var res = st.ExecuteWorkflow(op, p);
-
-            //Assert.IsTrue(res.resultMatch, "'>=' is false");
-            //Assert.AreEqual(res.executionEngineResult, ExecutionEngineResult.COMPLETED);
         }
     }
 }

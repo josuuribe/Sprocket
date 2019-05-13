@@ -13,16 +13,17 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Workflows
         /// <summary>
         /// Events storing information about workflow status.
         /// </summary>
-        public List<WorkflowEvent> WorkflowEvents { get; set; }
+        public WorkflowProcessResponse WorkflowEvent { get; set; }
         #endregion
 
         #region ·   Constructors    ·
         /// <summary>
-        /// Base constructor, creates a new Id.
+        /// Base constructor.
         /// </summary>
         public Workflow()
         {
-            this.WorkflowEvents = new List<WorkflowEvent>();
+            this.Id = Guid.NewGuid();
+            this.WorkflowEvent = new WorkflowProcessResponse(this, null, WorkflowStatus.None);
         }
         #endregion
 
@@ -30,19 +31,19 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Workflows
         /// <summary>
         /// Internal workflow id.
         /// </summary>
-        public long Id { get; set; }
+        public Guid Id { get; }
         /// <summary>
         /// Name for this workflow.
         /// </summary>
-        public string Name { get; set; }
+        public string Code { get; set; }
         /// <summary>
         /// Workflow type.
         /// </summary>
-        public WorkflowType Type { get; set; }
+        //public WorkflowType Type { get; set; }
         /// <summary>
         /// Workflow that is in the upper hierarchy.
         /// </summary>
-        public Guid? ParentWorkflow { get; set; }
+        //public Guid? ParentWorkflow { get; set; }
         #endregion
 
         #region ·   Methods ·
@@ -50,35 +51,41 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Workflows
         /// Adds event indicating that this workflow has failed.
         /// </summary>
         /// <param name="stageId"></param>
-        public void Failed(Stage stage)
-        {
-
-            this.WorkflowEvents.Add(new WorkflowProcessFailed(this, stage));
-        }
+        //public void Failed(Stage stage)
+        //{
+        //    this.WorkflowEvent = new WorkflowProcessResponse(this, stage, WorkflowStatus.Error);
+        //}
         /// <summary>
         /// Adds event indicating that this workflow has finished correctly aplying a rule.
         /// </summary>
         /// <param name="stageId">Stage processed.</param>
-        public void Positive(Stage stage)
-        {
-            this.WorkflowEvents.Add(new WorkflowProcessPositive(this, stage));
-        }
+        //public void Positive(Stage stage)
+        //{
+        //    this.WorkflowEvent = new WorkflowProcessPositive(this, stage);
+        //}
         /// <summary>
-        /// Adds event indicating that this workflow has executed correctly.
+        /// Adds event indicating that this workflow has finished correctly with negative result.
         /// </summary>
-        public void Completed()
-        {
-            this.WorkflowEvents.Add(new WorkflowProcessCompleted(this));
-        }
-         /// <summary>
-        /// Adds event indicating that this workflow has exited before stage processing.
-        /// </summary>
-        /// <param name="stageId"></param>
-        public void Exited(Stage stage)
-        {
-
-            this.WorkflowEvents.Add(new WorkflowProcessExited(this, stage));
-        }
+        /// <param name="stage"></param>
+        //public void Incompleted(Stage stage)
+        //{
+        //    this.WorkflowEvent = new WorkflowProcessResponse(this, stage, WorkflowStatus.Incompleted);
+        //}
+        ///// <summary>
+        ///// Adds event indicating that this workflow has executed correctly.
+        ///// </summary>
+        //public void Completed(Stage stage)
+        //{
+        //    this.WorkflowEvent = new WorkflowProcessResponse(this, stage, WorkflowStatus.Completed);
+        //}
+        ///// <summary>
+        ///// Adds event indicating that this workflow has exited before stage processing.
+        ///// </summary>
+        ///// <param name="stageId"></param>
+        //public void Exited(Stage stage)
+        //{
+        //    this.WorkflowEvent = new WorkflowProcessResponse(this, stage, WorkflowStatus.Exited);
+        //}
         #endregion
     }
 }

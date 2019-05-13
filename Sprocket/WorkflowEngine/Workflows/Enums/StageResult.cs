@@ -8,7 +8,7 @@
         NONE,
         POSITIVE,
         NEGATIVE,
-        EXITED,
+        EXIT,
         ERROR
     }
 }

@@ -68,7 +68,7 @@ namespace RaraAvis.Sprocket.Parts.Elements
         }
 
 
-        public static BooleanCommand<T> operator +(Command<T, U> command1, Command<T, U> command2)
+        public static Batch<T> operator +(Command<T, U> command1, Command<T, U> command2)
         {
             Batch<T> batch = new Batch<T>();
             batch.Add(command1);
@@ -76,13 +76,13 @@ namespace RaraAvis.Sprocket.Parts.Elements
             return batch;
         }
 
-        public static BooleanCommand<T> operator +(Batch<T> batch, Command<T, U> command)
+        public static Batch<T> operator +(Batch<T> batch, Command<T, U> command)
         {
             batch.Add(command);
             return batch;
         }
 
-        public static BooleanCommand<T> operator +(Command<T, U> command, Batch<T> batch)
+        public static Batch<T> operator +(Command<T, U> command, Batch<T> batch)
         {
             batch.Add(command);
             return batch;
