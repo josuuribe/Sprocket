@@ -1,6 +1,6 @@
 # Simple example
 
-We create first the entity we want to work with like, we'll need to implement ```IElement```.
+This section will provide a simple example about the main idea, other chapters explain more features in detail like serialize rules. 
 
 ## Creating entity
 
