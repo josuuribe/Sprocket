@@ -1,9 +1,9 @@
 # Simple example
 
-This section will provide a simple example about the main idea, other chapters explain more features in detail like serialize rules. 
+This section will provide a simple example about the main idea, wiki explain more features in detail like serialize rules. 
 
 ## Creating entity
-
+First you need an entity, a class where rules will act on.
 ```C#
 public class Person : IElement
 {
@@ -22,6 +22,11 @@ public class Person : IElement
     public void Run()
     {
         this.DistanceTravelled+=2;
+    }
+    
+    public void Walk()
+    {
+        this.DistanceTravelled++;
     }
 }
 ```
@@ -48,10 +53,10 @@ public class WalkCommand : BooleanCommand<Person>
 }
 ```
 
-This command will call method ``` Run() ``` on ```Person``` class, the class ```BooleanCommand``` inherits from ``` Command<Entity, Value> ``` the first type is the entity this command will act in and the second is the return parameter, boolean in this case.
+This command will call method ``` Run() ``` on ```Person``` class, the class ```BooleanCommand``` is a command class that returns a boolean and execute some code, in this case calls ```Run()``` and ```Walk()```.
 
 ## Creating rule
-Now we create the rule, we are going to use the commands for walk and run, so we create the commands and we call Match using the expression and the person object to execute with, ```Match(x,y)``` returns true if it matches or false if it does not match or there has been some error, in this case the rule only executes methods so ```res``` only indicates the success about the process.
+Now we create the rule, we are going to use the commands for ```Run()``` and ```Walk()```, so we use the commands and we invoke ```Match()``` using the expression and the person object to execute with, ```Match``` returns true if it matches or false if it does not match or there has been some error, in this case the rule only executes methods so ```res``` only indicates the success about the process.
 ```C#
 public void RunAndWalk()
 {
@@ -59,7 +64,7 @@ public void RunAndWalk()
     WalkCommand wc = new WalkCommand();
     Person p = new Person();
     
-    Operator<Person> op = (rc + wc);
+    var op = (rc + wc);
 
     var res = st.Match(op, p);
 
