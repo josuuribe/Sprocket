@@ -13,9 +13,9 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators
     /// <summary>
     /// Processes functions with in and out parameters.
     /// </summary>
-    /// <typeparam name="T">The parameters to function.</typeparam>
-    /// <typeparam name="U">The result type.</typeparam>
-    /// <typeparam name="V">An IElement object.</typeparam>
+    /// <typeparam name="T">An IElement object.</typeparam>
+    /// <typeparam name="U">The function parameters.</typeparam>
+    /// <typeparam name="V">The result type.</typeparam>
     [DataContract]
     public abstract class Function<T, U, V> : IOperate<T, V>
         where T : IElement

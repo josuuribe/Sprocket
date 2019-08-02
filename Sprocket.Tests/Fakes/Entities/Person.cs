@@ -29,11 +29,6 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities
             IsHungry = true;
         }
 
-        public void Birthday()
-        {
-            this.Age++;
-        }
-
         public void Walk()
         {
             this.DistanceTravelled++;

@@ -6,11 +6,11 @@ using System.Text;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    public class GetNameCommand : Command<Person, string>
+public class GetNameCommand : Command<Person, string>
+{
+    public override string Value(RuleElement<Person> element)
     {
-        public override string Value(RuleElement<Person> element)
-        {
-            return element.Element.Name;
-        }
+        return element.Element.Name;
     }
+}
 }

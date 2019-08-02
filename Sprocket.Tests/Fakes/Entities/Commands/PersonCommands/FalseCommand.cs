@@ -4,7 +4,7 @@ using RaraAvis.Sprocket.WorkflowEngine;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    public class FalseCommand : Command<Person, bool>
+    public class FalseCommand : BooleanCommand<Person>
     {
         public override bool Value(RuleElement<Person> element)
         {
