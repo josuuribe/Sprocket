@@ -81,3 +81,32 @@ public void RunAndWalk()
     }
 }
 ```
+
+## Operators
+This table shows all operators available:
+- a, b, c ... n -> Commands
+- \# -> Number
+- op -> operation
+
+|OP|Name|Description|
+|---|---|---|
+|a + b + c ... + n| Batch | Executes all commands in given order.
+|a > #| GreaterThan | Checks if result from command is greater than #
+|a > #| GreaterThanOrEquals | Checks if result from command is greater or equals than #
+|a < #| LessThan | Checks if result from command is less than #
+|a <= #| LessThanOrEquals | Checks if result from command is less or equals than #
+|(a)| Check | Executes command and returns command value that must be true or false
+| (a - (b - (c - (n))) | Function | Executes funcion a using b as parameter for a and c as parameter for b ...
+| !a | Not | Performs not operation on command result
+| a & b | AndAlso | Processes and without short-circuit evaluation
+| a && b | And | Processes and
+| a \| b | OrAlso | Processes or without short-circuit evaluation
+| a \|\| b | Or | Processes or
+| (op) % a | IfElse | Executes op and if result is true executes command a
+| (op) % a / b | IfElse | Executes op and if result is true executes command a otherwise executes b
+| (op1) * (op2) | Loop | Executes op2 while op1 be true
+| (op) >> # | Bitwise operator add | Shifts # based on op, if it's true it's shifted added
+| (op) << # | Bitwise operator remove | Shifts # based on op, if it's true it's shifted removed
+| (op1) % ~(op2) | Break | Stops execution if condition is met
+
+
