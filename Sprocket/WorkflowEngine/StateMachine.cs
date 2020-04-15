@@ -10,7 +10,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         /// <summary>
         /// Status after execute stage.
         /// </summary>
-        public StageStatus Status { get; set; }
+        public StageAction Status { get; set; }
         /// <summary>
         /// Next stage to execute.
         /// </summary>

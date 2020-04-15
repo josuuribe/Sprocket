@@ -1,14 +1,10 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Parts.Elements.Commands;
+﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
 using RaraAvis.Sprocket.WorkflowEngine;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Linq;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    public class IsFamilyCommand : BooleanCommand<Person>
+    class IsFamilyCommand : BooleanCommand<Person>
     {
         public Person Person { get; set; }
         public override bool Value(RuleElement<Person> element)

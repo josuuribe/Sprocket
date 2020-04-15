@@ -9,7 +9,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [DataContract]
-    internal abstract class BinaryOperator<T> : ExpressionOperator<T>, ICloneable
+    public abstract class BinaryOperator<T> : ExpressionOperator<T>, ICloneable
         where T : IElement
     {
         /// <summary>

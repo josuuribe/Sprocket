@@ -1,8 +1,6 @@
 ﻿using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.BinaryOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOperators;
 using RaraAvis.Sprocket.Parts.Elements.Wrappers;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using System;
@@ -13,85 +11,48 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators
     /// <summary>
     /// A base class for all logical operators.
     /// </summary>
-    /// <typeparam name="T">An IElement object.</typeparam>
+    /// <typeparam name="TElement">An IElement object.</typeparam>
     [KnownType("GetTypes")]
     [DataContract]
-    public abstract class ExpressionOperator<T> : Operator<T>
-        where T : IElement
+    public abstract class ExpressionOperator<TElement> : Operator<TElement>
+        where TElement : IElement
     {
-        private static BinaryOperator<T> and = new AndAlso<T>();
-        private static BinaryOperator<T> or = new OrElse<T>();
+        //public static Batch<TElement> operator +(ExpressionOperator<TElement> operatorLeft, ExpressionOperator<TElement> operatorRight)
+        //{
+        //    Batch<TElement> batch = new Batch<TElement>();
+        //    BooleanCommandWrapper<TElement> booleanMethodWrapperLeft = new BooleanCommandWrapper<TElement>(operatorLeft);
+        //    batch.Add(booleanMethodWrapperLeft);
+        //    BooleanCommandWrapper<TElement> booleanMethodWrapperRight = new BooleanCommandWrapper<TElement>(operatorRight);
+        //    batch.Add(booleanMethodWrapperRight);
+        //    return batch;
+        //}
 
-        public static bool operator true(ExpressionOperator<T> operatorTrue)
-        {
-            or = new Or<T>();
-            return false;
-        }
+        //public static ExpressionOperator<TElement> operator %(ExpressionOperator<TElement> operatorIf, IfThenElse<TElement> operatorIfThenElse)
+        //{
+        //    operatorIfThenElse.If = operatorIf;
+        //    return operatorIfThenElse;
+        //}
 
-        public static bool operator false(ExpressionOperator<T> operatorTrue)
-        {
-            and = new And<T>();
-            return false;
-        }
+        //public static Operator<TElement> operator ^(ExpressionOperator<TElement> operatorLeft, int stageId)
+        //{
+        //    IfThen<TElement> ifThen = new IfThen<TElement>();
+        //    ifThen.If = operatorLeft;
+        //    JMP<TElement> jmp = new JMP<TElement>();
+        //    jmp.Parameters = stageId;
+        //    FunctionWrapper<TElement, int, bool> function = new FunctionWrapper<TElement, int, bool>(jmp);
+        //    ifThen.Then = function;
+        //    return function;
+        //}
 
-        public static ExpressionOperator<T> operator &(ExpressionOperator<T> operatorLeft, ExpressionOperator<T> operatorRight)
-        {
-            BinaryOperator<T> clone = (BinaryOperator<T>)and.MemberwiseClone();
-            clone.OperatorLeft = operatorLeft;
-            clone.OperatorRight = operatorRight;
-            and = new AndAlso<T>();
-            return clone;
-        }
-
-        public static ExpressionOperator<T> operator |(ExpressionOperator<T> operatorLeft, ExpressionOperator<T> operatorRight)
-        {
-            BinaryOperator<T> clone = (BinaryOperator<T>)or.MemberwiseClone();
-            clone.OperatorLeft = operatorLeft;
-            clone.OperatorRight = operatorRight;
-            or = new OrElse<T>();
-            return clone;
-        }
-
-        public static ExpressionOperator<T> operator !(ExpressionOperator<T> operatorUnary)
-        {
-            Not<T> ngte = new Not<T>();
-            ngte.Operator = operatorUnary;
-            return ngte;
-        }
-
-        public static ExpressionOperator<T> operator +(ExpressionOperator<T> operatorLeft, ExpressionOperator<T> operatorRight)
-        {
-            IfThenElse<T> ite = (IfThenElse<T>)operatorRight;
-            ite.If = operatorLeft;
-            return operatorRight;
-        }
-
-        public static ExpressionOperator<T> operator %(bool operatorLeft, ExpressionOperator<T> operatorRight)
-        {
-            IfThenElse<T> ite = (IfThenElse<T>)operatorRight;
-            ite.If = new LogicalWrapper<T>(operatorLeft);
-            return ite;
-        }
-
-
-        public static ExpressionOperator<T> operator *(ExpressionOperator<T> operatorLeft, ExpressionOperator<T> operatorRight)
-        {
-            Loop<T> loop = new Loop<T>();
-            loop.If = operatorLeft;
-            loop.Block = operatorRight;
-            return loop;
-        }
-
-        public static Operator<T> operator ^(ExpressionOperator<T> operatorLeft, string stage)
-        {
-            IfThen<T> ifThen = new IfThen<T>();
-            ifThen.If = operatorLeft;
-            JMP<T> jmp = new JMP<T>();
-            jmp.Parameters = stage;
-            FunctionWrapper<T, string, bool> function = new FunctionWrapper<T, string, bool>(jmp);
-            ifThen.Then = function;
-            return function;
-        }
+        //public static ExpressionOperator<TElement> operator ~(ExpressionOperator<TElement> expressionIf)
+        //{
+        //    IfThen<TElement> ifThen = new IfThen<TElement>();
+        //    ifThen.If = expressionIf;
+        //    Break<TElement> brk = new Break<TElement>();
+        //    OperateWrapper<TElement> wrapperBrk = new OperateWrapper<TElement>(brk);
+        //    ifThen.Then = wrapperBrk;
+        //    return ifThen;
+        //}
 
         private static Type[] GetTypes()
         {

@@ -3,7 +3,7 @@ using RaraAvis.Sprocket.WorkflowEngine;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    public class EatCommand : BooleanCommand<Person>
+    class EatCommand : BooleanCommand<Person>
     {
         public override bool Value(RuleElement<Person> element)
         {

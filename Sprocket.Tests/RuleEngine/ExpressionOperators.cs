@@ -1,28 +1,26 @@
 ﻿using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;
 using RaraAvis.Sprocket.Tests.Fakes.System;
-using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
 using System;
 using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    
-    public class ExpressionOperators
+
+    public class ExpressionOperators : IDisposable
     {
         private static Person p = null;
-        private static RuleElement<Person> re = null;
-        private static DistanceCommand dc = null;
+        private static GetDistanceCommand dc = null;
         private static Operator<Person> op = null;
         private static SerializeTest st = null;
 
-        
+
         public ExpressionOperators()
         {
-            dc = new DistanceCommand();
+            dc = new GetDistanceCommand();
             st = new SerializeTest();
             p = new Person();
             st.BeginSerialize();
@@ -33,7 +31,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             st.EndSerialize();
         }
 
-        [Trait("RuleEngine","ArithmeticOperators")]
+        [Trait("RuleEngine", "ArithmeticOperators")]
         [Fact]
         public void NumericGreaterThanTrue()
         {
@@ -94,7 +92,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.True(res, "'<' is false");
         }
 
-        [Trait("RuleEngine","ArithmeticOperators")]
+        [Trait("RuleEngine", "ArithmeticOperators")]
         [Fact]
         public void NumericLessThanFalse()
         {
@@ -106,7 +104,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res, "'>' is true");
         }
 
-        [Trait("RuleEngine","ArithmeticOperators")]
+        [Trait("RuleEngine", "ArithmeticOperators")]
         [Fact]
         public void NumericLessThanOrEqualsTrue()
         {
@@ -118,7 +116,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.True(res, "'<=' is false");
         }
 
-        [Trait("RuleEngine","ArithmeticOperators")]
+        [Trait("RuleEngine", "ArithmeticOperators")]
         [Fact]
         public void NumericLessThanOrEqualsFalse()
         {
@@ -130,7 +128,31 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res, "'<=' is true");
         }
 
-        [Trait("RulEngine","Wrapps")]
+        [Trait("RulEngine", "Wrapps")]
+        [Fact]
+        public void CommandWrapper_False()
+        {
+            int gdc1 = new GetDistanceCommand();
+            GetDistanceCommand gdc2 = new GetDistanceCommand();
+            op = (gdc2 > (gdc1 + 1));
+            var res = st.Match(op, p);
+
+            Assert.False(res);
+        }
+
+        [Trait("RulEngine", "Wrapps")]
+        [Fact]
+        public void CommandWrapper_True()
+        {
+            int gdc1 = new GetDistanceCommand();
+            GetDistanceCommand gdc2 = new GetDistanceCommand();
+            op = (gdc2 != (gdc1 + 1));
+            var res = st.Match(op, p);
+
+            Assert.True(res);
+        }
+
+        [Trait("RulEngine", "Wrapps")]
         [Fact]
         public void WrapBoolCommandTrue()
         {
@@ -163,34 +185,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res, "'WrapBool' is false");
         }
 
-        [Trait("RuleEngine", "Casts")]
-        [Fact]
-        public void CastBoolCommandAsBooleanOperateTrue()
-        {
-            EatCommand ec = new EatCommand();
-
-            op = (ec) & (ec);
-            var res = st.Match(op, p);
-
-            Assert.True(res, "'Cast bool command' is false");
-        }
-
-        [Trait("RuleEngine", "Casts")]
-        [Fact]
-        public void CastBoolCommandAsBooleanOperateFalse()
-        {
-            EatCommand ec = new EatCommand();
-
-            var op = (ec) & !(ec);
-
-            var res = st.Match(op, p);
-
-            Assert.False(res, "'Cast bool command' is true");
-        }
-
         [Trait("RuleEngine", "Functions")]
         [Fact]
-        public void NestedCallFunction()
+        public void Function_Equals_True()
         {
             Person son1 = new Person();
             Person son2 = new Person();
@@ -205,6 +202,78 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var res = st.Match(op, p);
 
             Assert.True(res, "'Nested Call' is true");
+        }
+
+        [Trait("RuleEngine", "Functions")]
+        [Fact]
+        public void Function_NotEquals_True()
+        {
+            Person son1 = new Person();
+            Person son2 = new Person();
+            son2.Name = "Son2";
+            son2.Name = "Son2Name";
+            p.Family.Add(son1);
+            p.Family.Add(son2);
+
+            SonsFunction sc = new SonsFunction();
+            GetNameFunction gn = new GetNameFunction();
+
+            op = (gn - (sc - 1) != "Get:");
+            var res = st.Match(op, p);
+
+            Assert.True(res, "'Nested Call' is true");
+        }
+
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericEqualsTrue()
+        {
+            p.DistanceTravelled = 10;
+
+            op = (dc == 10);
+
+            var res = st.Match(op, p);
+
+            Assert.True(res);
+        }
+
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericEqualsFalse()
+        {
+            p.DistanceTravelled = 10;
+
+            op = (dc == 1);
+
+            var res = st.Match(op, p);
+
+            Assert.False(res);
+        }
+
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericNotEqualsTrue()
+        {
+            p.DistanceTravelled = 10;
+
+            op = (dc != 5);
+
+            var res = st.Match(op, p);
+
+            Assert.True(res);
+        }
+
+        [Trait("RuleEngine", "ArithmeticOperators")]
+        [Fact]
+        public void NumericNotEqualsFalse()
+        {
+            p.DistanceTravelled = 10;
+
+            op = (dc != 10);
+
+            var res = st.Match(op, p);
+
+            Assert.False(res);
         }
     }
 }

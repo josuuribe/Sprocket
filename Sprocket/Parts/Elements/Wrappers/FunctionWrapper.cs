@@ -27,11 +27,6 @@ namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
             return true;
         }
 
-        public static implicit operator V(FunctionWrapper<T, U, V> function)
-        {
-            return function.Result;
-        }
-
         private static Type[] GetKnownType()
         {
             Type[] t = new Type[1];

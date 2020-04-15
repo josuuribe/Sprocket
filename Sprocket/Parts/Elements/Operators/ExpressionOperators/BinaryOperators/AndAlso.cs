@@ -1,4 +1,5 @@
-﻿using RaraAvis.Sprocket.Parts.Interfaces;
+﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
+using RaraAvis.Sprocket.Parts.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine;
 using System;
 using System.Runtime.Serialization;
@@ -11,7 +12,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.BinaryO
     /// <typeparam name="T">An IElement object.</typeparam>
     [DataContract]
     [KnownType("GetKnownType")]
-    internal class AndAlso<T> : BinaryOperator<T>
+    public class AndAlso<T> : BinaryOperator<T>
         where T : IElement
     {
         public override bool Match(RuleElement<T> element)

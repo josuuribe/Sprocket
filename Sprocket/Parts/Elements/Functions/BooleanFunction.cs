@@ -3,6 +3,7 @@ using RaraAvis.Sprocket.Parts.Elements.Operators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.BinaryOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
+using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOperators;
 using RaraAvis.Sprocket.Parts.Elements.Wrappers;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using System.Runtime.Serialization;
@@ -10,99 +11,75 @@ using System.Runtime.Serialization;
 namespace RaraAvis.Sprocket.Parts.Elements.Functions
 {
     [DataContract]
-    public abstract class BooleanFunction<T, U> : Function<T, U, bool>
-        where T : IElement
+    public abstract class BooleanFunction<TElement, TParameters> : Function<TElement, TParameters, bool>
+        where TElement : IElement
     {
-        private static BinaryOperator<T> and = new AndAlso<T>();
-        private static BinaryOperator<T> or = new OrElse<T>();
+        private static BinaryOperator<TElement> and = new AndAlso<TElement>();
+        private static BinaryOperator<TElement> or = new OrElse<TElement>();
 
-        public static bool operator true(BooleanFunction<T, U> operatorTrue)
+        //public static bool operator true(BooleanFunction<TElement, TParameters> operatorTrue)
+        //{
+        //    or = new Or<TElement>();
+        //    return false;
+        //}
+
+        //public static bool operator false(BooleanFunction<TElement, TParameters> operatorTrue)
+        //{
+        //    and = new And<TElement>();
+        //    return false;
+        //}
+
+        //public static BooleanFunction<TElement, TParameters> operator &(BooleanFunction<TElement, TParameters> operatorLeft, BooleanFunction<TElement, TParameters> operatorRight)
+        //{
+        //    AndAlso<TElement> andAlso = new AndAlso<TElement>();
+        //    andAlso.OperatorLeft = operatorLeft;
+        //    andAlso.OperatorRight = operatorRight;
+        //    return andAlso;
+        //}
+        public static Operator<TElement> operator +(BooleanFunction<TElement, TParameters> operatorUnary)
         {
-            or = new Or<T>();
-            return false;
+            OperateWrapper<TElement> ow = new OperateWrapper<TElement>(operatorUnary);
+            return ow;
         }
 
-        public static bool operator false(BooleanFunction<T, U> operatorTrue)
+        public static Operator<TElement> operator !(BooleanFunction<TElement, TParameters> operatorUnary)
         {
-            and = new And<T>();
-            return false;
+            OperateWrapper<TElement> ow = new OperateWrapper<TElement>(operatorUnary);
+            Not<TElement> not = new Not<TElement>();
+            not.Operator = ow;
+            return not;
         }
 
-        public static BooleanFunction<T, U> operator &(BooleanFunction<T, U> operatorLeft, BooleanFunction<T, U> operatorRight)
+        public static BooleanFunction<TElement, TParameters> operator |(BooleanFunction<TElement, TParameters> operatorLeft, BooleanFunction<TElement, TParameters> operatorRight)
         {
-            BinaryOperator<T> clone = (BinaryOperator<T>)and.Clone();
+            BinaryOperator<TElement> clone = (BinaryOperator<TElement>)or.Clone();
             clone.OperatorLeft = operatorLeft;
             clone.OperatorRight = operatorRight;
-            BooleanFunctionWrapper<T, U> wrapper = new BooleanFunctionWrapper<T, U>(clone);
-            and = new AndAlso<T>();
+            BooleanFunctionWrapper<TElement, TParameters> wrapper = new BooleanFunctionWrapper<TElement, TParameters>(clone);
+            or = new OrElse<TElement>();
             return wrapper;
         }
 
-        public static BooleanFunction<T, U> operator |(BooleanFunction<T, U> operatorLeft, BooleanFunction<T, U> operatorRight)
+        public static ExpressionOperator<TElement> operator %(bool left, BooleanFunction<TElement, TParameters> operatorRight)
         {
-            BinaryOperator<T> clone = (BinaryOperator<T>)or.Clone();
-            clone.OperatorLeft = operatorLeft;
-            clone.OperatorRight = operatorRight;
-            BooleanFunctionWrapper<T, U> wrapper = new BooleanFunctionWrapper<T, U>(clone);
-            or = new OrElse<T>();
-            return wrapper;
-        }
-
-        //public static LogicalOperator<T> operator !(BooleanFunction<T, U> operatorUnary)
-        //{
-        //    Not<T> ngte = new Not<T>();
-        //    BoolWrapper<T> wrapper = new BoolWrapper<T>((IOperate<T, bool>)operatorUnary);
-        //    ngte.Operator = wrapper;
-        //    return ngte;
-        //}
-
-        //public static LogicalOperator<T> operator +(BooleanFunction<T, U> operatorUnary)
-        //{
-        //    Yes<T> ngte = new Yes<T>();
-        //    BoolWrapper<T> wrapper = new BoolWrapper<T>((IOperate<T, bool>)operatorUnary);
-        //    ngte.Operator = wrapper;
-        //    return ngte;
-        //}
-
-        public static ExpressionOperator<T> operator /(BooleanFunction<T, U> operatorLeft, BooleanFunction<T, U> operatorRight)
-        {
-            IfThenElse<T> ite = new IfThenElse<T>();
-            LogicalWrapper<T> wrapperThen = new LogicalWrapper<T>(operatorLeft);
-            LogicalWrapper<T> wrapperElse = new LogicalWrapper<T>(operatorRight);
-            ite.Then = wrapperThen;
-            ite.Else = wrapperElse;
-            return ite;
-        }
-
-        public static ExpressionOperator<T> operator %(bool boolConstant, BooleanFunction<T, U> operatorRight)
-        {
-            IfThen<T> it = new IfThen<T>();
-            LogicalWrapper<T> wrapper = new LogicalWrapper<T>(boolConstant);
+            IfThen<TElement> it = new IfThen<TElement>();
+            OperateWrapper<TElement> wrapper = new OperateWrapper<TElement>(new ValueWrapper<TElement, bool>(left));
             it.If = wrapper;
-            it.Then = new LogicalWrapper<T>(operatorRight);
+            it.Then = new OperateWrapper<TElement>(operatorRight);
             return it;
         }
 
-        public static ExpressionOperator<T> operator %(Operator<T> operatorIf, BooleanFunction<T, U> operatorRight)
+        public static ExpressionOperator<TElement> operator %(Operator<TElement> operatorIf, BooleanFunction<TElement, TParameters> operatorRight)
         {
-            IfThen<T> it = new IfThen<T>();
+            IfThen<TElement> it = new IfThen<TElement>();
             it.If = operatorIf;
-            it.Then = new LogicalWrapper<T>(operatorRight);
+            it.Then = new OperateWrapper<TElement>(operatorRight);
             return it;
         }
 
-        public static ExpressionOperator<T> operator *(ExpressionOperator<T> expression, BooleanFunction<T, U> function)
+        public static implicit operator Operator<TElement>(BooleanFunction<TElement, TParameters> function)
         {
-            Loop<T> loop = new Loop<T>();
-            loop.If = expression;
-            LogicalWrapper<T> wrapper = new LogicalWrapper<T>(function);
-            loop.Block = wrapper;
-            return loop;
-        }
-
-        public static implicit operator Operator<T>(BooleanFunction<T, U> function)
-        {
-            LogicalWrapper<T> bw = new LogicalWrapper<T>(function);
+            OperateWrapper<TElement> bw = new OperateWrapper<TElement>(function);
             return bw;
         }
     }

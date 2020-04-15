@@ -10,7 +10,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
     {
         [DataMember]
         public U Operate { get; set; }
-         
+
         public ValueWrapper(U operate)
         {
             this.Operate = operate;
@@ -19,6 +19,11 @@ namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
         public U Value(RuleElement<T> element)
         {
             return Operate;
+        }
+
+        public static implicit operator ValueWrapper<T, U>(U value)
+        {
+            return new ValueWrapper<T, U>(value);
         }
     }
 }

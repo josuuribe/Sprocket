@@ -1,18 +1,17 @@
 ﻿using RaraAvis.Sprocket.Parts.Elements;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;
 using RaraAvis.Sprocket.Tests.Fakes.System;
 using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    public class Workflows
+    public class Workflows : IDisposable
     {
-        private static DistanceCommand dc = null;
+        private static GetDistanceCommand dc = null;
         private static RunCommand rc = null;
         private static WalkCommand wc = null;
         private static Person fakeElement = null;
@@ -24,7 +23,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
 
         public Workflows()
         {
-            dc = new DistanceCommand();
+            dc = new GetDistanceCommand();
             rc = new RunCommand();
             wc = new WalkCommand();
             gnf = new GetNameFunction();

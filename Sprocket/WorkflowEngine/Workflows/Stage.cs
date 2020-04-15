@@ -31,7 +31,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Workflows
         /// <summary>
         /// XML that stores information about one stage.
         /// </summary>
-        public string XMLStage { get; set; }    
+        public string XMLStage { get; set; }
         #endregion
     }
 }

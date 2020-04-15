@@ -1,36 +1,32 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
-using RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators;
-using RaraAvis.Sprocket.Parts.Interfaces;
+﻿using RaraAvis.Sprocket.Parts.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine;
 using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
 {
     [KnownType("GetKnownType")]
     [DataContract]
-    internal class CommandWrapper<T, U> : Operator<T>
-        where T : IElement
+    internal class CommandWrapper<TElement, TValue> : Operator<TElement>
+        where TElement : IElement
     {
         [DataMember]
-        public Command<T, U> Command { get; set; }
+        public Command<TElement, TValue> Command { get; set; }
 
-        public U Result { get; private set; }
+        public TValue Result { get; private set; }
 
-        public CommandWrapper(Command<T, U> command)
+        public CommandWrapper(Command<TElement, TValue> command)
         {
             this.Command = command;
         }
 
-        public override bool Match(RuleElement<T> element)
+        public override bool Match(RuleElement<TElement> element)
         {
             this.Result = Command.Value(element);
             return true;
         }
 
-        public static implicit operator U(CommandWrapper<T, U> command)
+        public static implicit operator TValue(CommandWrapper<TElement, TValue> command)
         {
             return command.Result;
         }
@@ -38,7 +34,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
         private static Type[] GetKnownType()
         {
             Type[] t = new Type[1];
-            t[0] = typeof(CommandWrapper<T, U>);
+            t[0] = typeof(CommandWrapper<TElement, TValue>);
             return t;
         }
     }

@@ -1,4 +1,6 @@
 ﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
+using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
+using RaraAvis.Sprocket.Parts.Elements.Wrappers;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine;
 using System;
@@ -8,8 +10,8 @@ using System.Runtime.Serialization;
 namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
 {
     [DataContract]
-    public sealed class Batch<T> : BooleanCommand<T>
-        where T : IElement
+    public sealed class Batch<TElement> : BooleanCommand<TElement>
+        where TElement : IElement
     {
         [DataMember]
         public ArrayList Operates { get; set; }
@@ -19,12 +21,17 @@ namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
             this.Operates = new ArrayList();
         }
 
-        public void Add<U>(IOperate<T, U> operate)
+        public void Add<U>(IOperate<TElement, U> operate)
         {
             this.Operates.Add(operate);
         }
 
-        public override bool Value(RuleElement<T> element)
+        public void Add<U>(Batch<TElement> batch)
+        {
+            this.Operates.AddRange(batch.Operates);
+        }
+
+        public override bool Value(RuleElement<TElement> element)
         {
             var enumerator = this.Operates.GetEnumerator();
             try
@@ -40,6 +47,19 @@ namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
                 return false;
             }
             return true;
+        }
+
+        public static Batch<TElement> operator +(Batch<TElement> batchLeft, Batch<TElement> batchRight)
+        {
+            Batch<TElement> batch = new Batch<TElement>();
+            batch.Add(batchLeft);
+            batch.Add(batchRight);
+            return batch;
+        }
+
+        public static implicit operator Operator<TElement>(Batch<TElement> batch)
+        {
+            return new OperateWrapper<TElement>(batch);
         }
     }
 }

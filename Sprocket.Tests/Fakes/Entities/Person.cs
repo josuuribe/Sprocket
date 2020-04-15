@@ -5,10 +5,12 @@ using System.Composition;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities
 {
-    enum Feature { BLACK, BLONDE, BROWN, WHITE, ASIAN, SKIN }
+    enum Feature { Black, Blonde, Brown, White, Asian, Skin }
+    public enum Status { WakeUp, Sleep }
     [Export]
     public class Person : IElement, ICloneable
     {
+        public Status Status { get; set; }
         public string Name { get; set; }
 
         public string Surname { get; set; }
@@ -20,6 +22,8 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities
         public int DistanceTravelled { get; set; }
 
         public IList<Person> Family { get; set; }
+
+        public bool Correct { get; set; }
 
         public bool IsHungry { get; set; }
 
@@ -42,6 +46,16 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities
         public void Drive(int miles)
         {
             DistanceTravelled += miles;
+        }
+
+        public void WakeUp()
+        {
+            Status = Status.WakeUp;
+        }
+
+        public void Sleep()
+        {
+            Status = Status.Sleep;
         }
 
         public void Eat()

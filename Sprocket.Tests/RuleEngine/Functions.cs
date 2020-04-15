@@ -1,12 +1,14 @@
 ﻿using RaraAvis.Sprocket.Parts.Elements;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;
 using RaraAvis.Sprocket.Tests.Fakes.System;
 using RaraAvis.Sprocket.WorkflowEngine;
+using System;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    public class Functions
+    public class Functions : IDisposable
     {
         private static Person p = null;
         private static RuleElement<Person> re = null;
@@ -14,7 +16,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         private static Operator<Person> op = null;
         private static SerializeTest st = null;
 
-        
+
         public Functions()
         {
             drf = new DistanceRemainingFunction();

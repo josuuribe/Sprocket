@@ -13,8 +13,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
     {
         public RuleElement()
         {
-            this.DynamicData = new ExpandoObject();
-            this.StageStatus = StageResult.NONE;
+            this.StageStatus = StageResult.None;
             this.UserStatus = 0;
         }
 
@@ -28,11 +27,9 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         public T Element { get; set; }
 
         public int UserStatus { get; set; }
-        internal StageStatus StageAction { get; set; }
+        internal StageAction StageAction { get; set; }
         internal StageResult StageStatus { get; set; }
-        /// <summary>
-        /// Dynamic data created by rule engine during rule processing.
-        /// </summary>
-        internal dynamic DynamicData;
+
+        internal long NextStageId;
     }
 }

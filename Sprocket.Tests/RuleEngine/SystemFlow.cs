@@ -1,22 +1,17 @@
 ﻿using RaraAvis.Sprocket.Parts.Elements;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;
 using RaraAvis.Sprocket.Tests.Fakes.System;
 using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    public class SystemFlow
+    public class SystemFlow : IDisposable
     {
-        private static DistanceCommand dc = null;
-        private static RunCommand rc = null;
-        private static WalkCommand wc = null;
-        private static Person fakeElement = null;
-        private static GetNameFunction gnf = null;
+        private static GetDistanceCommand dc = null;
         private static SetNameFunction snf = null;
         private static SerializeTest st = null;
         private static Operator<Person> op = null;
@@ -24,12 +19,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
 
         public SystemFlow()
         {
-            dc = new DistanceCommand();
-            rc = new RunCommand();
-            wc = new WalkCommand();
-            gnf = new GetNameFunction();
+            dc = new GetDistanceCommand();
             snf = new SetNameFunction();
-            fakeElement = new Person();
             st = new SerializeTest();
             p = new Person();
             st.BeginSerialize();
@@ -44,7 +35,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void JMP()
         {
-            var s1 = ((dc < 10) ^ "Stage-3");
+            var s1 = ((dc < 10) ^ 3);
 
             var s2 = (snf - "Name-2");
 
@@ -64,7 +55,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Break()
         {
-            op = (dc < 10) % ~(snf - "new");
+            op = ~(snf - "new");
 
             var stage = st.CreateStage(1, "Stage-1", op);
             var result = st.ExecuteWorkflow(p, stage);
@@ -73,36 +64,34 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.Equal(ExecutionEngineResult.EXIT, result.Item2);
         }
 
-        [Trait("RuleEngine", "Commands")]
+        [Trait("RulEngine", "Commands")]
         [Fact]
-        public void AddResult()
+        public void Break_ExpressionOperator_True()
         {
-            SetAsianCommand sac = new SetAsianCommand();
+            GetDistanceCommand dc = new GetDistanceCommand();
 
-            op = (sac) >> (int)Feature.ASIAN;
+            op = ~(dc < 5);
 
             var stage = st.CreateStage(1, "Stage-1", op);
             var result = st.ExecuteWorkflow(p, stage);
 
-            Assert.True(((Feature)result.ruleElement.UserStatus & Feature.ASIAN) == Feature.ASIAN, "Invalid status");
-            Assert.Equal(ExecutionEngineResult.OK, result.Item2);
+            Assert.Equal(0, p.DistanceTravelled);
+            Assert.Equal(ExecutionEngineResult.EXIT, result.Item2);
         }
 
-        [Trait("RuleEngine", "Commands")]
+        [Trait("RulEngine", "Commands")]
         [Fact]
-        public void RemoveResult()
+        public void Break_ExpressionOperator_False()
         {
-            SetAsianCommand sac = new SetAsianCommand();
-            //Batch<Person> batchAsian = new Batch<Person>();
-            //batchAsian.Add(sac);
+            GetDistanceCommand dc = new GetDistanceCommand();
 
-            op = (sac) << (int)Feature.ASIAN;
+            op = ~(dc > 5);
 
             var stage = st.CreateStage(1, "Stage-1", op);
-            var res = st.ExecuteWorkflow(p, stage);
+            var result = st.ExecuteWorkflow(p, stage);
 
-            Assert.Equal(0, res.ruleElement.UserStatus);
-            Assert.Equal(ExecutionEngineResult.OK, res.Item2);
+            Assert.Equal(0, p.DistanceTravelled);
+            Assert.Equal(ExecutionEngineResult.KO, result.Item2);
         }
     }
 }

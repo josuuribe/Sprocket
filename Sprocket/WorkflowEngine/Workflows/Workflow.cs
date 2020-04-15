@@ -1,6 +1,5 @@
 ﻿using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
 using System;
-using System.Collections.Generic;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Workflows
 {

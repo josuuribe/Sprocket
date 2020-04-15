@@ -13,7 +13,7 @@ namespace RaraAvis.Sprocket.Services
     /// <typeparam name="T"></typeparam>
     //[InheritedExport(typeof(IRuleEngineService<>))]
     public interface IRuleEngineService<T>
-        where T:IElement
+        where T : IElement
     {
         U Execute<U>(Command<T, U> operate, T element);
         /// <summary>

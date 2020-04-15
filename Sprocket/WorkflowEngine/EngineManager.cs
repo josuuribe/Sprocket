@@ -46,7 +46,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         #endregion
 
         #region ·   Methods ·
-        public U Execute<U>(Command<T,U> operate, T element)
+        public U Execute<U>(Command<T, U> operate, T element)
         {
             RuleElement<T> ruleElement = new RuleElement<T>(element);
             return operate.Value(ruleElement);
@@ -86,19 +86,19 @@ namespace RaraAvis.Sprocket.WorkflowEngine
 
             switch (re.StageStatus)
             {//Workflow end result
-                case StageResult.POSITIVE:
+                case StageResult.Positive:
                     ExecutionEngineResult = ExecutionEngineResult.OK;
                     //workflow.Completed(stage);
                     break;
-                case StageResult.NEGATIVE:
+                case StageResult.Negative:
                     ExecutionEngineResult = ExecutionEngineResult.KO;
                     //workflow.Incompleted(stage);
                     break;
-                case StageResult.ERROR:
+                case StageResult.Error:
                     ExecutionEngineResult = ExecutionEngineResult.ERROR;
                     //workflow.Failed(stage);
                     break;
-                case StageResult.EXIT:
+                case StageResult.Exit:
                     ExecutionEngineResult = ExecutionEngineResult.EXIT;
                     //workflow.Exited(stage);
                     break;
@@ -129,25 +129,25 @@ namespace RaraAvis.Sprocket.WorkflowEngine
                         {
                             switch (ruleElement.StageAction)
                             {
-                                case StageStatus.CONTINUE:
+                                case StageAction.Continue:
                                     {
-                                        ruleElement.StageStatus = StageResult.POSITIVE;
+                                        ruleElement.StageStatus = StageResult.Positive;
                                     }
                                     break;
-                                case StageStatus.JMP:
+                                case StageAction.Jmp:
                                     {
                                         stagesEnumerator.Reset();
-                                        return this.Process(stages, stages.First(s => s.Name == ruleElement.DynamicData.NextStage), element);
+                                        return this.Process(stages, stages.First(s => s.Id == ruleElement.NextStageId), element);
                                     }
-                                case StageStatus.BREAK:
+                                case StageAction.Break:
                                     {
-                                        ruleElement.StageStatus = StageResult.EXIT;
+                                        ruleElement.StageStatus = StageResult.Exit;
                                         //WorkflowResults.Add(ruleElement);
                                         return ruleElement;
                                     }
                                 default:
                                     {
-                                        ruleElement.StageStatus = StageResult.NONE;
+                                        ruleElement.StageStatus = StageResult.None;
                                         //WorkflowResults.Add(ruleElement);
                                     }
                                     break;
@@ -155,7 +155,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
                         }
                         else
                         {
-                            ruleElement.StageStatus = StageResult.NEGATIVE;
+                            ruleElement.StageStatus = StageResult.Negative;
                             //WorkflowResults.Add(ruleElement);
                             return ruleElement;
                         }
@@ -164,7 +164,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
             }
             catch (Exception)
             {
-                ruleElement.StageStatus = StageResult.ERROR;
+                ruleElement.StageStatus = StageResult.Error;
             }
             return ruleElement;
         }

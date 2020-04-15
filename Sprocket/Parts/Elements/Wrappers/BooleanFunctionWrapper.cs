@@ -6,18 +6,18 @@ using System.Runtime.Serialization;
 namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
 {
     [DataContract]
-    internal class BooleanFunctionWrapper<T, U> : BooleanFunction<T, U>
-        where T : IElement
+    internal class BooleanFunctionWrapper<TElement, TParameters> : BooleanFunction<TElement, TParameters>
+        where TElement : IElement
     {
-        public BooleanFunctionWrapper(Operator<T> operatorToWrap)
+        public BooleanFunctionWrapper(Operator<TElement> operatorToWrap)
         {
             this.Operator = operatorToWrap;
         }
 
         [DataMember]
-        public Operator<T> Operator { get; set; }
+        public Operator<TElement> Operator { get; set; }
 
-        public override bool Execute(RuleElement<T> element)
+        public override bool Value(RuleElement<TElement> element)
         {
             return Operator.Match(element);
         }

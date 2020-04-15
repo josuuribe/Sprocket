@@ -10,13 +10,13 @@ namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
     /// </summary>
     /// <typeparam name="T">An IElement object.</typeparam>
     [DataContract]
-    internal sealed class JMP<T> : BooleanFunction<T, string>
+    internal sealed class JMP<T> : BooleanFunction<T, int>
         where T : IElement
     {
-        public override bool Execute(RuleElement<T> element)
+        public override bool Value(RuleElement<T> element)
         {
-            element.StageAction = StageStatus.JMP;
-            element.DynamicData.NextStage = this.Parameters;
+            element.StageAction = StageAction.Jmp;
+            element.NextStageId = this.Parameters;
             return true;
         }
     }

@@ -3,10 +3,10 @@
     /// <summary>
     /// Action after execute one stage.
     /// </summary>
-    public enum StageStatus
+    public enum StageAction
     {
-        CONTINUE,
-        BREAK,
-        JMP
+        Continue,
+        Break,
+        Jmp
     }
 }

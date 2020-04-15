@@ -16,7 +16,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
     {
         public override bool Value(RuleElement<T> element)
         {
-            element.StageAction = StageStatus.BREAK;
+            element.StageAction = StageAction.Break;
             return true;
         }
     }

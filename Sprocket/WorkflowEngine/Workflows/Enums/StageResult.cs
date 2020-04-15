@@ -5,10 +5,10 @@
     /// </summary>
     public enum StageResult
     {
-        NONE,
-        POSITIVE,
-        NEGATIVE,
-        EXIT,
-        ERROR
+        None,
+        Positive,
+        Negative,
+        Exit,
+        Error
     }
 }

@@ -23,6 +23,15 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
             are.ClearAll();
         }
 
+        public int UserStatus
+        {
+            get
+            {
+                return re.UserStatus;
+            }
+        }
+
+
         public Stage CreateStage(int id, string name, Operator<Person> p)
         {
             return are.CreateStage(id, name, p);
@@ -47,7 +56,7 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
             return are.CreateStage(1, nameStage, op);
         }
 
-        public U Execute<U>(Command<Person,U> operate, Person p)
+        public U Execute<U>(Command<Person, U> operate, Person p)
         {
             return are.Execute(operate, p);
         }

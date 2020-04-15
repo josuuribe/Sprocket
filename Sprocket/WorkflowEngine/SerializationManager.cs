@@ -61,7 +61,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
             var filteredTypes = new List<Type>();
             Action<Type, Type> createType = (t1, t2) =>
             {
-                if(t1.GetInterfaces().Where(t => t.GetTypeInfo().IsGenericType).Any(t => t.GetGenericTypeDefinition() == t2.GetGenericTypeDefinition()))
+                if (t1.GetInterfaces().Where(t => t.GetTypeInfo().IsGenericType).Any(t => t.GetGenericTypeDefinition() == t2.GetGenericTypeDefinition()))
                 {
                     filteredTypes.Add(t1);
                 }
