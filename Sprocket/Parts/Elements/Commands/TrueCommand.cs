@@ -3,10 +3,12 @@ using RaraAvis.Sprocket.WorkflowEngine;
 
 namespace RaraAvis.Sprocket.Parts.Elements.Commands
 {
-    public class TrueCommand<T> : BooleanCommand<T>
-        where T : IElement
+    public class TrueCommand<TElement> : Command<TElement, bool>
+        where TElement : IElement
     {
-        public override bool Value(RuleElement<T> element)
+        public TrueCommand() { }
+        public TrueCommand(TElement p) : base(p) { }
+        protected internal override bool Process(RuleElement<TElement> element)
         {
             return true;
         }

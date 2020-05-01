@@ -11,10 +11,12 @@ namespace RaraAvis.Sprocket.Parts.Interfaces
         where TElement : IElement
     {
         /// <summary>
-        /// Gets value for an element given.
+        /// Gets processed value based on this <see cref="IOperate{TElement, TValue}"/>.
         /// </summary>
-        /// <param name="element">Information to get or set about rule.</param>
-        /// <returns>Specified value.</returns>
-        TValue Value(RuleElement<TElement> element);
+        TValue Value { get; }
+        /// <summary>
+        /// The element used.
+        /// </summary>
+        TElement Element { get; }
     }
 }

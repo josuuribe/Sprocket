@@ -5,7 +5,9 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
     class SetAsianCommand : Command<Person, bool>
     {
-        public override bool Value(RuleElement<Person> element)
+        public SetAsianCommand() : base() { }
+        public SetAsianCommand(Person p) : base(p) { }
+        protected internal override bool Process(RuleElement<Person> element)
         {
             element.UserStatus = (int)Feature.Asian;
             return true;

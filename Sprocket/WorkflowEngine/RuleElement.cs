@@ -31,5 +31,10 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         internal StageResult StageStatus { get; set; }
 
         internal long NextStageId;
+
+        public static implicit operator RuleElement<T>(T person)
+        {
+            return new RuleElement<T>(person);
+        }
     }
 }

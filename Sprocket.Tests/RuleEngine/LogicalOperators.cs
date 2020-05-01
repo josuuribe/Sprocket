@@ -23,7 +23,6 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         private static RuleElement<Person> re = null;
         private static GetDistanceCommand dc = null;
         private static SerializeTest st = null;
-        private static Operator<Person> op = null;
         private static Person p = null;
 
 
@@ -107,7 +106,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Or_Operator_Bool_True()
         {
-            op = (dc < 10) % (rc);
+            Operator<Person> op = (dc < 10) % (rc);
             var op2 = op | false;
 
             var res = st.Match(op2, p);
@@ -121,7 +120,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Or_Operator_Bool_False()
         {
-            op = (dc > 10) % (rc);
+            Operator<Person> op = (dc > 10) % (rc);
             var op2 = op | false;
 
             var res = st.Match(op2, p);
@@ -136,7 +135,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void AndAlso_Operator_Bool_True()
         {
-            op = (dc < 10) % (rc);
+            Operator<Person> op = (dc < 10) % (rc);
             var op2 = op & true;
 
             var res = st.Match(op2, p);
@@ -150,7 +149,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void AndAlso_Operator_Bool_False()
         {
-            op = (dc < 10) % (rc);
+            Operator<Person> op = (dc < 10) % (rc);
             var op2 = op & false;
 
             var res = st.Match(op2, p);
@@ -164,7 +163,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void AndAlso_Bool_Operator_True()
         {
-            op = (dc < 10) % (rc);
+            Operator<Person> op = (dc < 10) % (rc);
             var op2 = true & op;
 
             var res = st.Match(op2, p);
@@ -179,7 +178,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         public void AndAlso_Bool_Operator_False()
         {
             RunCommand rc = new RunCommand();
-            op = (dc < 10) % (rc);
+            Operator<Person> op = (dc < 10) % (rc);
             var op2 = false & op;
 
             var res = st.Match(op2, p);
@@ -189,198 +188,115 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res, "'And' operator (&) is not true.");
         }
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void AndAlso_BooleanCommand_Operator_True()
-        {
-            TrueCommand<Person> tc = new TrueCommand<Person>();
-            SetAsianCommand rc = new SetAsianCommand();
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void AndAlso_BooleanCommand_Operator_True()
+        //{
+        //    TrueCommand<Person> tc = new TrueCommand<Person>();
+        //    SetAsianCommand rc = new SetAsianCommand();
+        //    Operator<Person> op1 = tc;
+        //    Operator<Person> op2 = rc;
+        //    var op3 = op1 & op2;
 
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = rc;
-            var op3 = op1 & op2;
+        //    var res = st.Match(op3, p);
 
-            var res = st.Match(op3, p);
+        //    Assert.IsType<AndAlso<Person>>(op3);
+        //    Assert.True(st.UserStatus == (int)Feature.Asian);
+        //    Assert.True(res);
+        //}
 
-            Assert.IsType<AndAlso<Person>>(op3);
-            Assert.True(st.UserStatus == (int)Feature.Asian);
-            Assert.True(res);
-        }
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void AndAlso_BooleanCommand_Operator_False()
+        //{
+        //    FalseCommand<Person> tc = new FalseCommand<Person>();
+        //    SetAsianCommand rc = new SetAsianCommand();
+        //    Operator<Person> op1 = tc;
+        //    Operator<Person> op2 = rc;
+        //    var op3 = op2 & op1;
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void AndAlso_BooleanCommand_Operator_False()
-        {
-            FalseCommand<Person> tc = new FalseCommand<Person>();
-            SetAsianCommand rc = new SetAsianCommand();
+        //    var res = st.Match(op3, p);
 
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = rc;
-            var op3 = op2 & op1;
+        //    Assert.IsType<AndAlso<Person>>(op3);
+        //    Assert.True(st.UserStatus == (int)Feature.Asian);
+        //    Assert.False(res);
+        //}
 
-            var res = st.Match(op3, p);
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void AndAlso_Operator_BooleanCommand_True()
+        //{
+        //    TrueCommand<Person> tc = new TrueCommand<Person>();
+        //    SetAsianCommand rc = new SetAsianCommand();
+        //    Operator<Person> op1 = tc;
+        //    Operator<Person> op2 = rc;
+        //    var op3 = op2 & op1;
 
-            Assert.IsType<AndAlso<Person>>(op3);
-            Assert.True(st.UserStatus == (int)Feature.Asian);
-            Assert.False(res);
-        }
+        //    var res = st.Match(op3, p);
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void AndAlso_Operator_BooleanCommand_True()
-        {
-            TrueCommand<Person> tc = new TrueCommand<Person>();
-            SetAsianCommand rc = new SetAsianCommand();
-
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = rc;
-            var op3 = op2 & op1;
-
-            var res = st.Match(op3, p);
-
-            Assert.IsType<AndAlso<Person>>(op3);
-            Assert.True(st.UserStatus == (int)Feature.Asian);
-            Assert.True(res);
-        }
+        //    Assert.IsType<AndAlso<Person>>(op3);
+        //    Assert.True(st.UserStatus == (int)Feature.Asian);
+        //    Assert.True(res);
+        //}
 
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void AndAlso_Operator_BooleanCommand_False()
-        {
-            FalseCommand<Person> tc = new FalseCommand<Person>();
-            SetAsianCommand rc = new SetAsianCommand();
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void AndAlso_Operator_BooleanCommand_False()
+        //{
+        //    FalseCommand<Person> tc = new FalseCommand<Person>();
+        //    SetAsianCommand rc = new SetAsianCommand();
+        //    Operator<Person> op1 = tc;
+        //    Operator<Person> op2 = rc;
+        //    var op3 = op2 & op1;
 
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = rc;
-            var op3 = op2 & op1;
+        //    var res = st.Match(op3, p);
 
-            var res = st.Match(op3, p);
+        //    Assert.IsType<AndAlso<Person>>(op3);
+        //    Assert.True(st.UserStatus == (int)Feature.Asian);
+        //    Assert.False(res);
+        //}
 
-            Assert.IsType<AndAlso<Person>>(op3);
-            Assert.True(st.UserStatus == (int)Feature.Asian);
-            Assert.False(res);
-        }
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void OrElse_BooleanCommand_Command_False()
+        //{
+        //    TrueCommand<Person> tc = new TrueCommand<Person>();
+        //    RightCommand rc = new RightCommand();
+        //    p.Correct = true;
+        //    Operator<Person> op = !tc | !rc;
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void OrElse_BooleanCommand_Command_True()
-        {
-            FalseCommand<Person> tc = new FalseCommand<Person>();
-            WalkCommand rc = new WalkCommand();
+        //    var res = st.Match(op, p);
 
-            op = (+tc) | (+rc);
+        //    Assert.IsType<OrElse<Person>>(op);
+        //    Assert.True(p.Correct);
+        //    Assert.False(res);
+        //}
 
-            var res = st.Match(op, p);
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void OrElse_BooleanCommand_Command_True()
+        //{
+        //    FalseCommand<Person> fc = new FalseCommand<Person>();
+        //    WrongCommand wc = new WrongCommand();
+        //    p.Correct = false;
+        //    Operator<Person> op3 = !fc | !wc;
 
-            Assert.IsType<OrElse<Person>>(op);
-            Assert.True(p.DistanceTravelled == 1);
-            Assert.True(res);
-        }
+        //    var res = st.Match(op3, p);
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void OrElse_BooleanCommand_Operator_True()
-        {
-            TrueCommand<Person> tc = new TrueCommand<Person>();
-            SetAsianCommand ac = new SetAsianCommand();
-            p.Correct = false;
-
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = ac;
-            var op3 = op1 | op2;
-
-            var res = st.Match(op3, p);
-
-            Assert.IsType<OrElse<Person>>(op3);
-            Assert.True(st.UserStatus == (int)Feature.Asian);
-            Assert.True(res);
-        }
+        //    Assert.IsType<OrElse<Person>>(op3);
+        //    Assert.False(p.Correct);
+        //    Assert.True(res);
+        //}
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
-        public void OrElse_BooleanCommand_Operator_False()
-        {
-            FalseCommand<Person> tc = new FalseCommand<Person>();
-            WrongCommand rc = new WrongCommand();
-            p.Correct = true;
-
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = rc;
-            var op3 = op1 | !op2;
-
-            var res = st.Match(op3, p);
-
-            Assert.IsType<OrElse<Person>>(op3);
-            Assert.False(p.Correct);
-            Assert.False(res);
-        }
-
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void OrElse_Operator_BooleanCommand_True()
-        {
-            TrueCommand<Person> tc = new TrueCommand<Person>();
-            SetAsianCommand ac = new SetAsianCommand();
-            p.Correct = false;
-
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = ac;
-            var op3 = op2 | op1;
-
-            var res = st.Match(op3, p);
-
-            Assert.IsType<OrElse<Person>>(op3);
-            Assert.True(st.UserStatus == (int)Feature.Asian);
-            Assert.True(res);
-        }
-
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void OrElse_Operator_BooleanCommand_False()
-        {
-            FalseCommand<Person> tc = new FalseCommand<Person>();
-            WrongCommand rc = new WrongCommand();
-            p.Correct = true;
-
-            BooleanCommand<Person> op1 = tc;
-            Operator<Person> op2 = rc;
-            var op3 = !op2 | op1;
-
-            var res = st.Match(op3, p);
-
-            Assert.IsType<OrElse<Person>>(op3);
-            Assert.False(p.Correct);
-            Assert.False(res);
-        }
-
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void OrElse_BooleanCommand_Command_False()
-        {
-            FalseCommand<Person> fc = new FalseCommand<Person>();
-            WalkCommand wc = new WalkCommand();
-
-            op = (+fc) | (+wc);
-
-            var res = st.Match(op, p);
-
-            Assert.IsType<OrElse<Person>>(op);
-            Assert.True(p.DistanceTravelled == 1);
-            Assert.True(res);
-        }
-
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void AndAlso_BooleanFunction_BooleanFunction_True()
+        public void AndAlso_Function_Function_True()
         {
             p.Age = 10;
-            HasAgeFunction haf = new HasAgeFunction();
-            haf.Parameters = 10;
-            AddAgeFunction aaf = new AddAgeFunction();
-            aaf.Parameters = 20;
-
-            op = (+haf) & (+aaf);
+            HasAgeFunction haf = new HasAgeFunction(10);
+            AddAgeFunction aaf = new AddAgeFunction(20);
+            var op = (+haf) & (+aaf);
 
             var res = st.Match(op, p);
 
@@ -391,14 +307,11 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
-        public void AndAlso_BooleanFunction_BooleanFunction_False()
+        public void AndAlso_Function_Function_False()
         {
-            HasAgeFunction haf = new HasAgeFunction();
-            haf.Parameters = 10;
-            AddAgeFunction aaf = new AddAgeFunction();
-            aaf.Parameters = 20;
-
-            var op = (+haf) & (+aaf);
+            HasAgeFunction haf = new HasAgeFunction(10);
+            AddAgeFunction aaf = new AddAgeFunction(20);
+            var op = (-haf) & (-aaf);
 
             var res = st.Match(op, p);
 
@@ -407,70 +320,68 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res);
         }
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void AndAlso_BooleanCommand_BooleanCommand_True()
-        {
-            WalkCommand wc = new WalkCommand();
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void AndAlso_BooleanCommand_BooleanCommand_True()
+        //{
+        //    WalkCommand wc = new WalkCommand();
+        //    Operator<Person> op = +wc & +wc;
 
-            Operator<Person> op = +wc & +wc;
+        //    var res = st.Match(op, p);
 
-            var res = st.Match(op, p);
+        //    Assert.IsType<AndAlso<Person>>(op);
+        //    Assert.True(p.DistanceTravelled == 2);
+        //    Assert.True(res);
+        //}
 
-            Assert.IsType<AndAlso<Person>>(op);
-            Assert.True(p.DistanceTravelled == 2);
-            Assert.True(res);
-        }
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void AndAlso_BooleanCommand_BooleanCommand_False()
+        //{
+        //    WalkCommand wc = new WalkCommand();
+        //    Operator<Person> op = (+wc) & !(+wc);
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void AndAlso_BooleanCommand_BooleanCommand_False()
-        {
-            WalkCommand wc = new WalkCommand();
+        //    var res = st.Match(op, p);
 
-            Operator<Person> op = (+wc) & !(+wc);
+        //    Assert.IsType<AndAlso<Person>>(op);
+        //    Assert.True(p.DistanceTravelled == 2);
+        //    Assert.False(res);
+        //}
 
-            var res = st.Match(op, p);
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void And_BooleanCommand_BooleanCommand_True()
+        //{
+        //    Operator<Person> op = +(rc + wc) && +(rc + wc);
 
-            Assert.IsType<AndAlso<Person>>(op);
-            Assert.True(p.DistanceTravelled == 2);
-            Assert.False(res);
-        }
+        //    var res = st.Match(op, p);
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void And_BooleanCommand_BooleanCommand_True()
-        {
-            op = +(rc + wc) && +(rc + wc);
+        //    Assert.IsType<And<Person>>(op);
+        //    Assert.True(p.DistanceTravelled == 6);
+        //    Assert.True(res);
+        //}
 
-            var res = st.Match(op, p);
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void And_BooleanCommand_BooleanCommand_False()
+        //{
+        //    RunCommand rc = new RunCommand();
+        //    WalkCommand wc = new WalkCommand();
+        //    Operator<Person> op = !(rc + wc) && +(rc + wc);
 
-            Assert.IsType<And<Person>>(op);
-            Assert.True(p.DistanceTravelled == 6);
-            Assert.True(res);
-        }
+        //    var res = st.Match(op, p);
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void And_BooleanCommand_BooleanCommand_False()
-        {
-            RunCommand rc = new RunCommand();
-            WalkCommand wc = new WalkCommand();
-            Operator<Person> op = +(!(rc + wc)) && +(rc + wc);
-
-            var res = st.Match(op, p);
-
-            Assert.IsType<And<Person>>(op);
-            Assert.True(p.DistanceTravelled == 3);
-            Assert.False(res);
-        }
+        //    Assert.IsType<And<Person>>(op);
+        //    Assert.True(p.DistanceTravelled == 3);
+        //    Assert.False(res);
+        //}
 
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
         public void OrElse_Bool_Operator_False()
         {
-            op = (dc > 10) % (rc);
+            var op = (dc > 10) % (rc);
             var op2 = false | op;
 
             var res = st.Match(op2, p);
@@ -514,12 +425,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void OrElse_BooleanFunction_BooleanFunction_True()
         {
-            AddAgeFunction aaf1 = new AddAgeFunction();
-            aaf1.Parameters = 10;
-            HasAgeFunction haf1 = new HasAgeFunction();
-            haf1.Parameters = 10;
-
-            op = (+haf1) | (+aaf1);
+            AddAgeFunction aaf1 = new AddAgeFunction(10);
+            HasAgeFunction haf1 = new HasAgeFunction(10);
+            var op = (+haf1) | (+aaf1);
 
             var res = st.Match(op, p);
 
@@ -532,12 +440,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void OrElse_BooleanFunction_BooleanFunction_False()
         {
-            HasAgeFunction haf1 = new HasAgeFunction();
-            haf1.Parameters = 10;
-            HasAgeFunction haf2 = new HasAgeFunction();
-            haf2.Parameters = 5;
-
-            op = (+haf1) | (+haf2);
+            HasAgeFunction haf1 = new HasAgeFunction(10);
+            HasAgeFunction haf2 = new HasAgeFunction(5);
+            var op = (-haf1) | (-haf2);
 
             var res = st.Match(op, p);
 
@@ -546,56 +451,113 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res);
         }
 
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void OrElse_BooleanCommand_BooleanCommand_True()
+        //{
+        //    Operator<Person> op = +(rc + wc) | +(rc + wc);
+
+        //    var res = st.Match(op, p);
+
+        //    Assert.IsType<OrElse<Person>>(op);
+        //    Assert.True(p.DistanceTravelled == 6);
+        //    Assert.True(res);
+        //}
+
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void Or_BooleanCommand_Batch_True()
+        //{
+        //    FalseCommand<Person> fc = new FalseCommand<Person>();
+        //    RunCommand rc = new RunCommand();
+        //    WalkCommand wc = new WalkCommand();
+        //    Operator<Person> op = (+fc) || (rc + wc);
+
+        //    var res = st.Match(op, p);
+
+        //    Assert.IsType<Or<Person>>(op);
+        //    Assert.True(p.DistanceTravelled == 0);
+        //    Assert.True(res);
+        //}
+
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
-        public void OrElse_BooleanCommand_BooleanCommand_True()
+        public void And_Command_Command_False()
         {
-            op = +(rc + wc) | +(rc + wc);
+            GetDistanceCommand gdc1 = new GetDistanceCommand();
+            GetDistanceCommand gdc2 = new GetDistanceCommand();
 
+            Operator<Person> op = (gdc1 > 10) && (gdc2 > 20);
             var res = st.Match(op, p);
 
-            Assert.IsType<OrElse<Person>>(op);
-            Assert.True(p.DistanceTravelled == 6);
+            Assert.IsType<And<Person>>(op);
+            Assert.False(res);
+        }
+
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void And_Command_Command_True()
+        {
+            GetDistanceCommand gdc1 = new GetDistanceCommand();
+            GetDistanceCommand gdc2 = new GetDistanceCommand();
+            Person p = new Person() { DistanceTravelled = 25 };
+
+            Operator<Person> op = (gdc1 > 10) && (gdc2 > 20);
+            var res = st.Match(op, p);
+
+            Assert.IsType<And<Person>>(op);
             Assert.True(res);
         }
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
-        public void Or_BooleanCommand_Batch_True()
+        public void Or_Command_Command_False()
         {
-            FalseCommand<Person> fc = new FalseCommand<Person>();
-            RunCommand rc = new RunCommand();
-            WalkCommand wc = new WalkCommand();
+            GetDistanceCommand gdc1 = new GetDistanceCommand();
+            GetDistanceCommand gdc2 = new GetDistanceCommand();
 
-            Operator<Person> op = (+fc) || (rc + wc);
-
+            Operator<Person> op = (gdc1 > 10) || (gdc2 > 20);
             var res = st.Match(op, p);
 
             Assert.IsType<Or<Person>>(op);
-            Assert.True(p.DistanceTravelled == 3);
-            Assert.True(res);
+            Assert.False(res);
         }
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
-        public void Or_BooleanCommand_BooleamCommand_False()
+        public void Or_Command_Command_True()
         {
-            RunCommand rc = new RunCommand();
-            WalkCommand wc = new WalkCommand();
+            GetDistanceCommand gdc1 = new GetDistanceCommand();
+            GetDistanceCommand gdc2 = new GetDistanceCommand();
+            p.DistanceTravelled = 15;
 
-            op = +(!(rc + wc)) || +(!(rc + wc));
-
+            Operator<Person> op = (gdc1 > 10) || (gdc2 > 20);
             var res = st.Match(op, p);
 
+            Assert.True(res);
             Assert.IsType<Or<Person>>(op);
-            Assert.True(p.DistanceTravelled == 6 && !res, "'Or' operator (||) is false.");
         }
+
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void Or_BooleanCommand_BooleanCommand_False()
+        //{
+        //    RunCommand rc = new RunCommand();
+        //    WalkCommand wc = new WalkCommand();
+        //    Operator<Person> op = (!(rc + wc)) || (!(rc + wc));
+
+        //    var res = st.Match(op, p);
+
+        //    Assert.IsType<Or<Person>>(op);
+        //    Assert.True(p.DistanceTravelled == 6);
+        //    Assert.False(res);
+        //}
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
         public void If_bool_Then_ExpressionOperator_Else_ExpressionOperator_True()
         {
-            op = (true) % (rc / wc);
+            Operator<Person> op = (true) % (rc / wc);
 
             var res = st.Match(op, p);
 
@@ -608,7 +570,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void If_bool_Then_ExpressionOperator_Else_ExpressionOperator_False()
         {
-            op = (false) % (rc / wc);
+            Operator<Person> op = (false) % (rc / wc);
 
             var res = st.Match(op, p);
 
@@ -621,7 +583,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void If_ExpressionOperator_Then_ExpressionOperator_Else_ExpressionOperator_True()
         {
-            op = (dc < 10) % (rc / wc);
+            Operator<Person> op = (dc < 10) % (rc / wc);
 
             var res = st.Match(op, p);
 
@@ -634,7 +596,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void If_ExpressionOperator_Then_ExpressionOperator_Else_ExpressionOperator_False()
         {
-            op = (dc > 10) % (rc / wc);
+            Operator<Person> op = (dc > 10) % (rc / wc);
 
             var res = st.Match(op, p);
 
@@ -643,31 +605,31 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res);
         }
 
-        [Trait("RuleEngine", "LogicalOperators")]
-        [Fact]
-        public void If_ExpressionOperator_Then_BooleanCommand_True()
-        {
-            op = (dc < 10) % (rc);
+        //[Trait("RuleEngine", "LogicalOperators")]
+        //[Fact]
+        //public void If_ExpressionOperator_Then_BooleanCommand_True()
+        //{
+        //    Operator<Person> op = (dc < 10) % (rc);
 
-            var res = st.Match(op, p);
+        //    var res = st.Match(op, p);
 
-            Assert.IsType<IfThen<Person>>(op);
-            Assert.True(p.DistanceTravelled == 2, "Incorrect distance travelled.");
-            Assert.True(res, "'IfThenElse' operator %(x)+(y-z) is false.");
-        }
+        //    Assert.IsType<IfThen<Person>>(op);
+        //    Assert.Equal(2, p.DistanceTravelled);
+        //    Assert.True(res);
+        //}
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
         public void If_Operator_Then_Command_True()
         {
             SleepCommand sc = new SleepCommand();
+            Operator<Person> op = (dc < 10) % (sc);
 
-            op = (dc < 10) % (sc);
             var res = st.Match(op, p);
 
             Assert.IsType<IfThen<Person>>(op);
-            Assert.True(p.Status == Status.Sleep, "Incorrect status.");
-            Assert.True(res, "'IfThen' operator is false.");
+            Assert.Equal(Status.Sleep, p.Status);
+            Assert.True(res);
         }
 
         [Trait("RuleEngine", "LogicalOperators")]
@@ -676,8 +638,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             SleepCommand sc = new SleepCommand();
             p.WakeUp();
-
-            op = (dc > 10) % (sc);
+            Operator<Person> op = (dc > 10) % (sc);
             var res = st.Match(op, p);
 
             Assert.IsType<IfThen<Person>>(op);
@@ -691,8 +652,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             GetAgeCommand gac = new GetAgeCommand();
             AddAgeFunction aaf = new AddAgeFunction();
+            Operator<Person> op = (gac <= 0) % (aaf - 1);
 
-            op = (gac <= 0) % (aaf - 1);
             var res = st.Match(op, p);
 
             Assert.IsType<IfThen<Person>>(op);
@@ -706,8 +667,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             GetAgeCommand gac = new GetAgeCommand();
             AddAgeFunction aaf = new AddAgeFunction();
+            Operator<Person> op = (gac > 10) % (aaf);
 
-            op = (gac > 10) % (aaf);
             var res = st.Match(op, p);
 
             Assert.IsType<IfThen<Person>>(op);
@@ -736,7 +697,6 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             SleepCommand sc = new SleepCommand();
             p.Status = Status.WakeUp;
-
             Operator<Person> op = (false) % (sc);
 
             var res = st.Match(op, p);
@@ -750,10 +710,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void If_Bool_Then_BooleanFunction_True()
         {
-            AddAgeFunction aaf = new AddAgeFunction();
-            aaf.Parameters = 10;
-
-            op = (true) % (aaf);
+            AddAgeFunction aaf = new AddAgeFunction(10);
+            Operator<Person> op = (true) % (aaf);
 
             var res = st.Match(op, p);
 
@@ -768,8 +726,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             AddAgeFunction aaf = new AddAgeFunction();
             aaf.Parameters = 10;
-
-            op = (false) % (aaf);
+            Operator<Person> op = (false) % (aaf);
 
             var res = st.Match(op, p);
 
@@ -808,7 +765,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Loop_ExpressionOperator_Command_True()
         {
-            op = (dc < 10) * (rc + wc);
+            Operator<Person> op = (dc < 10) * (rc + wc);
 
             var res = st.Match(op, p);
 
@@ -817,37 +774,35 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.True(res, "'Loop' operator %(x)*(y) is false.");
         }
 
-        //[Trait("RuleEngine", "LogicalOperators")]
-        //[Fact]
-        //public void True_Operator()
-        //{
-        //    op = (dc < 10);
-        //    var op2 = +op;
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void True_Operator()
+        {
+            Operator<Person> op = +(dc < 10);
 
-        //    var res = st.Match(op2, p);
+            var res = st.Match(op, p);
 
-        //    Assert.IsType<True<Person>>(op);
-        //    Assert.True(res);
-        //}
+            Assert.IsType<True<Person>>(op);
+            Assert.True(res);
+        }
 
-        //[Trait("RuleEngine", "LogicalOperators")]
-        //[Fact]
-        //public void False_Operator()
-        //{
-        //    op = (dc < 10);
-        //    var op2 = -op;
+        [Trait("RuleEngine", "LogicalOperators")]
+        [Fact]
+        public void False_Operator()
+        {
+            Operator<Person> op = -(dc < 10);
 
-        //    var res = st.Match(op2, p);
+            var res = st.Match(op, p);
 
-        //    Assert.IsType<False<Person>>(op);
-        //    Assert.False(res, "'Loop' operator %(x)*(y) is false.");
-        //}
+            Assert.IsType<False<Person>>(op);
+            Assert.False(res, "'Loop' operator %(x)*(y) is false.");
+        }
 
         [Trait("RuleEngine", "LogicalOperators")]
         [Fact]
         public void Not_Operator_True()
         {
-            var op = !(dc > 10);
+            Operator<Person> op = !(dc > 10);
 
             var res = st.Match(op, p);
 
@@ -859,7 +814,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Not_Operator_False()
         {
-            var op = !(dc < 10);
+            Operator<Person> op = !(dc < 10);
 
             var res = st.Match(op, p);
 
@@ -899,8 +854,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             GetAgeCommand gac = new GetAgeCommand();
             AddAgeFunction aaf = new AddAgeFunction();
             aaf.Parameters = 1;
-
-            op = (gac < 10) * (aaf - 1);
+            Operator<Person> op = (gac < 10) * (aaf - 1);
 
             var res = st.Match(op, p);
 
@@ -915,8 +869,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             AddAgeFunction aaf = new AddAgeFunction();
             aaf.Parameters = 1;
-
-            op = (false) * (aaf - 1);
+            Operator<Person> op = (false) * (aaf - 1);
 
             var res = st.Match(op, p);
 

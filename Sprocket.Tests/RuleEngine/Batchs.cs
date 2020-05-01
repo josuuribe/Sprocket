@@ -86,12 +86,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Batch_Batch_Function_True()
         {
-            AddAgeFunction ag1 = new AddAgeFunction();
-            ag1.Parameters = 1;
-            AddAgeFunction ag2 = new AddAgeFunction();
-            ag2.Parameters = 2;
-            AddAgeFunction ag3 = new AddAgeFunction();
-            ag3.Parameters = 3;
+            AddAgeFunction ag1 = new AddAgeFunction(1);
+            AddAgeFunction ag2 = new AddAgeFunction(2);
+            AddAgeFunction ag3 = new AddAgeFunction(3);
 
             Batch<Person> b1 = ag1 + ag2;
             var op3 = b1 + ag3;
@@ -106,12 +103,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Batch_Function_Batch_True()
         {
-            AddAgeFunction ag1 = new AddAgeFunction();
-            ag1.Parameters = 1;
-            AddAgeFunction ag2 = new AddAgeFunction();
-            ag2.Parameters = 2;
-            AddAgeFunction ag3 = new AddAgeFunction();
-            ag3.Parameters = 3;
+            AddAgeFunction ag1 = new AddAgeFunction(1);
+            AddAgeFunction ag2 = new AddAgeFunction(2);
+            AddAgeFunction ag3 = new AddAgeFunction(3);
 
             Batch<Person> b1 = ag1 + ag2;
             var op3 = ag3 + b1;

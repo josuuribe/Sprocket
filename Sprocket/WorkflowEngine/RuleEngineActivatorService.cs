@@ -60,14 +60,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
                     {
                         engine = container.GetExport<IRuleEngineService<T>>();
                     }
-                    try
-                    {
-                        ruleEngineCache.TryAdd(assemblyRuleEngine, engine);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception($"Can not add assembly {assemblyRuleEngine}", e);
-                    }
+                    ruleEngineCache.TryAdd(assemblyRuleEngine, engine);
                 }
             }
             return engine;

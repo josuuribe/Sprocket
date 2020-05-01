@@ -1,4 +1,5 @@
-﻿using RaraAvis.Sprocket.Tests.Fakes.Entities;
+﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
+using RaraAvis.Sprocket.Tests.Fakes.Entities;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;
 using RaraAvis.Sprocket.Tests.Fakes.System;
@@ -24,20 +25,6 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         public void Dispose()
         {
             st.EndSerialize();
-        }
-
-        [Trait("RuleEngine", "System")]
-        [Fact]
-        public void Execute()
-        {
-            GetNameCommand gnc = new GetNameCommand();
-            p.Name = "Name";
-
-            var ope = (gnc);
-
-            var res = st.Execute<string>(ope, p);
-
-            Assert.Equal("Name", res);
         }
 
         [Trait("RuleEngine", "System")]
@@ -100,9 +87,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void AddFlagCommand()
         {
-            IsFamilyCommand ifc = new IsFamilyCommand();
+            TrueCommand<Person> tc = new TrueCommand<Person>();
 
-            var ope = (ifc >> 1);
+            var ope = (tc >> 1);
 
             var res = st.Match(ope, p);
 
@@ -128,10 +115,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void AddFlag_Function()
         {
-            SonsFunction sf = new SonsFunction();
-            p.Family = new List<Person>();
-
-            var ope = (sf >> 1);
+            RightCommand rc = new RightCommand();
+            var ope = (rc >> 1);
 
             var res = st.Match(ope, p);
 
@@ -143,15 +128,146 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void RemoveFlag_Function()
         {
-            SonsFunction sf = new SonsFunction();
-            p.Family = new List<Person>();
-
-            var ope = (sf << 1);
+            RightCommand rc = new RightCommand();
+            var ope = (rc << 1);
 
             var res = st.Match(ope, p);
 
             Assert.True(res);
             Assert.Equal(0, st.UserStatus);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void CommandCast_String()
+        {
+            Person p = new Person() { Name = "Name" };
+            GetNameCommand gnc = new GetNameCommand(p);
+            
+            string name = gnc;
+            name = name.ToUpperInvariant();
+
+            Assert.Equal(p.Name.ToUpperInvariant(), name);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void CommandCast_SameElement()
+        {
+            Person p = new Person() { Name = "Name" };
+            GetNameCommand gnc = new GetNameCommand(p);
+
+            var element = gnc.Element;
+
+            Assert.Equal(p, element);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void CommandValue_SameCast()
+        {
+            Person p = new Person() { Name = "Name" };
+            GetNameCommand gnc = new GetNameCommand(p);
+
+            Assert.Equal(gnc, gnc.Value);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void Command_Not()
+        {
+            RightCommand rc = new RightCommand();
+            Person p = new Person();
+            var op = !rc;
+
+            var res = st.Match(op, p);
+
+            Assert.False(res);
+            Assert.True(p.Correct);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void Command_True()
+        {
+            RightCommand rc = new RightCommand();
+            Person p = new Person();
+            var op = +rc;
+
+            var res = st.Match(op, p);
+
+            Assert.True(res);
+            Assert.True(p.Correct);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void Command_False()
+        {
+            RightCommand rc = new RightCommand();
+            Person p = new Person();
+            var op = -rc;
+
+            var res = st.Match(op, p);
+
+            Assert.False(res);
+            Assert.True(p.Correct);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void FalseCommand_False()
+        {
+            FalseCommand<Person> fc = new FalseCommand<Person>();
+            Person p = new Person();
+
+            var res = st.Match(fc, p);
+
+            Assert.False(res);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void TrueCommand_True()
+        {
+            TrueCommand<Person> fc = new TrueCommand<Person>();
+            Person p = new Person();
+
+            var res = st.Match(fc, p);
+
+            Assert.True(res);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void CastFalseCommand_False()
+        {
+            FalseCommand<Person> fc = new FalseCommand<Person>();
+            Person p = new Person();
+
+            var res = st.Match(fc, p);
+
+            Assert.False(res);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void CastTrueCommand_Bool()
+        {
+            Person p = new Person();
+            TrueCommand<Person> fc = new TrueCommand<Person>(p);
+
+            Assert.True(fc);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void CastFalseCommand_Bool()
+        {
+            Person p = new Person();
+            FalseCommand<Person> fc = new FalseCommand<Person>(p);
+
+            Assert.False(fc);
         }
     }
 }

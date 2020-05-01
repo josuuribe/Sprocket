@@ -1,20 +1,18 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Operators;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.BinaryOperators;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
+﻿using RaraAvis.Sprocket.Parts.Elements.Casts;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOperators;
-using RaraAvis.Sprocket.Parts.Elements.Wrappers;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Parts.Elements.Commands
 {
     [DataContract]
-    public abstract class BooleanCommand<T> : Command<T, bool>
-        where T : IElement
+    public abstract class BooleanCommand<TElement> : Command<TElement, bool>
+        where TElement : IElement
     {
-        private static BinaryOperator<T> and = new AndAlso<T>();
-        private static BinaryOperator<T> or = new OrElse<T>();
+        public BooleanCommand() { }
+        public BooleanCommand(TElement p) : base(p) { }
+        //private static BinaryOperator<T> and = new AndAlso<T>();
+        //private static BinaryOperator<T> or = new OrElse<T>();
 
         //public static bool operator true(BooleanCommand<T> operatorTrue)
         //{
@@ -28,14 +26,14 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands
         //    return false;
         //}
 
-        public static BooleanCommand<T> operator &(BooleanCommand<T> operatorLeft, BooleanCommand<T> operatorRight)
-        {
-            AndAlso<T> aa = new AndAlso<T>();
-            aa.OperatorLeft = operatorLeft;
-            aa.OperatorRight = operatorRight;
-            BooleanCommandWrapper<T> bcw = new BooleanCommandWrapper<T>(aa);
-            return bcw;
-        }
+        //public static BooleanCommand<T> operator &(BooleanCommand<T> operatorLeft, BooleanCommand<T> operatorRight)
+        //{
+        //    AndAlso<T> aa = new AndAlso<T>();
+        //    aa.OperatorLeft = operatorLeft;
+        //    aa.OperatorRight = operatorRight;
+        //    BooleanCommandWrapper<T> bcw = new BooleanCommandWrapper<T>(aa);
+        //    return bcw;
+        //}
 
         //public static BooleanCommand<T> operator |(BooleanCommand<T> operatorLeft, BooleanCommand<T> operatorRight)
         //{
@@ -131,17 +129,16 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands
         //    return bcw;
         //}
 
-        public static BooleanCommand<T> operator !(BooleanCommand<T> operatorUnary)
+        public static Operator<TElement> operator !(BooleanCommand<TElement> operatorUnary)
         {
-            Not<T> not = new Not<T>();
-            not.Operator = (Operator<T>)operatorUnary;
-            BooleanCommandWrapper<T> lo = new BooleanCommandWrapper<T>(not);
-            return lo;
+            Not<TElement> not = new Not<TElement>();
+            not.Operator = (Operator<TElement>)operatorUnary;
+            return not;
         }
 
-        public static Operator<T> operator +(BooleanCommand<T> operatorUnary)
+        public static Operator<TElement> operator +(BooleanCommand<TElement> operatorUnary)
         {
-            OperateWrapper<T> ow = new OperateWrapper<T>(operatorUnary);
+            OperateAsOperator<TElement, bool> ow = new OperateAsOperator<TElement, bool>(operatorUnary);
             return ow;
         }
 
@@ -159,10 +156,15 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands
         //    return new BooleanCommandWrapper<T>(operatorToWrap);
         //}
 
-        public static implicit operator Operator<T>(BooleanCommand<T> operate)
+        public static implicit operator Operator<TElement>(BooleanCommand<TElement> operate)
         {
-            OperateWrapper<T> wrapper = new OperateWrapper<T>(operate);
+            OperateAsOperator<TElement, bool> wrapper = new OperateAsOperator<TElement, bool>(operate);
             return wrapper;
         }
+
+        //public static implicit operator bool(BooleanCommand<TElement> operate)
+        //{
+        //    return operate.Value;
+        //}
     }
 }

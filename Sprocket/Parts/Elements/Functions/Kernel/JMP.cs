@@ -1,4 +1,5 @@
-﻿using RaraAvis.Sprocket.Parts.Interfaces;
+﻿using RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators;
+using RaraAvis.Sprocket.Parts.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
 using System.Runtime.Serialization;
@@ -8,12 +9,16 @@ namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
     /// <summary>
     /// Sets the JMP property to establish next stage to execute.
     /// </summary>
-    /// <typeparam name="T">An IElement object.</typeparam>
+    /// <typeparam name="TElement">An IElement object.</typeparam>
     [DataContract]
-    internal sealed class JMP<T> : BooleanFunction<T, int>
-        where T : IElement
+    internal sealed class JMP<TElement> : Function<TElement, int, bool>
+        where TElement : IElement
     {
-        public override bool Value(RuleElement<T> element)
+        public JMP()
+        { }
+        public JMP(TElement element = default(TElement), int parameters = default(int)) : base(element, parameters)
+        { }
+        protected internal override bool Process(RuleElement<TElement> element)
         {
             element.StageAction = StageAction.Jmp;
             element.NextStageId = this.Parameters;

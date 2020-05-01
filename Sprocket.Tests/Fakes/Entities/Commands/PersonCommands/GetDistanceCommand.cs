@@ -5,7 +5,7 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
     public class GetDistanceCommand : ExpressionCommand<Person, int>
     {
-        public override int Value(RuleElement<Person> element)
+        protected internal override int Process(RuleElement<Person> element)
         {
             return element.Element.DistanceTravelled;
         }

@@ -1,11 +1,12 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Functions;
+﻿using RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators;
+using RaraAvis.Sprocket.Parts.Elements.Functions;
 using RaraAvis.Sprocket.WorkflowEngine;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
 {
-    public class SetSurnameFunction : BooleanFunction<Person, string>
+    public class SetSurnameFunction : Function<Person, string, bool>
     {
-        public override bool Value(RuleElement<Person> element)
+        protected internal override bool Process(RuleElement<Person> element)
         {
             element.Element.Surname = this.Parameters;
             return true;

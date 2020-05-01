@@ -1,66 +1,61 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Operators;
+﻿using RaraAvis.Sprocket.Parts.Elements.Casts;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ComparisonOperators;
-using RaraAvis.Sprocket.Parts.Elements.Wrappers;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using System;
 
 namespace RaraAvis.Sprocket.Parts.Elements.Commands
 {
-    public abstract class ExpressionCommand<T, U> : Command<T, U>
-        where T : IElement
-        where U : IComparable<U>
+    public abstract class ExpressionCommand<TElement, TValue> : Command<TElement, TValue>
+        where TElement : IElement
+        where TValue : IComparable<TValue>
     {
-        public static Operator<T> operator >=(ExpressionCommand<T, U> operateLeft, U operateRight)
+        public ExpressionCommand() : base() { }
+        public ExpressionCommand(TElement p) : base(p) { }
+        public static Operator<TElement> operator >=(ExpressionCommand<TElement, TValue> operateLeft, TValue operateRight)
         {
-            GreaterThanOrEquals<T, U> ngte = new GreaterThanOrEquals<T, U>();
+            GreaterThanOrEquals<TElement, TValue> ngte = new GreaterThanOrEquals<TElement, TValue>();
             ngte.OperateLeft = operateLeft;
-            ValueWrapper<T, U> wrapper = new ValueWrapper<T, U>(operateRight);
-            ngte.OperateRight = wrapper;
+            ngte.OperateRight = new ValueAsOperate<TElement, TValue>(operateRight);
             return ngte;
         }
 
-        public static Operator<T> operator <=(ExpressionCommand<T, U> operateLeft, U operateRight)
+        public static Operator<TElement> operator <=(ExpressionCommand<TElement, TValue> operateLeft, TValue operateRight)
         {
-            LessThanOrEquals<T, U> ngte = new LessThanOrEquals<T, U>();
+            LessThanOrEquals<TElement, TValue> ngte = new LessThanOrEquals<TElement, TValue>();
             ngte.OperateLeft = operateLeft;
-            ValueWrapper<T, U> wrapper = new ValueWrapper<T, U>(operateRight);
-            ngte.OperateRight = wrapper;
+            ngte.OperateRight = new ValueAsOperate<TElement, TValue>(operateRight);
             return ngte;
         }
 
-        public static Operator<T> operator >(ExpressionCommand<T, U> operateLeft, U operateRight)
+        public static Operator<TElement> operator >(ExpressionCommand<TElement, TValue> operateLeft, TValue operateRight)
         {
-            GreaterThan<T, U> ngte = new GreaterThan<T, U>();
+            GreaterThan<TElement, TValue> ngte = new GreaterThan<TElement, TValue>();
             ngte.OperateLeft = operateLeft;
-            ValueWrapper<T, U> wrapper = new ValueWrapper<T, U>(operateRight);
-            ngte.OperateRight = wrapper;
+            ngte.OperateRight = new ValueAsOperate<TElement, TValue>(operateRight);
             return ngte;
         }
 
-        public static Operator<T> operator <(ExpressionCommand<T, U> operateLeft, U operateRight)
+        public static Operator<TElement> operator <(ExpressionCommand<TElement, TValue> operateLeft, TValue operateRight)
         {
-            LessThan<T, U> ngte = new LessThan<T, U>();
+            LessThan<TElement, TValue> ngte = new LessThan<TElement, TValue>();
             ngte.OperateLeft = operateLeft;
-            ValueWrapper<T, U> wrapper = new ValueWrapper<T, U>(operateRight);
-            ngte.OperateRight = wrapper;
+            ngte.OperateRight = new ValueAsOperate<TElement, TValue>(operateRight);
             return ngte;
         }
 
-        public static Operator<T> operator ==(ExpressionCommand<T, U> operateLeft, U operateRight)
+        public static Operator<TElement> operator ==(ExpressionCommand<TElement, TValue> operateLeft, TValue operateRight)
         {
-            Equals<T, U> ngte = new Equals<T, U>();
+            Equals<TElement, TValue> ngte = new Equals<TElement, TValue>();
             ngte.OperateLeft = operateLeft;
-            ValueWrapper<T, U> wrapper = new ValueWrapper<T, U>(operateRight);
-            ngte.OperateRight = wrapper;
+            ngte.OperateRight = new ValueAsOperate<TElement, TValue>(operateRight);
             return ngte;
         }
 
-        public static Operator<T> operator !=(ExpressionCommand<T, U> operateLeft, U operateRight)
+        public static Operator<TElement> operator !=(ExpressionCommand<TElement, TValue> operateLeft, TValue operateRight)
         {
-            NotEquals<T, U> ngte = new NotEquals<T, U>();
+            NotEquals<TElement, TValue> ngte = new NotEquals<TElement, TValue>();
             ngte.OperateLeft = operateLeft;
-            ValueWrapper<T, U> wrapper = new ValueWrapper<T, U>(operateRight);
-            ngte.OperateRight = wrapper;
+            ngte.OperateRight = new ValueAsOperate<TElement, TValue>(operateRight);
             return ngte;
         }
     }

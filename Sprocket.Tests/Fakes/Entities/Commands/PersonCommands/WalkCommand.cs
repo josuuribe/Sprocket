@@ -1,11 +1,12 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
+﻿using RaraAvis.Sprocket.Parts.Elements;
+using RaraAvis.Sprocket.Parts.Elements.Commands;
 using RaraAvis.Sprocket.WorkflowEngine;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    class WalkCommand : BooleanCommand<Person>
+    class WalkCommand : Command<Person, bool>
     {
-        public override bool Value(RuleElement<Person> element)
+        protected internal override bool Process(RuleElement<Person> element)
         {
             element.Element.Walk();
             return true;

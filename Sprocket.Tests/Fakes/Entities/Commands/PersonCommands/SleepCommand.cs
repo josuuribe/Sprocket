@@ -5,7 +5,7 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
     class SleepCommand : Command<Person, Status>
     {
-        public override Status Value(RuleElement<Person> element)
+        protected internal override Status Process(RuleElement<Person> element)
         {
             element.Element.Sleep();
             return element.Element.Status;

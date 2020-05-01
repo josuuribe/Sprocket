@@ -9,12 +9,13 @@ namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
     /// <summary>
     /// Breaks execution for this rule.
     /// </summary>
-    /// <typeparam name="T">An IElement object.</typeparam>
+    /// <typeparam name="TElement">An IElement object.</typeparam>
     [DataContract]
-    internal sealed class Break<T> : BooleanCommand<T>
-        where T : IElement
+    internal sealed class Break<TElement> : Command<TElement, bool>
+        where TElement : IElement
     {
-        public override bool Value(RuleElement<T> element)
+
+        protected internal override bool Process(RuleElement<TElement> element)
         {
             element.StageAction = StageAction.Break;
             return true;

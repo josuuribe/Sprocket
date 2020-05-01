@@ -1,6 +1,5 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
-using RaraAvis.Sprocket.Parts.Elements.Wrappers;
+﻿using RaraAvis.Sprocket.Parts.Elements.Casts;
+using RaraAvis.Sprocket.Parts.Elements.Commands;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine;
 using System;
@@ -10,37 +9,36 @@ using System.Runtime.Serialization;
 namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
 {
     [DataContract]
-    public sealed class Batch<TElement> : BooleanCommand<TElement>
+    public sealed class Batch<TElement> : Command<TElement, bool>
         where TElement : IElement
     {
         [DataMember]
         public ArrayList Operates { get; set; }
 
-        internal Batch()
+        internal Batch() 
         {
             this.Operates = new ArrayList();
         }
 
-        public void Add<U>(IOperate<TElement, U> operate)
+        public void Add<TValue>(Operate<TElement, TValue> operate)
         {
             this.Operates.Add(operate);
         }
 
-        public void Add<U>(Batch<TElement> batch)
+        protected internal override bool Process(RuleElement<TElement> element)
         {
-            this.Operates.AddRange(batch.Operates);
-        }
-
-        public override bool Value(RuleElement<TElement> element)
-        {
-            var enumerator = this.Operates.GetEnumerator();
+            //var enumerator = this.Operates.GetEnumerator();
             try
             {
-                while (enumerator.MoveNext())
+                foreach(var operate in this.Operates)
                 {
-                    var parameter = enumerator.Current;
-                    parameter.GetType().GetMethod("Value").Invoke(parameter, new object[] { element });
+                    ((dynamic)operate).Process(element);
                 }
+                //while (enumerator.MoveNext())
+                //{
+                //    var parameter = enumerator.Current;
+                //    parameter.GetType().GetMethod("Value").Invoke(parameter, new object[] { element });
+                //}
             }
             catch (Exception)
             {
@@ -49,17 +47,9 @@ namespace RaraAvis.Sprocket.Parts.Elements.Functions.Kernel
             return true;
         }
 
-        public static Batch<TElement> operator +(Batch<TElement> batchLeft, Batch<TElement> batchRight)
-        {
-            Batch<TElement> batch = new Batch<TElement>();
-            batch.Add(batchLeft);
-            batch.Add(batchRight);
-            return batch;
-        }
-
-        public static implicit operator Operator<TElement>(Batch<TElement> batch)
-        {
-            return new OperateWrapper<TElement>(batch);
-        }
+        //public static implicit operator Operator<TElement>(Batch<TElement> batch)
+        //{
+        //    return new OperateAsOperator<TElement>(batch);
+        //}
     }
 }

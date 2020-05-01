@@ -12,13 +12,11 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
 {
     public class ActivateRuleEngine
     {
+        private readonly IRuleEngineService<Person> res = null;
+
         public RuleElement<Person> RuleElement { get; private set; }
         public ExecutionEngineResult ExecutionEngineResult { get; private set; }
-
-        IRuleEngineService<Person> res = null;
-
         public List<Stage> Stages { get; set; }
-        RuleEngineActivatorService<Person> reas;
 
         public ActivateRuleEngine()
         {
@@ -26,67 +24,41 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
             Stages = new List<Stage>();
         }
 
-        public FakeWorkflow Workflow
-        {
-            get; private set;
-        }
-
         public void ClearAll()
         {
-            this.Workflow = null;
             this.Stages.Clear();
         }
 
         public Stage CreateStage(int id, string name, Operator<Person> op)
         {
-            //Workflow = wf;
-
-            //ActivityAssembly aan1 = new ActivityAssembly();
-            //aan1.AssemblyPath = Path.Combine(AppContext.BaseDirectory, "RaraAvis.Sprocket.dll");
-
             ActivityAssembly aan = new ActivityAssembly();
             aan.AssemblyPath = Path.Combine(AppContext.BaseDirectory, "RaraAvis.Sprocket.Tests.dll");
-
             Stage stage = new Stage();
             stage.Id = id;
             stage.Name = name;
-
             stage.ActivitiesAssemblyNames.Add(aan);
-
             stage.XMLStage = res.Serialize(op, stage);
-
             Stages.Add(stage);
-
             return stage;
         }
 
-        public void CreateWorkflow()
+        public Stage CreateFailedStageWrongAssemblyPath(int id, string name, Operator<Person> op)
         {
-            FakeWorkflow workflow = new FakeWorkflow();
-            workflow = new FakeWorkflow();
-            //workflowPreprocess.Type = WorkflowType.PREPROCESS;
-            workflow.Code = "Workflow Pre-Process ";
-            this.Workflow = workflow;
+            ActivityAssembly aan = new ActivityAssembly();
+            aan.AssemblyPath = Path.Combine(AppContext.BaseDirectory, "Wrong.dll");
+            Stage stage = new Stage();            
+            stage.Id = id;
+            stage.Name = name;
+            stage.ActivitiesAssemblyNames.Add(aan);
+            stage.XMLStage = res.Serialize(op, stage);
+            Stages.Add(stage);
+            return stage;
         }
-
-        //public void CreateStagePostPreprocess(int id, ExpressionOperator<Person> op)
-        //{
-        //    FakeWorkflow workflowPostprocess = new FakeWorkflow();
-        //    workflowPostprocess = new FakeWorkflow();
-        //    workflowPostprocess.Type = WorkflowType.POSTPROCESS;
-        //    workflowPostprocess.Name = "Workflow Post-Process";
-        //    this.Workflow = workflowPostprocess;
-        //}
 
         public void Init(Person element)
         {
-            this.RuleElement = res.Init(this.Workflow, Stages, element);
+            this.RuleElement = res.Init(Stages, element);
             this.ExecutionEngineResult = res.ExecutionEngineResult;
-        }
-
-        public U Execute<U>(Command<Person, U> operate, Person p)
-        {
-            return res.Execute<U>(operate, p);
         }
     }
 }

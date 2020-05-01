@@ -1,12 +1,11 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
+﻿using RaraAvis.Sprocket.Parts.Elements.Casts;
+using RaraAvis.Sprocket.Parts.Elements.Commands;
 using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
 using RaraAvis.Sprocket.Parts.Elements.Operators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.BinaryOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.IterationOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOperators;
-using RaraAvis.Sprocket.Parts.Elements.Wrappers;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine;
 using System.Runtime.Serialization;
@@ -63,27 +62,26 @@ namespace RaraAvis.Sprocket.Parts.Elements
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
             ifThen.If = operatorLeft;
-            JMP<TElement> jmp = new JMP<TElement>();
-            jmp.Parameters = stageId;
-            FunctionWrapper<TElement, int, bool> function = new FunctionWrapper<TElement, int, bool>(jmp);
+            JMP<TElement> jmp = new JMP<TElement>(default(TElement), stageId);
+            OperateAsOperator<TElement, bool> function = new OperateAsOperator<TElement, bool>(jmp);
             ifThen.Then = function;
-            return function;
+            return ifThen;
         }
 
-        public static Operator<TElement> operator *(Operator<TElement> operatorLeft, Operator<TElement> operatorRight)
-        {
-            Loop<TElement> loop = new Loop<TElement>();
-            loop.Condition = operatorLeft;
-            loop.Block = operatorRight;
-            return loop;
-        }
+        //public static Operator<TElement> operator *(Operator<TElement> operatorLeft, Operator<TElement> operatorRight)
+        //{
+        //    Loop<TElement> loop = new Loop<TElement>();
+        //    loop.Condition = operatorLeft;
+        //    loop.Block = operatorRight;
+        //    return loop;
+        //}
 
         public static Operator<TElement> operator ~(Operator<TElement> expressionIf)
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
             ifThen.If = expressionIf;
             Break<TElement> brk = new Break<TElement>();
-            OperateWrapper<TElement> wrapperBrk = new OperateWrapper<TElement>(brk);
+            OperateAsOperator<TElement, bool> wrapperBrk = new OperateAsOperator<TElement, bool>(brk);
             ifThen.Then = wrapperBrk;
             return ifThen;
         }
@@ -91,10 +89,10 @@ namespace RaraAvis.Sprocket.Parts.Elements
         public static Batch<TElement> operator +(Operator<TElement> operatorLeft, Operator<TElement> operatorRight)
         {
             Batch<TElement> batch = new Batch<TElement>();
-            BooleanCommandWrapper<TElement> booleanMethodWrapperLeft = new BooleanCommandWrapper<TElement>(operatorLeft);
-            batch.Add(booleanMethodWrapperLeft);
-            BooleanCommandWrapper<TElement> booleanMethodWrapperRight = new BooleanCommandWrapper<TElement>(operatorRight);
-            batch.Add(booleanMethodWrapperRight);
+            OperatorAsOperate<TElement> booleanMethodWrapperLeft = new OperatorAsOperate<TElement>(operatorLeft);
+            batch.Add<bool>(booleanMethodWrapperLeft);
+            OperatorAsOperate<TElement> booleanMethodWrapperRight = new OperatorAsOperate<TElement>(operatorRight);
+            batch.Add<bool>(booleanMethodWrapperRight);
             return batch;
         }
         //public static ExpressionOperator<TElement> operator &(Operator<TElement> operatorLeft, bool right)
@@ -129,9 +127,11 @@ namespace RaraAvis.Sprocket.Parts.Elements
         //    return ngte;
         //}
 
-        public static IOperate<TElement, bool> operator +(Operator<TElement> op)
+        public static ExpressionOperator<TElement> operator +(Operator<TElement> op)
         {
-            return null;
+            True<TElement> t = new True<TElement>();
+            t.Operator = op;
+            return t;
         }
 
         public static ExpressionOperator<TElement> operator -(Operator<TElement> op)
@@ -145,9 +145,8 @@ namespace RaraAvis.Sprocket.Parts.Elements
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
             ifThen.If = operatorLeft;
-            AddFlag<TElement> result = new AddFlag<TElement>();
-            result.Parameters = shiftNumber;
-            OperateWrapper<TElement> wrapper = new OperateWrapper<TElement>((IOperate<TElement, bool>)result);
+            AddFlag<TElement> result = new AddFlag<TElement>(shiftNumber);
+            OperateAsOperator<TElement, bool> wrapper = new OperateAsOperator<TElement, bool>(result);
             ifThen.Then = wrapper;
             return ifThen;
         }
@@ -156,9 +155,8 @@ namespace RaraAvis.Sprocket.Parts.Elements
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
             ifThen.If = operatorLeft;
-            RemoveFlag<TElement> shift = new RemoveFlag<TElement>();
-            shift.Parameters = shiftNumber;
-            OperateWrapper<TElement> wrapper = new OperateWrapper<TElement>((IOperate<TElement, bool>)shift);
+            RemoveFlag<TElement> shift = new RemoveFlag<TElement>(shiftNumber);
+            OperateAsOperator<TElement, bool> wrapper = new OperateAsOperator<TElement, bool>(shift);
             ifThen.Then = wrapper;
             return ifThen;
         }
@@ -177,16 +175,15 @@ namespace RaraAvis.Sprocket.Parts.Elements
             return operatorIfThenElse;
         }
 
-        public static Operator<TElement> operator %(Operator<TElement> operatorIf, IfThen<TElement> operatorIfThen)
-        {
-            operatorIfThen.If = operatorIf;
-            return operatorIfThen;
-        }
+        //public static Operator<TElement> operator %(Operator<TElement> operatorIf, IfThen<TElement> operatorIfThen)
+        //{
+        //    operatorIfThen.If = operatorIf;
+        //    return operatorIfThen;
+        //}
 
         public static implicit operator Operator<TElement>(bool value)
         {
-            var operate = new ValueWrapper<TElement, bool>(value);
-            return new OperateWrapper<TElement>(operate);
+            return new ValueAsOperator<TElement, bool>(value);
         }
     }
 }

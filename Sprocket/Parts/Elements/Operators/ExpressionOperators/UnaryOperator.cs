@@ -16,5 +16,13 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators
         /// </summary>
         [DataMember]
         public virtual IOperator<T> Operator { get; set; }
+
+        public UnaryOperator()
+        { }
+
+        public UnaryOperator(IOperator<T> @operator)
+        {
+            this.Operator = @operator;
+        }
     }
 }

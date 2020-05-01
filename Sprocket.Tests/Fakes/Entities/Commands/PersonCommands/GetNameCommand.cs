@@ -5,7 +5,9 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
     class GetNameCommand : Command<Person, string>
     {
-        public override string Value(RuleElement<Person> element)
+        public GetNameCommand() : base() { }
+        public GetNameCommand(Person p) : base(p) { }
+        protected internal override string Process(RuleElement<Person> element)
         {
             return element.Element.Name;
         }

@@ -4,6 +4,7 @@ using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
 using RaraAvis.Sprocket.Tests.Fakes.System;
 using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
 using System;
+using System.Runtime.Serialization;
 using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
@@ -35,7 +36,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             op = (dc < 10) >> (int)Feature.Asian;
 
-            var stage = st.CreateStage(1, "Stage-1", op);
+            var stage = st.ActivateRuleEngine.CreateStage(1, "Stage-1", op);
             var result = st.ExecuteWorkflow(p, stage);
 
             Assert.True(((Feature)result.ruleElement.UserStatus & Feature.Asian) == Feature.Asian, "Invalid status");
@@ -47,11 +48,37 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             op = (dc < 10) << (int)Feature.Asian;
 
-            var stage = st.CreateStage(1, "Stage-1", op);
+            var stage = st.ActivateRuleEngine.CreateStage(1, "Stage-1", op);
             var result = st.ExecuteWorkflow(p, stage);
 
             Assert.Equal(0, result.ruleElement.UserStatus);
             Assert.Equal(ExecutionEngineResult.OK, result.Item2);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void Operator_False()
+        {
+            GetNameCommand gnc = new GetNameCommand();
+            p.Name = "Name";
+            var ope = -(gnc);
+
+            var res = st.Match(ope, p);
+
+            Assert.False(res);
+        }
+
+        [Trait("RuleEngine", "System")]
+        [Fact]
+        public void Operator_True()
+        {
+            GetNameCommand gnc = new GetNameCommand();
+            p.Name = "Name";
+            var ope = +(gnc);
+
+            var res = st.Match(ope, p);
+
+            Assert.True(res);
         }
     }
 }

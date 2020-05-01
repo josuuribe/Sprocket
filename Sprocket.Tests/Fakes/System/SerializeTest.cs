@@ -9,18 +9,18 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
 {
     public class SerializeTest
     {
-        ActivateRuleEngine are;
-        RuleElement<Person> re = null;
+        public ActivateRuleEngine ActivateRuleEngine { get; private set; }
+        private RuleElement<Person> re = null;
 
         public void BeginSerialize()
         {
             re = new RuleElement<Person>();
-            are = new ActivateRuleEngine();
+            ActivateRuleEngine = new ActivateRuleEngine();
         }
 
         public void EndSerialize()
         {
-            are.ClearAll();
+            ActivateRuleEngine.ClearAll();
         }
 
         public int UserStatus
@@ -31,34 +31,17 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
             }
         }
 
-
-        public Stage CreateStage(int id, string name, Operator<Person> p)
-        {
-            return are.CreateStage(id, name, p);
-        }
-
         public (RuleElement<Person> ruleElement, ExecutionEngineResult) ExecuteWorkflow(Person p, params Stage[] stages)
         {
-            are.CreateWorkflow();
-            are.Stages = stages.ToList();
-            are.Init(p);
-            return (are.RuleElement, are.ExecutionEngineResult);
+            ActivateRuleEngine.Stages = stages.ToList();
+            ActivateRuleEngine.Init(p);
+            return (ActivateRuleEngine.RuleElement, ActivateRuleEngine.ExecutionEngineResult);
         }
 
         public bool Match(Operator<Person> op, Person p)
         {
             re.Element = p;
             return op.Match(re);
-        }
-
-        public Stage CreateStage(string nameStage, Operator<Person> op, Person p)
-        {
-            return are.CreateStage(1, nameStage, op);
-        }
-
-        public U Execute<U>(Command<Person, U> operate, Person p)
-        {
-            return are.Execute(operate, p);
         }
     }
 }

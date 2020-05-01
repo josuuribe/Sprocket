@@ -11,15 +11,19 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOp
     internal class False<T> : UnaryOperator<T>
         where T : IElement
     {
+        public False() : base()
+        { }
+        public False(IOperator<T> @operator) : base(@operator)
+        { }
         public override bool Match(RuleElement<T> element)
         {
             Operator.Match(element);
             return false;
         }
 
-        public static IEnumerable<Type> GetKnownType()
-        {
-            return new Type[] { typeof(False<T>) };
-        }
+        //public static IEnumerable<Type> GetKnownType()
+        //{
+        //    return new Type[] { typeof(False<T>) };
+        //}
     }
 }

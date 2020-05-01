@@ -1,11 +1,15 @@
 ﻿using RaraAvis.Sprocket.Parts.Elements;
 using RaraAvis.Sprocket.WorkflowEngine;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    class RightCommand : Command<Person, bool>
+    [DataContract]
+    internal class RightCommand : Command<Person, bool>
     {
-        public override bool Value(RuleElement<Person> element)
+        public RightCommand() : base() { }
+        public RightCommand(Person p) : base(p) { }
+        protected internal override bool Process(RuleElement<Person> element)
         {
             element.Element.Correct = true;
             return element.Element.Correct;

@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Fakes\Entities\FakeWorkflow.cs" />
     <Compile Remove="Fakes\System\SprocketSystem.cs" />
   </ItemGroup>
 

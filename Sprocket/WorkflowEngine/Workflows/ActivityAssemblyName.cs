@@ -10,10 +10,6 @@
             this.Version = 1;
         }
         /// <summary>
-        /// Internal Id.
-        /// </summary>
-        public long Id { get; set; }
-        /// <summary>
         /// Assembly name that stores type information.
         /// </summary>
         public string AssemblyName
@@ -27,10 +23,6 @@
         /// Full path to assembly.
         /// </summary>
         public string AssemblyPath { get; set; }
-        /// <summary>
-        /// Description information and other related stuff.
-        /// </summary>
-        public string Description { get; set; }
         /// <summary>
         /// Assembly version.
         /// </summary>

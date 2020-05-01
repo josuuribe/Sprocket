@@ -19,11 +19,11 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.BinaryO
             return OperatorLeft.Match(element) && OperatorRight.Match(element);
         }
 
-        private static Type[] GetKnownType()
-        {
-            Type[] t = new Type[1];
-            t[0] = typeof(And<T>);
-            return t;
-        }
+        //private static Type[] GetKnownType()
+        //{
+        //    Type[] t = new Type[1];
+        //    t[0] = typeof(And<T>);
+        //    return t;
+        //}
     }
 }

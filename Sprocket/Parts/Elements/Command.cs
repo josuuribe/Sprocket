@@ -1,27 +1,28 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
+﻿using RaraAvis.Sprocket.Parts.Elements.Casts;
+using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
 using RaraAvis.Sprocket.Parts.Elements.Operators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ComparisonOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.IterationOperators;
-using RaraAvis.Sprocket.Parts.Elements.Wrappers;
+using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOperators;
 using RaraAvis.Sprocket.Parts.Interfaces;
-using RaraAvis.Sprocket.WorkflowEngine;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Parts.Elements
 {
     [DataContract]
-    public abstract class Command<TElement, TValue> : IOperate<TElement, TValue>
+    public abstract class Command<TElement, TValue> : Operate<TElement, TValue>
         where TElement : IElement
     {
-        public abstract TValue Value(RuleElement<TElement> element);
+        public Command() : base() { }
+
+        public Command(TElement element) : base(element) { }
 
         public static ExpressionOperator<TElement> operator >>(Command<TElement, TValue> operatorLeft, int shiftNumber)
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
             ifThen.If = (Operator<TElement>)operatorLeft;
-            AddFlag<TElement> shift = new AddFlag<TElement>();
-            shift.Parameters = shiftNumber;
+            AddFlag<TElement> shift = new AddFlag<TElement>(shiftNumber);
             ifThen.Then = (Operator<TElement>)shift;
             return ifThen;
         }
@@ -29,26 +30,25 @@ namespace RaraAvis.Sprocket.Parts.Elements
         public static ExpressionOperator<TElement> operator <<(Command<TElement, TValue> operatorLeft, int shiftNumber)
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
-            ifThen.If = (Operator<TElement>)operatorLeft;
-            RemoveFlag<TElement> shift = new RemoveFlag<TElement>();
-            shift.Parameters = shiftNumber;
-            ifThen.Then = (Operator<TElement>)shift;
+            ifThen.If = new OperateAsOperator<TElement, TValue>(operatorLeft);
+            RemoveFlag<TElement> shift = new RemoveFlag<TElement>(shiftNumber);
+            ifThen.Then = new OperateAsOperator<TElement, bool>(shift);
             return ifThen;
         }
 
         public static ExpressionOperator<TElement> operator %(bool boolConstant, Command<TElement, TValue> operatorRight)
         {
             IfThen<TElement> it = new IfThen<TElement>();
-            it.If = new OperateWrapper<TElement>(new ValueWrapper<TElement, bool>(boolConstant));
-            it.Then = (Operator<TElement>)operatorRight;
+            it.If = new ValueAsOperator<TElement, bool>(boolConstant);
+            it.Then = new CommandAsOperator<TElement, TValue>(operatorRight);
             return it;
         }
 
-        public static ExpressionOperator<TElement> operator %(Operator<TElement> operatorIf, Command<TElement, TValue> operatorRight)
+        public static ExpressionOperator<TElement> operator %(Operator<TElement> operatorIf, Command<TElement, TValue> command)
         {
             IfThen<TElement> it = new IfThen<TElement>();
             it.If = operatorIf;
-            it.Then = (Operator<TElement>)operatorRight;
+            it.Then = new CommandAsOperator<TElement, TValue>(command);
             return it;
         }
 
@@ -56,7 +56,7 @@ namespace RaraAvis.Sprocket.Parts.Elements
         {
             Loop<TElement> loop = new Loop<TElement>();
             loop.Condition = expression;
-            loop.Block = (Operator<TElement>)command;
+            loop.Block = new CommandAsOperator<TElement, TValue>(command);
             return loop;
         }
 
@@ -68,16 +68,11 @@ namespace RaraAvis.Sprocket.Parts.Elements
             return batch;
         }
 
-        public static implicit operator Operator<TElement>(Command<TElement, TValue> command)
-        {
-            return new CommandWrapper<TElement, TValue>(command);
-        }
-
         public static IfThenElse<TElement> operator /(Command<TElement, TValue> operatorThen, Command<TElement, TValue> operatorElse)
         {
             IfThenElse<TElement> ite = new IfThenElse<TElement>();
-            ite.Then = new CommandWrapper<TElement, TValue>(operatorThen);
-            ite.Else = new CommandWrapper<TElement, TValue>(operatorElse);
+            ite.Then = new CommandAsOperator<TElement, TValue>(operatorThen);
+            ite.Else = new CommandAsOperator<TElement, TValue>(operatorElse);
             return ite;
         }
 
@@ -85,7 +80,7 @@ namespace RaraAvis.Sprocket.Parts.Elements
         {
             Equals<TElement, TValue> oe = new Equals<TElement, TValue>();
             oe.OperateLeft = command;
-            ValueWrapper<TElement, TValue> wrapper = new ValueWrapper<TElement, TValue>(o);
+            ValueAsOperate<TElement, TValue> wrapper = new ValueAsOperate<TElement, TValue>(o);
             oe.OperateRight = wrapper;
             return oe;
         }
@@ -94,15 +89,34 @@ namespace RaraAvis.Sprocket.Parts.Elements
         {
             NotEquals<TElement, TValue> oe = new NotEquals<TElement, TValue>();
             oe.OperateLeft = command;
-            ValueWrapper<TElement, TValue> wrapper = new ValueWrapper<TElement, TValue>(o);
+            ValueAsOperate<TElement, TValue> wrapper = new ValueAsOperate<TElement, TValue>(o);
             oe.OperateRight = wrapper;
             return oe;
         }
 
-        public static implicit operator TValue(Command<TElement, TValue> command)
+        public static Operator<TElement> operator +(Command<TElement, TValue> command)
         {
-            CommandWrapper<TElement, TValue> wrapper = new CommandWrapper<TElement, TValue>(command);
-            return wrapper.Result;
+            return new True<TElement>(new OperateAsOperator<TElement, TValue>(command));
+        }
+
+        public static Operator<TElement> operator -(Command<TElement, TValue> command)
+        {
+            return new False<TElement>(new OperateAsOperator<TElement, TValue>(command));
+        }
+
+        public static Operator<TElement> operator !(Command<TElement, TValue> command)
+        {
+            return new Not<TElement>(new OperateAsOperator<TElement, TValue>(command));
+        }
+
+        public static implicit operator TValue(Command<TElement, TValue> command)
+        {// No devuelve el valor correctamente, el Match no devuelve el Wrapper y los comandos no deberían almacenar valor
+            return command.Process(command.element);
+        }
+
+        public static implicit operator Operator<TElement>(Command<TElement, TValue> command)
+        {
+            return new OperateAsOperator<TElement, TValue>(command);
         }
     }
 }

@@ -4,9 +4,9 @@ using RaraAvis.Sprocket.WorkflowEngine;
 using System;
 using System.Runtime.Serialization;
 
-namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
+namespace RaraAvis.Sprocket.Parts.Elements.Casts
 {
-    [KnownType("GetKnownType")]
+    //[KnownType("GetKnownType")]
     [DataContract]
     internal class FunctionWrapper<T, U, V> : Operator<T>
         where T : IElement
@@ -23,15 +23,15 @@ namespace RaraAvis.Sprocket.Parts.Elements.Wrappers
 
         public override bool Match(RuleElement<T> element)
         {
-            this.Result = this.Operate.Value(element);
+            this.Result = this.Operate.Process(element);
             return true;
         }
 
-        private static Type[] GetKnownType()
-        {
-            Type[] t = new Type[1];
-            t[0] = typeof(FunctionWrapper<T, U, V>);
-            return t;
-        }
+        //private static Type[] GetKnownType()
+        //{
+        //    Type[] t = new Type[1];
+        //    t[0] = typeof(FunctionWrapper<T, U, V>);
+        //    return t;
+        //}
     }
 }

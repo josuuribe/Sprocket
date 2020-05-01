@@ -12,7 +12,6 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.Connect
     public class IfThen<T> : SelectionOperator<T>
         where T : IElement
     {
-
         public override bool Match(RuleElement<T> element)
         {
             return If.Match(element) ? Then.Match(element) : false;

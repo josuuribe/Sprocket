@@ -6,7 +6,9 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
     class GetAgeCommand : ExpressionCommand<Person, int>
     {
-        public override int Value(RuleElement<Person> element)
+        public GetAgeCommand() : base() { }
+        public GetAgeCommand(Person p) : base(p) { }
+        protected internal override int Process(RuleElement<Person> element)
         {
             return element.Element.Age;
         }

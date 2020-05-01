@@ -50,69 +50,6 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         #endregion
 
         #region ·   Methods   ·
-        /// <summary>
-        /// Filter types removing generics, datacontracts, interfaces and abstract classes.
-        /// </summary>
-        /// <param name="types">Types to filter.</param>
-        /// <returns>A List with types filtered.</returns>
-        private List<Type> Filter(Assembly assembly)
-        {
-            var types = assembly.GetTypes();
-            var filteredTypes = new List<Type>();
-            Action<Type, Type> createType = (t1, t2) =>
-            {
-                if (t1.GetInterfaces().Where(t => t.GetTypeInfo().IsGenericType).Any(t => t.GetGenericTypeDefinition() == t2.GetGenericTypeDefinition()))
-                {
-                    filteredTypes.Add(t1);
-                }
-                /*
-                var type = t1.GetInterfaces().Where(t => t.GetTypeInfo().IsGenericType).FirstOrDefault(t => t.GetGenericTypeDefinition() == t2.GetGenericTypeDefinition());
-                if (type != null)
-                {
-                    var genericTypes = type.GetGenericArguments();
-                    type.GetGenericTypeDefinition().MakeGenericType(new Type[] { genericTypes[0], genericTypes[1] });
-                    if (!filteredTypes.Contains(type))
-                        filteredTypes.Add(type);
-                }
-                */
-            };
-            foreach (var type in types)
-            {
-                createType(type, typeof(IOperate<,>));
-                createType(type, typeof(IOperator<>));
-            }
-            return filteredTypes;
-        }
-        /// <summary>
-        /// Load types required to serialize using given assemblies.
-        /// </summary>
-        /// <param name="assemblyNames">Assemblies with types.</param>
-        /// <returns>An array with assemblies.</returns>
-        /*internal Type[] Load(List<ActivityAssembly> assemblies)
-        {
-            List<Type> typesResult = new List<Type>(CommonTypes);
-            foreach (var ass in assemblies)
-            {
-                if (assemblyTypes.ContainsKey(ass.AssemblyName))
-                {
-                    typesResult.AddRange(assemblyTypes[ass.AssemblyName]);
-                }
-                else
-                {
-                    var executingAssemblyName = Assembly.GetEntryAssembly();
-                    var assembly = AssemblyLoadContext.GetAssemblyName(ass.AssemblyPath);
-                    var assemblyLoaded = AssemblyLoadContext.GetLoadContext(executingAssemblyName).LoadFromAssemblyName(assembly);
-
-                    var types = Filter(assemblyLoaded);
-
-                    assemblyTypes.TryAdd(ass.AssemblyName, types);
-
-                    typesResult.AddRange(types);
-                }
-            }
-            return typesResult.ToArray();
-        }*/
-
         private DataContractSerializer GetSerializer(Stage stage)
         {
             DataContractSerializerSettings dcss = new DataContractSerializerSettings();

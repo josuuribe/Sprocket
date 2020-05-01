@@ -1,8 +1,4 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators;
-using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
-using RaraAvis.Sprocket.Parts.Elements.Wrappers;
-using RaraAvis.Sprocket.Parts.Interfaces;
+﻿using RaraAvis.Sprocket.Parts.Interfaces;
 using System;
 using System.Runtime.Serialization;
 
@@ -12,7 +8,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators
     /// A base class for all logical operators.
     /// </summary>
     /// <typeparam name="TElement">An IElement object.</typeparam>
-    [KnownType("GetTypes")]
+    //[KnownType("GetTypes")]
     [DataContract]
     public abstract class ExpressionOperator<TElement> : Operator<TElement>
         where TElement : IElement
@@ -54,10 +50,10 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators
         //    return ifThen;
         //}
 
-        private static Type[] GetTypes()
-        {
-            Type[] t = new Type[0];
-            return t;
-        }
+        //private static Type[] GetTypes()
+        //{
+        //    Type[] t = new Type[0];
+        //    return t;
+        //}
     }
 }

@@ -1,10 +1,10 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
+﻿using RaraAvis.Sprocket.Parts.Elements.Casts;
+using RaraAvis.Sprocket.Parts.Elements.Functions.Kernel;
 using RaraAvis.Sprocket.Parts.Elements.Operators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ComparisonOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.ConnectiveOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.IterationOperators;
 using RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOperators;
-using RaraAvis.Sprocket.Parts.Elements.Wrappers;
 using RaraAvis.Sprocket.Parts.Interfaces;
 using System.Runtime.Serialization;
 
@@ -20,6 +20,12 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators
     public abstract class Function<TElement, TParameters, TValue> : Command<TElement, TValue>
         where TElement : IElement
     {
+        public Function() { }
+        public Function(TElement element = default(TElement), TParameters parameters = default(TParameters)) : base(element) 
+        {
+            this.Parameters = parameters;
+        }
+
         [DataMember]
         public TParameters Parameters { get; set; }
 
@@ -43,8 +49,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators
         {
             Equals<TElement, TValue> oe = new Equals<TElement, TValue>();
             oe.OperateLeft = function;
-            ValueWrapper<TElement, TValue> wrapper = new ValueWrapper<TElement, TValue>(o);
-            oe.OperateRight = wrapper;
+            oe.OperateRight = new ValueAsOperate<TElement, TValue>(o);
             return oe;
         }
 
@@ -52,8 +57,7 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators
         {
             NotEquals<TElement, TValue> oe = new NotEquals<TElement, TValue>();
             oe.OperateLeft = function;
-            ValueWrapper<TElement, TValue> wrapper = new ValueWrapper<TElement, TValue>(o);
-            oe.OperateRight = wrapper;
+            oe.OperateRight = new ValueAsOperate<TElement, TValue>(o);
             return oe;
         }
 
@@ -63,67 +67,73 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators
             return function;
         }
 
-        public static Operator<TElement> operator *(Operator<TElement> operatorLeft, Function<TElement, TParameters, TValue> operatorRight)
+        public static Operator<TElement> operator *(Operator<TElement> operatorLeft, Function<TElement, TParameters, TValue> function)
         {
             Loop<TElement> loop = new Loop<TElement>();
             loop.Condition = operatorLeft;
-            FunctionWrapper<TElement, TParameters, TValue> wrapper = new FunctionWrapper<TElement, TParameters, TValue>(operatorRight);
+            OperateAsOperator<TElement, TValue> wrapper = new OperateAsOperator<TElement, TValue>(function);
             loop.Block = wrapper;
             return loop;
         }
 
-        public static ExpressionOperator<TElement> operator *(bool left, Function<TElement, TParameters, TValue> operatorRight)
+        public static ExpressionOperator<TElement> operator *(bool left, Function<TElement, TParameters, TValue> function)
         {
             Loop<TElement> loop = new Loop<TElement>();
-            loop.Condition = new OperateWrapper<TElement>(new ValueWrapper<TElement, bool>(left));
-            FunctionWrapper<TElement, TParameters, TValue> wrapper = new FunctionWrapper<TElement, TParameters, TValue>(operatorRight);
-            loop.Block = wrapper;
+            loop.Condition = new ValueAsOperator<TElement, bool>(left);
+            OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
+            loop.Block = operateAsOperator;
             return loop;
         }
 
-        public static Operator<TElement> operator %(Operator<TElement> operatorLeft, Function<TElement, TParameters, TValue> operatorRight)
+        public static ExpressionOperator<TElement> operator %(bool left, Function<TElement, TParameters, TValue> function)
+        {
+            IfThen<TElement> it = new IfThen<TElement>();
+            it.If = new ValueAsOperator<TElement, bool>(left);
+            it.Then = new OperateAsOperator<TElement, TValue>(function);
+            return it;
+        }
+
+        public static Operator<TElement> operator %(Operator<TElement> operatorLeft, Function<TElement, TParameters, TValue> function)
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
             ifThen.If = operatorLeft;
-            FunctionWrapper<TElement, TParameters, TValue> wrapper = new FunctionWrapper<TElement, TParameters, TValue>(operatorRight);
-            ifThen.Then = wrapper;
+            OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
+            ifThen.Then = operateAsOperator;
             return ifThen;
         }
 
-        public static ExpressionOperator<TElement> operator ~(Function<TElement, TParameters, TValue> ifFunction)
+        public static ExpressionOperator<TElement> operator ~(Function<TElement, TParameters, TValue> function)
         {
             IfThen<TElement> ifThen = new IfThen<TElement>();
-            FunctionWrapper<TElement, TParameters, TValue> wrapperIf = new FunctionWrapper<TElement, TParameters, TValue>(ifFunction);
-            ifThen.If = wrapperIf;
+            OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
+            ifThen.If = operateAsOperator;
             Break<TElement> brk = new Break<TElement>();
-            OperateWrapper<TElement> wrapperBrk = new OperateWrapper<TElement>(brk);
+            OperateAsOperator<TElement, bool> wrapperBrk = new OperateAsOperator<TElement, bool>(brk);
             ifThen.Then = wrapperBrk;
             return ifThen;
         }
 
-        public static Operator<TElement> operator >>(Function<TElement, TParameters, TValue> operateLeft, int shiftNumber)
-        {
-            IfThen<TElement> ifThen = new IfThen<TElement>();
-            FunctionWrapper<TElement, TParameters, TValue> wrapperIf = new FunctionWrapper<TElement, TParameters, TValue>(operateLeft);
-            ifThen.If = wrapperIf;
-            AddFlag<TElement> shift = new AddFlag<TElement>();
-            shift.Parameters = shiftNumber;
-            OperateWrapper<TElement> wrapper = new OperateWrapper<TElement>((IOperate<TElement, bool>)shift);
-            ifThen.Then = wrapper;
-            return ifThen;
-        }
+        //public static Operator<TElement> operator >>(Function<TElement, TParameters, TValue> function, int shiftNumber)
+        //{
+        //    IfThen<TElement> ifThen = new IfThen<TElement>();
+        //    OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
+        //    ifThen.If = operateAsOperator;
+        //    AddFlag<TElement> shift = new AddFlag<TElement>(shiftNumber);
+        //    OperateAsOperator<TElement, bool> wrapper = new OperateAsOperator<TElement, bool>(shift);
+        //    ifThen.Then = wrapper;
+        //    return ifThen;
+        //}
 
-        public static Operator<TElement> operator <<(Function<TElement, TParameters, TValue> operateLeft, int shiftNumber)
-        {
-            IfThen<TElement> ifThen = new IfThen<TElement>();
-            FunctionWrapper<TElement, TParameters, TValue> wrapperIf = new FunctionWrapper<TElement, TParameters, TValue>(operateLeft);
-            ifThen.If = wrapperIf;
-            RemoveFlag<TElement> shift = new RemoveFlag<TElement>();
-            shift.Parameters = shiftNumber;
-            OperateWrapper<TElement> wrapper = new OperateWrapper<TElement>((IOperate<TElement, bool>)shift);
-            ifThen.Then = wrapper;
-            return ifThen;
-        }
+        //public static Operator<TElement> operator <<(Function<TElement, TParameters, TValue> function, int shiftNumber)
+        //{
+        //    IfThen<TElement> ifThen = new IfThen<TElement>();
+        //    OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
+        //    ifThen.If = operateAsOperator;
+        //    RemoveFlag<TElement> shift = new RemoveFlag<TElement>(shiftNumber);
+        //    OperateAsOperator<TElement, bool> wrapper = new OperateAsOperator<TElement, bool>(shift);
+        //    ifThen.Then = wrapper;
+        //    return ifThen;
+        //}
 
         public static Batch<TElement> operator +(Function<TElement, TParameters, TValue> function1, Function<TElement, TParameters, TValue> function2)
         {
@@ -145,10 +155,17 @@ namespace RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators
             return batch;
         }
 
+        public static Operator<TElement> operator !(Function<TElement, TParameters, TValue> operatorUnary)
+        {
+            OperateAsOperator<TElement, TValue> ow = new OperateAsOperator<TElement, TValue>(operatorUnary);
+            Not<TElement> not = new Not<TElement>();
+            not.Operator = ow;
+            return not;
+        }
+
         public static implicit operator Operator<TElement>(Function<TElement, TParameters, TValue> function)
         {
-            FunctionWrapper<TElement, TParameters, TValue> wrapper = new FunctionWrapper<TElement, TParameters, TValue>(function);
-            return wrapper;
+            return new OperateAsOperator<TElement, TValue>(function);
         }
     }
 }

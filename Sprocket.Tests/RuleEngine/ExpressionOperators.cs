@@ -130,30 +130,6 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
 
         [Trait("RulEngine", "Wrapps")]
         [Fact]
-        public void CommandWrapper_False()
-        {
-            int gdc1 = new GetDistanceCommand();
-            GetDistanceCommand gdc2 = new GetDistanceCommand();
-            op = (gdc2 > (gdc1 + 1));
-            var res = st.Match(op, p);
-
-            Assert.False(res);
-        }
-
-        [Trait("RulEngine", "Wrapps")]
-        [Fact]
-        public void CommandWrapper_True()
-        {
-            int gdc1 = new GetDistanceCommand();
-            GetDistanceCommand gdc2 = new GetDistanceCommand();
-            op = (gdc2 != (gdc1 + 1));
-            var res = st.Match(op, p);
-
-            Assert.True(res);
-        }
-
-        [Trait("RulEngine", "Wrapps")]
-        [Fact]
         public void WrapBoolCommandTrue()
         {
             Person son = new Person();
@@ -189,6 +165,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Function_Equals_True()
         {
+            Person p = new Person();
             Person son1 = new Person();
             Person son2 = new Person();
             son2.Name = "Son2Name";
@@ -196,9 +173,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             p.Family.Add(son2);
 
             SonsFunction sc = new SonsFunction();
-            GetNameFunction gn = new GetNameFunction();
+            GetNameFunction gn = new GetNameFunction(p);
 
-            op = (gn - (sc - 1) == "Get:" + son2.Name);
+            op = (gn - (sc - 1) == son2.Name);
             var res = st.Match(op, p);
 
             Assert.True(res, "'Nested Call' is true");
@@ -208,6 +185,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         [Fact]
         public void Function_NotEquals_True()
         {
+            Person p = new Person();
             Person son1 = new Person();
             Person son2 = new Person();
             son2.Name = "Son2";
@@ -216,7 +194,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             p.Family.Add(son2);
 
             SonsFunction sc = new SonsFunction();
-            GetNameFunction gn = new GetNameFunction();
+            GetNameFunction gn = new GetNameFunction(p);
 
             op = (gn - (sc - 1) != "Get:");
             var res = st.Match(op, p);

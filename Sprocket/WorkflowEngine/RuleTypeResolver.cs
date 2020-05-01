@@ -30,12 +30,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
 
         public override Type ResolveName(string typeName, string typeNamespace, Type declaredType, DataContractResolver knownTypeResolver)
         {
-            Type type = Type.GetType(typeName);
-            if (type == null)
-            {
-                type = knownTypeResolver.ResolveName(typeName, typeNamespace, declaredType, knownTypeResolver);
-            }
-            return type;
+            return Type.GetType(typeName);
         }
 
         public override bool TryResolveType(Type type, Type declaredType, DataContractResolver knownTypeResolver, out XmlDictionaryString typeName, out XmlDictionaryString typeNamespace)

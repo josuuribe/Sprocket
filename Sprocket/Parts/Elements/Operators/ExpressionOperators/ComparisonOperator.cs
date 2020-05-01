@@ -9,8 +9,8 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators
 
     {
         [DataMember]
-        public IOperate<T, U> OperateLeft;
+        public Operate<T, U> OperateLeft;
         [DataMember]
-        public IOperate<T, U> OperateRight;
+        public Operate<T, U> OperateRight;
     }
 }

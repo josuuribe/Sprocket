@@ -11,18 +11,24 @@ namespace RaraAvis.Sprocket.Parts.Elements.Operators.ExpressionOperators.UnaryOp
     /// </summary>
     /// <typeparam name="T">An IElement object.</typeparam>
     [DataContract]
-    [KnownType("GetKnownType")]
+    //[KnownType("GetKnownType")]
     internal class Not<T> : UnaryOperator<T>
         where T : IElement
     {
+        public Not() : base()
+        { }
+
+        public Not(IOperator<T> @operator) : base(@operator)
+        { }
+
         public override bool Match(RuleElement<T> element)
         {
             return !Operator.Match(element);
         }
 
-        public static IEnumerable<Type> GetKnownType()
-        {
-            return new Type[] { typeof(Not<T>) };
-        }
+        //public static IEnumerable<Type> GetKnownType()
+        //{
+        //    return new Type[] { typeof(Not<T>) };
+        //}
     }
 }
