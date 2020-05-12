@@ -1,11 +1,11 @@
-﻿using RaraAvis.Sprocket.Parts.Interfaces;
+﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Composition;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities
 {
-    enum Feature { Black, Blonde, Brown, White, Asian, Skin }
+    enum Feature { Tiny, Small, Medium, Big, Huge }
     public enum Status { WakeUp, Sleep }
     [Export]
     public class Person : IElement, ICloneable

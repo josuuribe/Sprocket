@@ -1,9 +1,7 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Services;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
-using RaraAvis.Sprocket.WorkflowEngine;
-using RaraAvis.Sprocket.WorkflowEngine.Workflows;
-using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using RaraAvis.Sprocket.WorkflowEngine.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,51 +12,39 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
     {
         private readonly IRuleEngineService<Person> res = null;
 
-        public RuleElement<Person> RuleElement { get; private set; }
-        public ExecutionEngineResult ExecutionEngineResult { get; private set; }
-        public List<Stage> Stages { get; set; }
-
         public ActivateRuleEngine()
         {
-            res = new RuleEngineActivatorService<Person>().GetRuleEngine();
-            Stages = new List<Stage>();
+            res = RuleEngineActivatorService<Person>.GetRuleEngine();
         }
 
-        public void ClearAll()
+        public Rule<Person> RunEngine(Operator<Person> op, Person p)
         {
-            this.Stages.Clear();
+            //ActivityAssembly aan = new ActivityAssembly();
+            //aan.AssemblyPath = Path.Combine(AppContext.BaseDirectory, "RaraAvis.Sprocket.Tests.dll");
+            //Stage stage = new Stage();
+            //stage.Id = id;
+            //stage.ActivitiesAssemblyNames.Add(aan);
+            ////stage.XMLStage = res.Serialize(op, stage);
+            //Stages.Add(stage);
+
+            return res.Init(op, p);
         }
 
-        public Stage CreateStage(int id, string name, Operator<Person> op)
-        {
-            ActivityAssembly aan = new ActivityAssembly();
-            aan.AssemblyPath = Path.Combine(AppContext.BaseDirectory, "RaraAvis.Sprocket.Tests.dll");
-            Stage stage = new Stage();
-            stage.Id = id;
-            stage.Name = name;
-            stage.ActivitiesAssemblyNames.Add(aan);
-            stage.XMLStage = res.Serialize(op, stage);
-            Stages.Add(stage);
-            return stage;
-        }
+        //public Stage CreateFailedStageWrongAssemblyPath(Guid id, Operator<Person> op)
+        //{
+        //    ActivityAssembly aan = new ActivityAssembly();
+        //    aan.AssemblyPath = Path.Combine(AppContext.BaseDirectory, "Wrong.dll");
+        //    Stage stage = new Stage();
+        //    stage.Id = id;
+        //    stage.ActivitiesAssemblyNames.Add(aan);
+        //    //stage.XMLStage = res.Serialize(op, stage);
+        //    Stages.Add(stage);
+        //    return stage;
+        //}
 
-        public Stage CreateFailedStageWrongAssemblyPath(int id, string name, Operator<Person> op)
-        {
-            ActivityAssembly aan = new ActivityAssembly();
-            aan.AssemblyPath = Path.Combine(AppContext.BaseDirectory, "Wrong.dll");
-            Stage stage = new Stage();            
-            stage.Id = id;
-            stage.Name = name;
-            stage.ActivitiesAssemblyNames.Add(aan);
-            stage.XMLStage = res.Serialize(op, stage);
-            Stages.Add(stage);
-            return stage;
-        }
-
-        public void Init(Person element)
-        {
-            this.RuleElement = res.Init(Stages, element);
-            this.ExecutionEngineResult = res.ExecutionEngineResult;
-        }
+        //public Rule<Person> Init(Person element)
+        //{
+        //    return res.Init(Stages, element);
+        //}
     }
 }

@@ -1,16 +1,20 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
+using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    internal class WrongCommand : Command<Person, bool>
+    [DataContract]
+    public class WrongCommand : Command<Person, bool>
     {
         public WrongCommand() : base() { }
         public WrongCommand(Person p) : base(p) { }
-        protected internal override bool Process(RuleElement<Person> element)
+        public override bool Value(Person element)
         {
-            element.Element.Correct = false;
-            return element.Element.Correct;
+            element.Correct = false;
+            return element.Correct;
         }
     }
 }

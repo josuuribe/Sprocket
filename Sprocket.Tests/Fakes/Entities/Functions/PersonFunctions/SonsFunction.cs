@@ -1,16 +1,18 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
 {
-    class SonsFunction : Function<Person, int, Person>
+    public class SonsFunction : Function<Person, int, Person>
     {
         public SonsFunction() : base() { }
         public SonsFunction(Person p, int i) : base(p, i) { }
-        protected internal override Person Process(RuleElement<Person> element)
+        public SonsFunction(int i) : base(i) { }
+        public override Person Value(Person element)
         {
-            if (element.Element.Family.Count > 0)
-                return element.Element.Family[this.Parameters];
+            if (element.Family.Count > 0)
+                return element.Family[this.Parameters];
             else
                 return null;
         }

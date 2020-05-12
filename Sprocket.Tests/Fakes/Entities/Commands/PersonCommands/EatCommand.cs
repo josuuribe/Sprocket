@@ -1,6 +1,6 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Parts.Elements.Commands;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
@@ -8,9 +8,9 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
     [DataContract]
     class EatCommand : Command<Person, bool>
     {
-        protected internal override bool Process(RuleElement<Person> element)
+        public override bool Value(Person element)
         {
-            element.Element.Eat();
+            element.Eat();
             return true;
         }
     }

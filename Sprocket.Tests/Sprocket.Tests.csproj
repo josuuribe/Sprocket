@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Fakes\Entities\Commands\PersonCommands\SetHugeCommand.cs" />
     <Compile Remove="Fakes\Entities\FakeWorkflow.cs" />
     <Compile Remove="Fakes\System\SprocketSystem.cs" />
   </ItemGroup>
@@ -30,6 +31,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Sprocket\Sprocket.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

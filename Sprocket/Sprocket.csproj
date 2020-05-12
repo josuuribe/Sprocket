@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
@@ -7,36 +7,36 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="WorkflowEngine\Workflows\Events\WorkflowProcessResponses\**" />
-    <EmbeddedResource Remove="WorkflowEngine\Workflows\Events\WorkflowProcessResponses\**" />
-    <None Remove="WorkflowEngine\Workflows\Events\WorkflowProcessResponses\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Parts\Elements\Casts\BooleanCommandWrapper.cs" />
-    <Compile Remove="Parts\Elements\Casts\FunctionWrapper.cs" />
-    <Compile Remove="Parts\Elements\Commands\BooleanCommand.cs" />
-    <Compile Remove="Parts\Elements\Functions\BooleanFunction.cs" />
-    <Compile Remove="Parts\Elements\Functions\ExpressionFunction.cs" />
-    <Compile Remove="Parts\Elements\Method.cs" />
-    <Compile Remove="Parts\Elements\Casts\BooleanFunctionWrapper.cs" />
+    <Compile Remove="RuleEngine\Elements\Casts\BooleanCommandWrapper.cs" />
+    <Compile Remove="RuleEngine\Elements\Casts\FunctionWrapper.cs" />
+    <Compile Remove="RuleEngine\Elements\Casts\OperatorAsOperate.cs" />
+    <Compile Remove="RuleEngine\Elements\Operates\Commands\BooleanCommand.cs" />
+    <Compile Remove="RuleEngine\Elements\Operates\Commands\ExpressionCommand.cs" />
+    <Compile Remove="RuleEngine\Elements\Operates\Functions\BooleanFunction.cs" />
+    <Compile Remove="RuleEngine\Elements\Operates\Functions\ExpressionFunction.cs" />
+    <Compile Remove="RuleEngine\Elements\Method.cs" />
+    <Compile Remove="RuleEngine\Elements\Casts\BooleanFunctionWrapper.cs" />
+    <Compile Remove="RuleEngine\Elements\Operators\Kernel\AddFlag.cs" />
+    <Compile Remove="RuleEngine\Elements\Operators\Kernel\Batch.cs" />
+    <Compile Remove="RuleEngine\Elements\Operators\Kernel\End.cs" />
+    <Compile Remove="RuleEngine\Elements\Operators\Kernel\RemoveFlag.cs" />
+    <Compile Remove="WorkflowEngine\Services\IRuleEngineActivatorService.cs" />
     <Compile Remove="WorkflowEngine\StateMachine.cs" />
-    <Compile Remove="WorkflowEngine\Workflows\Events\WorkflowActivated.cs" />
-    <Compile Remove="WorkflowEngine\Workflows\Events\WorkflowDeactivated.cs" />
-    <Compile Remove="WorkflowEngine\Workflows\Events\WorkflowEvent.cs" />
-    <Compile Remove="WorkflowEngine\Workflows\Events\WorkflowProcessResponse.cs" />
-    <Compile Remove="WorkflowEngine\Workflows\Rule.cs" />
-    <Compile Remove="WorkflowEngine\Workflows\Workflow.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="System.Composition" Version="1.2.0" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.3" />
+    <PackageReference Include="System.Composition" Version="1.4.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="WorkflowEngine\Workflows\Events\" />
+    <Folder Include="RuleEngine\Elements\Operates\Functions\" />
+    <Folder Include="RuleEngine\Elements\Operates\Kernel\" />
   </ItemGroup>
 
 </Project>

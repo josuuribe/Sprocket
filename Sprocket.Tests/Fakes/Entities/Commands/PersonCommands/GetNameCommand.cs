@@ -1,5 +1,7 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
+using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
@@ -7,9 +9,9 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
     {
         public GetNameCommand() : base() { }
         public GetNameCommand(Person p) : base(p) { }
-        protected internal override string Process(RuleElement<Person> element)
+        public override string Value(Person element)
         {
-            return element.Element.Name;
+            return element.Name;
         }
     }
 }

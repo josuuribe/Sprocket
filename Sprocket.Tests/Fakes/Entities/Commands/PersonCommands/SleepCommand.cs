@@ -1,14 +1,15 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    class SleepCommand : Command<Person, Status>
+    public class SleepCommand : Command<Person, Status>
     {
-        protected internal override Status Process(RuleElement<Person> element)
+        public override Status Value(Person element)
         {
-            element.Element.Sleep();
-            return element.Element.Status;
+            element.Sleep();
+            return element.Status;
         }
     }
 }

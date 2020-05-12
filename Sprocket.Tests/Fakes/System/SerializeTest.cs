@@ -1,47 +1,37 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
+using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
-using RaraAvis.Sprocket.WorkflowEngine;
-using RaraAvis.Sprocket.WorkflowEngine.Workflows;
-using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using RaraAvis.Sprocket.WorkflowEngine.Services;
 using System.Linq;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.System
 {
-    public class SerializeTest
+    public class WorflowEngineTest
     {
-        public ActivateRuleEngine ActivateRuleEngine { get; private set; }
-        private RuleElement<Person> re = null;
+        private readonly IRuleEngineService<Person> ruleEngineService;
+        private IOperator<Person> op;
 
-        public void BeginSerialize()
+        private string serialized;
+
+        public WorflowEngineTest()
         {
-            re = new RuleElement<Person>();
-            ActivateRuleEngine = new ActivateRuleEngine();
+            ruleEngineService = RuleEngineActivatorService<Person>.GetRuleEngine();
         }
 
-        public void EndSerialize()
+        public Rule<Person> Start(Operator<Person> @operator, Person p)
         {
-            ActivateRuleEngine.ClearAll();
+            serialized = ruleEngineService.Serialize(@operator);
+            this.op = ruleEngineService.Deserialize(serialized);
+            return ruleEngineService.Init(op, p);
         }
 
-        public int UserStatus
+        public bool Match(Operator<Person> @operator, Person p)
         {
-            get
-            {
-                return re.UserStatus;
-            }
-        }
-
-        public (RuleElement<Person> ruleElement, ExecutionEngineResult) ExecuteWorkflow(Person p, params Stage[] stages)
-        {
-            ActivateRuleEngine.Stages = stages.ToList();
-            ActivateRuleEngine.Init(p);
-            return (ActivateRuleEngine.RuleElement, ActivateRuleEngine.ExecutionEngineResult);
-        }
-
-        public bool Match(Operator<Person> op, Person p)
-        {
-            re.Element = p;
-            return op.Match(re);
+            serialized = ruleEngineService.Serialize(@operator);
+            this.op = ruleEngineService.Deserialize(serialized);
+            Rule<Person> rule = new Rule<Person>(p);
+            return (op as Operator<Person>).Operate(rule);
         }
     }
 }

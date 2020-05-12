@@ -1,13 +1,15 @@
-﻿using RaraAvis.Sprocket.Parts.Elements.Commands;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
+using RaraAvis.Sprocket.RuleEngine.Elements.Operates.Commands;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    public class GetDistanceCommand : ExpressionCommand<Person, int>
+    public class GetDistanceCommand : Command<Person, int>
     {
-        protected internal override int Process(RuleElement<Person> element)
+        public override int Value(Person element)
         {
-            return element.Element.DistanceTravelled;
+            return element.DistanceTravelled;
         }
     }
 }

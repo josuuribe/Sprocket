@@ -1,11 +1,9 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Parts.Interfaces;
-using RaraAvis.Sprocket.WorkflowEngine;
-using RaraAvis.Sprocket.WorkflowEngine.Workflows;
-using RaraAvis.Sprocket.WorkflowEngine.Workflows.Enums;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
+using RaraAvis.Sprocket.RuleEngine.Interfaces;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using System.Collections.Generic;
 
-namespace RaraAvis.Sprocket.Services
+namespace RaraAvis.Sprocket.WorkflowEngine.Services
 {
     /// <summary>
     /// Expose all requires functionality a rule engine must adopt.
@@ -20,24 +18,10 @@ namespace RaraAvis.Sprocket.Services
         /// </summary>
         /// <param name="stages">Woorkflow stages.</param>
         /// <param name="stags">Element to process.</param>
-        RuleElement<T> Init(IList<Stage> stages, T element);
-        /// <summary>
-        /// Continue a workflow pending.
-        /// </summary>
-        /// <param name="stages">Stages belonging this workflow.</param>
-        /// <param name="stage">Init stage.</param>
-        /// <param name="element">Element to process.</param>
-        RuleElement<T> Continue(IList<Stage> stages, Stage stage, T element);
-        /// <summary>
-        /// Serializes one rule.
-        /// </summary>
-        /// <param name="rule">Rule to serialize.</param>
-        /// <param name="stage">Stage with Xml.</param>
-        /// <returns>A string with Xml serialized.</returns>
-        string Serialize(Operator<T> rule, Stage stage);
-        /// <summary>
-        /// Stores individual result by workflow.
-        /// </summary>
-        ExecutionEngineResult ExecutionEngineResult { get; }
+        Rule<T> Init(IOperator<T> op, T element);
+
+        string Serialize(Operator<T> @operator);
+
+        IOperator<T> Deserialize(string serialized);
     }
 }

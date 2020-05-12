@@ -1,60 +1,104 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
-using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;
 using RaraAvis.Sprocket.Tests.Fakes.System;
-using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities.Enums;
 using System;
 using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    public class Functions : IDisposable
+    public class Functions
     {
-        private static Person p = null;
-        private static RuleElement<Person> re = null;
-        private static Operator<Person> op = null;
-        private static SerializeTest st = null;
-
+        private WorflowEngineTest st = null;
+        private Operator<Person> op = null;
 
         public Functions()
         {
-            st = new SerializeTest();
-            p = new Person();
-            st.BeginSerialize();
-        }
-
-        [Trait("RuleEngine", "Functions")]
-        [Fact]
-        public static void Function_Equals_True()
-        {
-            string name = "Son";
-            Person p = new Person() { Name = "Name" };
-            p.Family.Add(new Person() { Name = name });
-            SonsFunction sf = new SonsFunction(p, 0);
-            GetNameFunction gnf = new GetNameFunction(p, sf);
-
-            var res = gnf.Value;
-
-            Assert.Equal(name, gnf.Value);
-        }
-
-        [Trait("RuleEngine", "Functions")]
-        [Fact]
-        public static void Function_Equals_False()
-        {
-            int distanceTravelled = 20;
-            Person p = new Person() { DistanceTravelled = 20 };
-            DistanceRemainingFunction drf = new DistanceRemainingFunction(p, 40);
-
-            var res = drf.Value;
-
-            Assert.Equal(distanceTravelled, res);
+            st = new WorflowEngineTest();
         }
 
         public void Dispose()
         {
-            st.EndSerialize();
+            st = null;
+        }
+
+        [Trait("Functions", "Parameters")]
+        [Fact]
+        public void FunctionWithParameters_Equals_True()
+        {
+            var p = new Person();
+            var son1 = new Person();
+            var son2 = new Person();
+            son2.Name = "Son2Name";
+            p.Family.Add(son1);
+            p.Family.Add(son2);
+            var sc = new SonsFunction();
+            var gn = new GetNameFunction(p);
+            op = (gn - (sc - 1) == son2.Name);
+
+            var res = st.Start(op, p);
+
+            Assert.Equal(ExecutionEngineResult.Correct, res.ExecutionResult);
+        }
+
+        [Trait("Functions", "Parameters")]
+        [Fact]
+        public void FunctionWithParameters_Equals_False()
+        {
+            var p = new Person();
+            var son1 = new Person();
+            var son2 = new Person();
+            son2.Name = "Son2Name";
+            p.Family.Add(son1);
+            p.Family.Add(son2);
+            var sc = new SonsFunction();
+            var gn = new GetNameFunction(p);
+            op = (gn - (sc - 1) != son2.Name);
+
+            var res = st.Start(op, p);
+
+            Assert.Equal(ExecutionEngineResult.Correct, res.ExecutionResult);
+        }
+
+        [Trait("Functions", "Parameters")]
+        [Fact]
+        public void FunctionWithParameters_NotEquals_True()
+        {
+            var p = new Person();
+            var son1 = new Person();
+            var son2 = new Person();
+            son2.Name = "Son2";
+            son2.Name = "Son2Name";
+            p.Family.Add(son1);
+            p.Family.Add(son2);
+            var sc = new SonsFunction();
+            var gn = new GetNameFunction(p);
+            op = (gn - (sc - 1) != "Get:");
+
+            var res = st.Start(op, p);
+
+            Assert.Equal(ExecutionEngineResult.Correct, res.ExecutionResult);
+        }
+
+        [Trait("Functions", "Parameters")]
+        [Fact]
+        public void FunctionWithParameters_NotEquals_False()
+        {
+            var p = new Person();
+            var son1 = new Person();
+            var son2 = new Person();
+            son2.Name = "Son2";
+            son2.Name = "Son2Name";
+            p.Family.Add(son1);
+            p.Family.Add(son2);
+            var sc = new SonsFunction();
+            var gn = new GetNameFunction(p);
+            op = (gn - (sc - 1) != "Son2Name");
+
+            var res = st.Start(op, p);
+
+            Assert.Equal(ExecutionEngineResult.Correct, res.ExecutionResult);
         }
     }
 }

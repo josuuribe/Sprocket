@@ -1,18 +1,20 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Parts.Elements.Commands.ExpressionOperators;
-using RaraAvis.Sprocket.Parts.Interfaces;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
+using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
 {
-    class GetNameFunction : Function<Person, Operate<Person, Person>, string>
+    [DataContract]
+    public class GetNameFunction : Function<Person, Operand<Person, Person>, string>
     {
         public GetNameFunction(Person p) : base(p) { }
-        public GetNameFunction(Person p, Operate<Person, Person> op) : base(p, op) { }
+        public GetNameFunction(Person p, Operand<Person, Person> op) : base(p, op) { }
 
-        protected internal override string Process(RuleElement<Person> element)
+        public override string Value(Person element)
         {
-            Person p = this.Parameters.Process(element);
+            Person p = this.Parameters.Value(element);
             return p.Name;
         }
     }

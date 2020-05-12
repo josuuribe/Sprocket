@@ -1,6 +1,6 @@
-﻿using RaraAvis.Sprocket.Parts.Elements;
-using RaraAvis.Sprocket.Parts.Elements.Commands;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
 using RaraAvis.Sprocket.WorkflowEngine;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -10,9 +10,9 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
     class IsFamilyCommand : Command<Person, bool>
     {
         public Person Person { get; set; }
-        protected internal override bool Process(RuleElement<Person> element)
+        public override bool Value(Person element)
         {
-            return element.Element.Family.Any(x => x.Id == Person.Id);
+            return element.Family.Any(x => x.Id == Person.Id);
         }
     }
 }
