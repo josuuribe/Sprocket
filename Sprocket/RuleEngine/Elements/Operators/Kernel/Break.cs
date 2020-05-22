@@ -1,6 +1,5 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
-using RaraAvis.Sprocket.WorkflowEngine.Entities.Enums;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.Kernel
@@ -13,13 +12,18 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.Kernel
     internal sealed class Break<TElement> : Kernel<TElement>
         where TElement : IElement
     {
-        public Break(Operator<TElement> operate) : base(operate)
-        { }
+        [DataMember]
+        ExecutionResult ExecutionResult { get; set; }
 
-        public override bool Operate(Rule<TElement> rule)
+        public Break(Operator<TElement> @operator, ExecutionResult executionResult) : base(@operator)
         {
-            bool b = this.Operator.Operate(rule.Element);
-            rule.StageAction = b ? StageAction.Break : rule.StageAction;
+            this.ExecutionResult = executionResult;
+        }
+
+        public override bool Process(Rule<TElement> rule)
+        {
+            bool b = this.Operator.Process(rule.Element);
+            rule.ExecutionResult = b ? ExecutionResult : rule.ExecutionResult;
             return b;
         }
     }

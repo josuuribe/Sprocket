@@ -9,10 +9,10 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.ComparisonOperators
     internal class Equals<T, U> : ComparisonOperator<T, U>
         where T : IElement
     {
-        public override bool Operate(Rule<T> element)
+        public override bool Process(Rule<T> element)
         {
-            U u1 = OperateLeft.Value(element);
-            U u2 = OperateRight.Value(element);
+            var u1 = OperateLeft.Process(element);
+            var u2 = OperateRight.Process(element);
             return u1.Equals(u2);
         }
     }

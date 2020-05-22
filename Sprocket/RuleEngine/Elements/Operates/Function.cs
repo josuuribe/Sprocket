@@ -1,6 +1,5 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Elements.Casts;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators.ComparisonOperators;
-using RaraAvis.Sprocket.RuleEngine.Elements.Operators.ConditionalOperators;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators.IterationOperators;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators.Kernel;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators.UnaryOperators;
@@ -90,29 +89,41 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operates
             return loop;
         }
 
-        public static Operator<TElement> operator +(bool left, Function<TElement, TParameters, TValue> function)
-        {
-            IfThen<TElement> it = new IfThen<TElement>();
-            it.If = new ValueAsOperator<TElement, bool>(left);
-            it.Then = new OperateAsOperator<TElement, TValue>(function);
-            return it;
-        }
+        //public static Operator<TElement> operator +(bool left, Function<TElement, TParameters, TValue> function)
+        //{
+        //    IfThen<TElement> it = new IfThen<TElement>();
+        //    it.If = new ValueAsOperator<TElement, bool>(left);
+        //    it.Then = new OperateAsOperator<TElement, TValue>(function);
+        //    return it;
+        //}
 
-        public static Operator<TElement> operator +(Operator<TElement> operatorLeft, Function<TElement, TParameters, TValue> function)
-        {
-            IfThen<TElement> ifThen = new IfThen<TElement>();
-            ifThen.If = operatorLeft;
-            OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
-            ifThen.Then = operateAsOperator;
-            return ifThen;
-        }
+        //public static Operator<TElement> operator +(Operator<TElement> operatorLeft, Function<TElement, TParameters, TValue> function)
+        //{
+        //    IfThen<TElement> ifThen = new IfThen<TElement>();
+        //    ifThen.If = operatorLeft;
+        //    OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
+        //    ifThen.Then = operateAsOperator;
+        //    return ifThen;
+        //}
 
-        public static Operator<TElement> operator ~(Function<TElement, TParameters, TValue> function)
+        public static IOperator<TElement> operator ~(Function<TElement, TParameters, TValue> function)
         {
             OperateAsOperator<TElement, TValue> operateAsOperator = new OperateAsOperator<TElement, TValue>(function);
             Break<TElement> brk = new Break<TElement>(operateAsOperator);
             return brk;
         }
+
+        //public static IOperator<TElement> operator %(Function<TElement, TParameters, TValue> function, Operator<TElement> jump)
+        //{
+        //    Jump<TElement> jmp = new Jump<TElement>(function, jump);
+        //    return jmp;
+        //}
+
+        //public static IOperator<TElement> operator %(Function<TElement, TParameters, TValue> function, (Operator<TElement>, Operator<TElement>) jump)
+        //{
+        //    Jump<TElement> jmp = new Jump<TElement>(function, jump);
+        //    return jmp;
+        //}
 
         //public static Operator<TElement> operator >>(Function<TElement, TParameters, TValue> function, int shiftNumber)
         //{
@@ -138,11 +149,8 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operates
 
         public static Operator<TElement> operator /(Function<TElement, TParameters, TValue> function1, Function<TElement, TParameters, TValue> function2)
         {
-            OperateAsOperator<TElement, TValue> f1 = new OperateAsOperator<TElement, TValue>(function1);
-            OperateAsOperator<TElement, TValue> f2 = new OperateAsOperator<TElement, TValue>(function2);
-            f1.Next = f2;
-
-            return f1;
+            function1.Next = function2;
+            return function1;
         }
 
         public static Operator<TElement> operator /(Operator<TElement> @operator, Function<TElement, TParameters, TValue> function)

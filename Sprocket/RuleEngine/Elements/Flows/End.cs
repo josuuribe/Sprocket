@@ -1,7 +1,8 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
+﻿using Newtonsoft.Json;
+using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
-using RaraAvis.Sprocket.WorkflowEngine.Entities.Enums;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
@@ -9,22 +10,32 @@ using System.Text;
 namespace RaraAvis.Sprocket.RuleEngine.Elements.Flows
 {
     [DataContract]
-    internal sealed class End<TElement> : IOperator<TElement>
+    internal sealed class End<TElement> : IOperand<TElement, bool>
         where TElement : IElement
     {
-        [DataMember]
-        public IOperator<TElement> Next { get; set; }
-        public IOperator<TElement> Previous { get; set; }
+        //private readonly ICode next;
+        //[JsonIgnore]
+        //[DataMember]
+        //public ICode Previous { get; set; }
+        //[DataMember]
+        //[JsonIgnore]
+        //public ICode Next
+        //{
+        //    get
+        //    {
+        //        return next;
+        //    }
+        //    set { }
+        //}
 
         public End()
         {
-            this.Next = this;
+            //this.next = this;
         }
 
-        public bool Operate(Rule<TElement> rule)
+        public bool Process(Rule<TElement> rule)
         {
-            rule.StageAction = StageAction.Finish;
-            return false;
+            return true;
         }
     }
 }

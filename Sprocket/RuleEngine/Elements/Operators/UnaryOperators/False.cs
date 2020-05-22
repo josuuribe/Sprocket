@@ -14,9 +14,9 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.UnaryOperators
         { }
         public False(Operator<T> @operator) : base(@operator)
         { }
-        public override bool Operate(Rule<T> element)
+        public override bool Process(Rule<T> element)
         {
-            Operator.Operate(element);
+            Operator.Process(element);
             return false;
         }
 

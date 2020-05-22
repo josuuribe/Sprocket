@@ -257,8 +257,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         public void Equals_Function_Int_True()
         {
             var p = new Person() { DistanceTravelled = 20 };
-            var drc = new DistanceRemainingFunction();
-            Operator<Person> op = (drc - 30) == 10;
+            var drc = new DistanceRemainingFunction(30);
+            Operator<Person> op = (drc) == 10;
 
             var res = st.Match(op, p);
 
@@ -271,8 +271,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         public void Equals_Function_Int_False()
         {
             var p = new Person() { DistanceTravelled = 20 };
-            var drc = new DistanceRemainingFunction();
-            Operator<Person> op = (drc - 30) == 0;
+            var drc = new DistanceRemainingFunction(30);
+            Operator<Person> op = (drc) == 0;
 
             var res = st.Match(op, p);
 
@@ -285,8 +285,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         public void NotEquals_Function_Int_True()
         {
             var p = new Person() { DistanceTravelled = 20 };
-            var drc = new DistanceRemainingFunction();
-            Operator<Person> op = (drc - 30) != 0;
+            var drc = new DistanceRemainingFunction(30);
+            Operator<Person> op = (drc) != 0;
 
             var res = st.Match(op, p);
 
@@ -299,8 +299,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         public void NotEquals_Function_Int_False()
         {
             var p = new Person() { DistanceTravelled = 20 };
-            var drc = new DistanceRemainingFunction();
-            Operator<Person> op = (drc - 30) != 10;
+            var drc = new DistanceRemainingFunction(30);
+            var op = (drc) != 10;
 
             var res = st.Match(op, p);
 

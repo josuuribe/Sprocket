@@ -6,7 +6,8 @@
     public enum ExecutionEngineResult
     {
         None,
-        Correct,
+        Positive,
+        Negative,
         Error,
         Exit
     }

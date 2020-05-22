@@ -20,7 +20,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Services
         /// <param name="stags">Element to process.</param>
         Rule<T> Init(IOperator<T> op, T element);
 
-        string Serialize(Operator<T> @operator);
+        string Serialize(IOperator<T> @operator);
 
         IOperator<T> Deserialize(string serialized);
     }

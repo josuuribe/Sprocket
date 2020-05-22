@@ -7,14 +7,14 @@ using System.Runtime.Serialization;
 namespace RaraAvis.Sprocket.RuleEngine.Elements.Casts
 {
     [DataContract]
-    internal class CommandAsOperator<TElement, TValue> : OperateAsOperator<TElement, TValue>
+    internal class CommandAsOperator<TElement, TValue> : BooleanOperateAsOperator<TElement, TValue>
         where TElement : IElement
     {
         public CommandAsOperator(Operand<TElement, TValue> operate) : base(operate) { }
 
-        public override bool Operate(Rule<TElement> rule)
+        public override bool Process(Rule<TElement> rule)
         {
-            Operand.Value(rule.Element);
+            Operand.Process(rule.Element);
             return true;
         }
     }

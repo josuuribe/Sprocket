@@ -28,8 +28,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            var op1 = (dc < 10) + (rc);
-            var op2 = (dc < 10) + (rc);
+            var op1 = (dc < 10) % (rc);
+            var op2 = (dc < 10) % (rc);
             op = op1 && op2;
 
             var res = st.Match(op, p);
@@ -62,8 +62,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            var op1 = (dc < 10) + (rc);
-            var op2 = (dc < 10) + (rc);
+            var op1 = (dc < 10) % (rc);
+            var op2 = (dc < 10) % (rc);
             op = op1 & op2;
 
             var res = st.Match(op, p);
@@ -80,8 +80,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            var op1 = (dc < 10) + (rc);
-            var op2 = (dc > 10) + (rc);
+            var op1 = (dc < 10) % (rc);
+            var op2 = (dc > 10) % (rc);
             op = op1 & op2;
 
             var res = st.Match(op, p);
@@ -98,7 +98,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            op = (dc < 10) + (rc);
+            op = (dc < 10) % (rc);
             op = op | false;
 
             var res = st.Match(op, p);
@@ -115,7 +115,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            var op1 = (dc > 10) + (rc);
+            var op1 = (dc > 10) % (rc);
             op = op1 | false;
 
             var res = st.Match(op, p);
@@ -195,22 +195,6 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
 
         [Trait("BinaryOperators", "AndAlso")]
         [Fact]
-        public void AndAlso_Function_Function_True()
-        {
-            var p = new Person() { Age = 10 };
-            HasAgeFunction haf = new HasAgeFunction(10);
-            AddAgeFunction aaf = new AddAgeFunction(20);
-            op = (+haf) & (+aaf);
-
-            var res = st.Match(op, p);
-
-            Assert.IsType<AndAlso<Person>>(op);
-            Assert.Equal(30, p.Age);
-            Assert.True(res);
-        }
-
-        [Trait("BinaryOperators", "AndAlso")]
-        [Fact]
         public void AndAlso_Function_Function_False()
         {
             Person p = new Person();
@@ -232,7 +216,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            var op1 = (dc > 10) + (rc);
+            var op1 = (dc > 10) % (rc);
             op = false | op1;
 
             var res = st.Match(op, p);
@@ -249,8 +233,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            var op1 = (dc < 10) + (rc);
-            var op2 = (dc < 10) + (rc);
+            var op1 = (dc < 10) % (rc);
+            var op2 = (dc < 10) % (rc);
             op = op1 | op2;
 
             var res = st.Match(op, p);
@@ -267,8 +251,8 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var p = new Person();
             var dc = new GetDistanceCommand();
             var rc = new RunCommand();
-            var op1 = (dc > 10) + (rc);
-            var op2 = (dc > 10) + (rc);
+            var op1 = (dc > 10) % (rc);
+            var op2 = (dc > 10) % (rc);
             op = op1 | op2;
 
             var res = st.Match(op, p);

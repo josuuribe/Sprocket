@@ -1,6 +1,6 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
-using RaraAvis.Sprocket.WorkflowEngine.Entities.Enums;
-using System;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
+using RaraAvis.Sprocket.RuleEngine.Interfaces;
+using System.Collections.Generic;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Entities
 {
@@ -13,9 +13,9 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Entities
     {
         public Rule()
         {
-            this.ExecutionResult = ExecutionEngineResult.None;
-            this.StageAction = StageAction.Continue;
+            this.ExecutionResult = ExecutionResult.None;
             this.UserStatus = 0;
+            this.Parameters = new Dictionary<string, object>();
         }
 
         public Rule(T element) : this()
@@ -28,10 +28,9 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Entities
         public T Element { get; set; }
 
         public int UserStatus { get; set; }
-        internal StageAction StageAction { get; set; }
-        public ExecutionEngineResult ExecutionResult { get; set; }
+        public ExecutionResult ExecutionResult { get; set; }
 
-        internal int Steps;
+        public Dictionary<string, object> Parameters { get; }
 
         public static implicit operator Rule<T>(T person)
         {

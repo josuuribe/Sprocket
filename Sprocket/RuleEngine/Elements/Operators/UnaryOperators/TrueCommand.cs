@@ -1,4 +1,5 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
+using RaraAvis.Sprocket.WorkflowEngine.Entities;
 
 namespace RaraAvis.Sprocket.RuleEngine.Elements.Operates.Commands
 {
@@ -7,7 +8,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operates.Commands
     {
         public TrueCommand() { }
         public TrueCommand(TElement p) : base(p) { }
-        public override bool Value(TElement element)
+        public override bool Process(Rule<TElement> element)
         {
             return true;
         }

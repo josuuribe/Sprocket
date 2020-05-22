@@ -9,16 +9,15 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.Kernel
         where TElement : IElement
     {
         [DataMember]
-        int Flag { get; set; }
+        public int Flag { get; set; }
 
-        public AddFlag(Operator<TElement> @operator, int flag) : base(@operator)
+        public AddFlag(Operator<TElement> @operator) : base(@operator)
         {
-            this.Flag = flag;
         }
 
-        public override bool Operate(Rule<TElement> rule)
+        public override bool Process(Rule<TElement> rule)
         {
-            bool b = this.Operator.Operate(rule);
+            bool b = this.Operator.Process(rule);
             rule.UserStatus = b ? rule.UserStatus | Flag : rule.UserStatus;
             return b;
         }

@@ -1,7 +1,6 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Elements;
 using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
-using RaraAvis.Sprocket.WorkflowEngine.Entities.Enums;
 using System;
 using System.Composition;
 
@@ -28,7 +27,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Services
         public Rule<T> Init(IOperator<T> op, T element)
         {
             Rule<T> rule = new Rule<T>(element);
-            rule.ExecutionResult = ExecutionEngineResult.Correct;
+            rule.ExecutionResult = ExecutionResult.Positive;
             this.Process(op, rule);
             return rule;
         }
@@ -39,40 +38,17 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Services
         /// <param name="element">Element  to process.</param>
         private void Process(IOperator<T> op, Rule<T> rule)
         {
-            bool b = true;
-            do
+            try
             {
-                b &= op.Operate(rule);
-                try
-                {
-                    switch (rule.StageAction)
-                    {
-                        case StageAction.Break:
-                            {
-                                rule.ExecutionResult = ExecutionEngineResult.Exit;
-                                return;
-                            }
-                        case StageAction.Continue:
-                            {
-                                rule.ExecutionResult = ExecutionEngineResult.Correct;
-                                var nextOP = op.Next;
-                                this.Process(nextOP, rule);
-                                return;
-                            }
-                        case StageAction.Finish:
-                            {
-                                return;
-                            }
-                    }
-                }
-                catch (Exception)
-                {
-                    rule.ExecutionResult = ExecutionEngineResult.Error;
-                }
-            } while (b && op != null);
+                rule.ExecutionResult = op.Process(rule) ? rule.ExecutionResult : ExecutionResult.Negative;
+            }
+            catch (Exception)
+            {
+                rule.ExecutionResult = ExecutionResult.Error;
+            }
         }
 
-        public string Serialize(Operator<T> @operator)
+        public string Serialize(IOperator<T> @operator)
         {
             return serializationEngine.Serialize(@operator);
         }

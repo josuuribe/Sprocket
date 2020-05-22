@@ -1,7 +1,5 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Elements.Casts;
-using RaraAvis.Sprocket.RuleEngine.Elements.Flows;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators;
-using RaraAvis.Sprocket.RuleEngine.Elements.Operators.ConditionalOperators;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators.ExpressionOperators.BinaryOperators;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators.IterationOperators;
 using RaraAvis.Sprocket.RuleEngine.Elements.Operators.Kernel;
@@ -9,49 +7,34 @@ using RaraAvis.Sprocket.RuleEngine.Elements.Operators.UnaryOperators;
 using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using System;
+using System.Linq.Expressions;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.RuleEngine.Elements
 {
+    public enum ExecutionResult
+    {
+        None,
+        Positive,
+        Negative,
+        Error,
+        Exit
+    }
+
     [DataContract]
     public abstract class Operator<TElement> : IOperator<TElement>
         where TElement : IElement
     {
         private static BinaryOperator<TElement> and = new AndAlso<TElement>();
         private static BinaryOperator<TElement> or = new OrElse<TElement>();
-        protected IOperator<TElement> next = null;
+        protected ICode next = null;
 
-        public abstract bool Operate(Rule<TElement> rule);
+        public abstract bool Process(Rule<TElement> rule);
 
-        public virtual IOperator<TElement> Previous { get; set; }
 
-        [DataMember]
-        public virtual IOperator<TElement> Next
-        {
-            get
-            {
-                return next ?? new End<TElement>();
-            }
-            set
-            {
-                IOperator<TElement> end = this;
-                while (!(end.Next is End<TElement>))
-                {
-                    end = end.Next;
-                }
-                value.Previous = end;
-                (end as Operator<TElement>).next = value;
-            }
-        }
 
         public Operator()
         {
-            this.next = new End<TElement>();
-        }
-
-        public Operator(IOperator<TElement> next)
-        {
-            this.Next = next;
         }
 
         //public void Operate(Rule<TElement> rule)
@@ -77,6 +60,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements
             and = new And<TElement>();
             return false;
         }
+
 
         public static Operator<TElement> operator &(Operator<TElement> operatorLeft, Operator<TElement> operatorRight)
         {
@@ -115,25 +99,21 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements
         //    return jmp;
         //}
 
-        public static Operator<TElement> operator *(Operator<TElement> operatorLeft, Operator<TElement> operatorRight)
-        {
-            Loop<TElement> loop = new Loop<TElement>();
-            loop.Condition = operatorLeft;
-            loop.Block = operatorRight;
-            return loop;
-        }
+        //public static Operator<TElement> operator *(Operator<TElement> operatorLeft, Operator<TElement> operatorRight)
+        //{
+        //    Loop<TElement> loop = new Loop<TElement>();
+        //    loop.Condition = operatorLeft;
+        //    loop.Block = operatorRight;
+        //    return loop;
+        //}
 
-        public static Operator<TElement> operator ~(Operator<TElement> @operator)
+        public static IOperator<TElement> operator ^(Operator<TElement> @operator, ExecutionResult executionResult)
         {
-            Break<TElement> brk = new Break<TElement>(@operator);
+            Break<TElement> brk = new Break<TElement>(@operator, executionResult);
             return brk;
         }
 
-        public static Operator<TElement> operator /(Operator<TElement> left, Operator<TElement> right)
-        {
-            left.Next = right;
-            return left;
-        }
+
 
         //public static ExpressionOperator<TElement> operator &(Operator<TElement> operatorLeft, bool right)
         //{
@@ -181,6 +161,24 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements
             return f;
         }
 
+        public static Operator<TElement> operator %(Operator<TElement> condition, Operand<TElement, bool> jump)
+        {
+            Jump<TElement> jmp = new Jump<TElement>(condition, jump);
+            return jmp;
+        }
+
+        public static Operator<TElement> operator %(Operator<TElement> condition, (Operand<TElement, bool>, Operand<TElement, bool>) jump)
+        {
+            Jump<TElement> jmp = new Jump<TElement>(condition, jump);
+            return jmp;
+        }
+
+        //public static Operator<TElement> operator %(Operator<TElement> @operator, (Pointer<TElement, TElement>, Operator<TElement>) jump)
+        //{
+        //    Jump<TElement> jmp = new Jump<TElement>(@operator, jump);
+        //    return jmp;
+        //}
+
         //public static Operator<TElement> operator %(bool operatorIf, Operator<TElement> operatorThen)
         //{
         //    IfThen<TElement> it = new IfThen<TElement>();
@@ -189,17 +187,51 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements
         //    return it;
         //}
 
-        public static Operator<TElement> operator +(Operator<TElement> operatorIf, IfThenElse<TElement> operatorIfThenElse)
-        {
-            operatorIfThenElse.If = operatorIf;
-            return operatorIfThenElse;
-        }
+        //public static Operator<TElement> operator +(Operator<TElement> operatorIf, IfThenElse<TElement> operatorIfThenElse)
+        //{
+        //    operatorIfThenElse.If = operatorIf;
+        //    return operatorIfThenElse;
+        //}
 
         //public static Operator<TElement> operator %(Operator<TElement> operatorIf, IfThen<TElement> operatorIfThen)
         //{
         //    operatorIfThen.If = operatorIf;
         //    return operatorIfThen;
         //}
+
+        public static Operator<TElement> operator >>(Operator<TElement> @operator, int shift)
+        {
+            AddFlag<TElement> addFlag = new AddFlag<TElement>(@operator);
+            addFlag.Operator = @operator;
+            addFlag.Flag = shift;
+            return addFlag;
+        }
+
+        public static Operator<TElement> operator <<(Operator<TElement> @operator, int shift)
+        {
+            RemoveFlag<TElement> removeFlag = new RemoveFlag<TElement>(@operator);
+            removeFlag.Operator = @operator;
+            removeFlag.Flag = shift;
+            return removeFlag;
+        }
+
+        public static Operator<TElement> operator *(Operator<TElement> condition, Operand<TElement, bool> operand)
+        {
+            Loop<TElement, bool> loop = new Loop<TElement, bool>();
+            loop.Condition = condition;
+            loop.Block = operand;
+            return loop;
+        }
+
+        public static implicit operator Operator<TElement>(Expression<Func<Rule<TElement>, bool>> operand)
+        {
+            return new PointerToFunc<TElement, bool>(operand);
+        }
+
+        public static implicit operator Operator<TElement>(Operand<TElement, bool> operand)
+        {
+            return new BooleanOperandAsOperator<TElement>(operand);
+        }
 
         public static implicit operator Operator<TElement>(bool value)
         {

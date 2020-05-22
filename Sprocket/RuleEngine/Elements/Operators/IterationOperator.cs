@@ -16,11 +16,6 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.ExpressionOperators
         /// </summary>
         [DataMember]
         public Operator<T> Condition { get; set; }
-        /// <summary>
-        /// Then clause to process in case true.
-        /// </summary>
-        [DataMember]
-        public Operator<T> Block { get; set; }
         public IterationOperator() { }
     }
 }

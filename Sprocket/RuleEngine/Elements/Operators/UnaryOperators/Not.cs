@@ -22,9 +22,9 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.UnaryOperators
         public Not(Operator<T> @operator) : base(@operator)
         { }
 
-        public override bool Operate(Rule<T> element)
+        public override bool Process(Rule<T> element)
         {
-            return !Operator.Operate(element);
+            return !Operator.Process(element);
         }
 
         //public static IEnumerable<Type> GetKnownType()

@@ -127,18 +127,18 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             Assert.False(res);
         }
 
-        [Trait("UnaryOperators", "Not")]
-        [Fact]
-        public void Not_Function_False()
-        {
-            var p = new Person();
-            var snf = new SetNameFunction();
-            op = !snf;
+        //[Trait("UnaryOperators", "Not")]
+        //[Fact]
+        //public void Not_Function_False()
+        //{
+        //    var p = new Person();
+        //    var snf = new SetNameFunction();
+        //    op = !snf;
 
-            var res = st.Match(op, p);
+        //    var res = st.Match(op, p);
 
-            Assert.IsType<Not<Person>>(op);
-            Assert.False(res);
-        }
+        //    Assert.IsType<Not<Person>>(op);
+        //    Assert.False(res);
+        //}
     }
 }

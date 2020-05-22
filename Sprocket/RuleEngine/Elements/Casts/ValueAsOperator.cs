@@ -20,7 +20,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Casts
             this.ValueOperator = value;
         }
 
-        public override bool Operate(Rule<TElement> rule)
+        public override bool Process(Rule<TElement> rule)
         {
             return (ValueOperator as bool?) ?? false;
         }

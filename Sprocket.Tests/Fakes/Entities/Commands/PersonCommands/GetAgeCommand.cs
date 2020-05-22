@@ -1,17 +1,18 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
-using RaraAvis.Sprocket.RuleEngine.Elements.Operates.Commands;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
 using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands
 {
-    public class GetAgeCommand : Command<Person, int>
+    [DataContract]
+    public class GetAgeCommand : Operand<Person, int>
     {
-        public GetAgeCommand() : base() { }
+        public GetAgeCommand() { }
         public GetAgeCommand(Person p) : base(p) { }
-        public override int Value(Person element)
+        public override int Process(Rule<Person> element)
         {
-            return element.Age;
+            return element.Element.Age;
         }
     }
 }

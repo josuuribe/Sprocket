@@ -1,33 +1,34 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements.Flows;
+using RaraAvis.Sprocket.RuleEngine.Elements.Operands;
 using RaraAvis.Sprocket.RuleEngine.Interfaces;
-using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
-using System;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.RuleEngine.Elements.Casts
 {
     //[KnownType("GetKnownType")]
     [DataContract]
-    internal class OperateAsOperator<TElement, TValue> : Operator<TElement>
+    internal class BooleanOperandAsOperator<TElement> : Operator<TElement>
         where TElement : IElement
     {
         [DataMember]
-        public Operand<TElement, TValue> Operand { get; set; }
+        public IOperand<TElement, bool> Operand { get; set; }
 
-        public OperateAsOperator(Command<TElement, TValue> operate) : base()
+        public BooleanOperandAsOperator(Operand<TElement, bool> operate) : base()
         {
             this.Operand = operate;
         }
 
-        public OperateAsOperator(Operand<TElement, TValue> operate) : base()
+        public override bool Process(Rule<TElement> rule)
         {
-            this.Operand = operate;
-        }
-
-        public override bool Operate(Rule<TElement> rule)
-        {
-            return (this.Operand.Value(rule.Element) as bool?) ?? false;
+            var next = Operand;
+            var res = true;
+            do
+            {
+                res &= next.Process(rule);
+                next = (next as ICode).Next as IOperand<TElement, bool>;
+            } while (!(next is Noop<TElement>));
+            return res;
         }
         //private static Type[] GetKnownType()
         //{

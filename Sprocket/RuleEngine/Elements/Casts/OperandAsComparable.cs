@@ -9,21 +9,21 @@ using System.Text;
 namespace RaraAvis.Sprocket.RuleEngine.Elements.Casts
 {
     [DataContract]
-    internal class OperateAsComparable<TElement, TValue> : Operand<TElement, IComparable>
+    internal class OperandAsComparable<TElement, TValue> : Operand<TElement, IComparable>
         where TElement : IElement
     {
         [DataMember]
         public Operand<TElement, TValue> Comparable { get; set; }
 
-        public OperateAsComparable(Operand<TElement, TValue> comparable)
+        public OperandAsComparable(Operand<TElement, TValue> comparable)
         {
             this.Comparable = comparable;
         }
 
-        public override IComparable Value(TElement element)
+        public override IComparable Process(Rule<TElement> element)
         {
             this.element = element;
-            return this.Comparable.Value(element) as IComparable;
+            return this.Comparable.Process(element) as IComparable;
         }
     }
 }

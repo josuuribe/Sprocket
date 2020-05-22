@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities
 {
     enum Feature { Tiny, Small, Medium, Big, Huge }
     public enum Status { WakeUp, Sleep }
     [Export]
+    [DataContract]
     public class Person : IElement, ICloneable
     {
         public Status Status { get; set; }
@@ -16,7 +18,7 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities
         public string Surname { get; set; }
 
         public Guid Id { get; set; }
-
+        [DataMember]
         public int Age { get; set; }
 
         public int DistanceTravelled { get; set; }

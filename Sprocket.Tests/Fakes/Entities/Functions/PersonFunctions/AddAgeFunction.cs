@@ -1,18 +1,24 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
 using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
 {
-    public class AddAgeFunction : Function<Person, int, bool>
+    [DataContract]
+    public class AddAgeFunction : Operand<Person, bool>
     {
+        [DataMember]
+        public int Parameter { get; set; }
         public AddAgeFunction()
         { }
-        public AddAgeFunction(int parameter) : base(default(Person), parameter)
-        { }
-        public override bool Value(Person element)
+        public AddAgeFunction(int parameter)
         {
-            element.Age += this.Parameters;
+            this.Parameter = parameter;
+        }
+        public override bool Process(Rule<Person> element)
+        {
+            element.Element.Age += this.Parameter;
             return true;
         }
     }

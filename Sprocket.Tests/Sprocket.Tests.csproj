@@ -14,6 +14,9 @@
     <Compile Remove="Fakes\Entities\Commands\PersonCommands\SetHugeCommand.cs" />
     <Compile Remove="Fakes\Entities\FakeWorkflow.cs" />
     <Compile Remove="Fakes\System\SprocketSystem.cs" />
+    <Compile Remove="RuleEngine\Commands.cs" />
+    <Compile Remove="RuleEngine\ConditionalOperators.cs" />
+    <Compile Remove="RuleEngine\Functions.cs" />
   </ItemGroup>
 
   <ItemGroup>

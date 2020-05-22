@@ -1,20 +1,20 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
-using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
 {
     [DataContract]
-    public class GetNameFunction : Function<Person, Operand<Person, Person>, string>
+    public class GetNameFunction : Operand<Person, string>
     {
-        public GetNameFunction(Person p) : base(p) { }
-        public GetNameFunction(Person p, Operand<Person, Person> op) : base(p, op) { }
+        [DataMember]
+        public Operand<Person, Person> Parameter { get; set; }
 
-        public override string Value(Person element)
+        public GetNameFunction(Operand<Person, Person> op) { }
+
+        public override string Process(Rule<Person> element)
         {
-            Person p = this.Parameters.Value(element);
+            Person p = this.Parameter.Process(element);
             return p.Name;
         }
     }

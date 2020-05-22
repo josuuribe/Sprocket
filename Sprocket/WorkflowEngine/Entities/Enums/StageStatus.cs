@@ -3,7 +3,7 @@
     /// <summary>
     /// Action after execute one stage.
     /// </summary>
-    public enum StageAction
+    public enum ExecutionEngineResult
     {
         Finish,
         Continue,

@@ -15,9 +15,9 @@ namespace RaraAvis.Sprocket.RuleEngine.Elements.Operators.ExpressionOperators.Bi
     public class And<T> : BinaryOperator<T>
         where T : IElement
     {
-        public override bool Operate(Rule<T> element)
+        public override bool Process(Rule<T> element)
         {
-            return OperatorLeft.Operate(element) && OperatorRight.Operate(element);
+            return OperatorLeft.Process(element) && OperatorRight.Process(element);
         }
 
         //private static Type[] GetKnownType()

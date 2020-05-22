@@ -1,5 +1,4 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Elements.Operators.ConditionalOperators;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;

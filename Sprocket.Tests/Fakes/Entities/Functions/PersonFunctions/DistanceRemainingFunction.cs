@@ -1,18 +1,21 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
 using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
 {
-    public class DistanceRemainingFunction : Function<Person, int, int>
+    [DataContract]
+    public class DistanceRemainingFunction : Operand<Person, int>
     {
-        public DistanceRemainingFunction() : base() { }
-        public DistanceRemainingFunction(Person p) : base(p) { }
-        public DistanceRemainingFunction(Person p, int i) : base(p, i) { }
-        public DistanceRemainingFunction(int i) : base(i) { }
-        public override int Value(Person element)
+        [DataMember]
+        int Parameter { get; set; }
+        public DistanceRemainingFunction(int i) {
+            this.Parameter = i;
+        }
+        public override int Process(Rule<Person> element)
         {
-            return this.Parameters - element.DistanceTravelled;
+            return this.Parameter - element.Element.DistanceTravelled;
         }
     }
 }

@@ -1,14 +1,24 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements.Operates;
+﻿using RaraAvis.Sprocket.RuleEngine.Elements;
 using RaraAvis.Sprocket.WorkflowEngine;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
 {
-    public class SetNameFunction : Function<Person, string, bool>
+    [DataContract]
+    public class SetNameFunction : Operand<Person, bool>
     {
-        public override bool Value(Person element)
+        [DataMember]
+        string Parameter { get; set; }
+
+        public SetNameFunction(string name)
         {
-            element.Name = this.Parameters;
+            this.Parameter = name;
+        }
+
+        public override bool Process(Rule<Person> element)
+        {
+            element.Element.Name = this.Parameter;
             return true;
         }
     }
