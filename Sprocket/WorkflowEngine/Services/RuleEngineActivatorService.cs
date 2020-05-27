@@ -1,61 +1,70 @@
 ﻿using Microsoft.Extensions.Configuration;
-using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using RaraAvis.Sprocket.WorkflowEngine.Serialization;
+using RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers;
 using System;
 using System.Collections.Generic;
+using System.Composition;
 using System.Composition.Convention;
 using System.Composition.Hosting;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Runtime.Loader;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Services
 {
     /// <summary>
-    /// Service that manage RuleManager lifecycle.
+    /// Bootstrap for Rule engine.
     /// </summary>
-    /// <typeparam name="T">Element to process.</typeparam>
-    public static class RuleEngineActivatorService<T>
-        where T : IElement
+    /// <typeparam name="T">Target type to use.</typeparam>
+    public static class RuleEngineActivatorService<TTarget>
+        where TTarget : notnull
     {
         #region ·   Fields  ·
-        public static SprocketConfiguration Configuration { get; set; }
+        internal static SprocketConfiguration Configuration { get; set; }
+        private static readonly ContainerConfiguration containerConfiguration = null!;
         #endregion
 
+#pragma warning disable CA1810 // Initialize reference type static fields inline
         static RuleEngineActivatorService()
+#pragma warning restore CA1810 // Initialize reference type static fields inline
         {
-            var configuration = new ConfigurationBuilder()
-            .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"))
-            .Build();
-            Configuration = configuration.GetSection("Sprocket").Get<SprocketConfiguration>();
-            Configuration.Paths.Add(Path.Combine(AppContext.BaseDirectory, "RaraAvis.Sprocket.dll"));
-        }
-
-        #region ·   Methods ·
-        /// <summary>
-        /// Gets a rule engine given assembly path.
-        /// </summary>
-        /// <param name="assemblyRuleEngine">Assembly with <see cref="IRuleEngineService<T>"/> path.</param>
-        /// <returns>A rule manager.</returns>
-        public static IRuleEngineService<T> GetRuleEngine()
-        {
-            IRuleEngineService<T> engine = null;
-            var conventions = new ConventionBuilder();
-            conventions.ForTypesDerivedFrom<IRuleEngineService<T>>().Export<IRuleEngineService<T>>().Shared();
+            var config = new ConfigurationBuilder()
+                                        .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"))
+                                        .Build();
+            Configuration = config.GetSection("Sprocket").Get<SprocketConfiguration>();
+            Configuration.Paths.Add(Path.Combine(AppContext.BaseDirectory, Path.GetFileName(System.Reflection.Assembly.GetExecutingAssembly().Location)));
 
             var configuration = new ContainerConfiguration();
             foreach (var assemblyRuleEngine in Configuration.Paths)
             {
-                var assemblyName = AssemblyLoadContext.GetAssemblyName(assemblyRuleEngine);
+                var path = Path.IsPathFullyQualified(assemblyRuleEngine) ? assemblyRuleEngine : Path.Combine(AppContext.BaseDirectory, assemblyRuleEngine);
+                var assemblyName = AssemblyLoadContext.GetAssemblyName(path);
                 var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
-                configuration = configuration.WithAssembly(assembly, conventions);
+                containerConfiguration = configuration.WithAssembly(assembly);
             }
+        }
 
-            using (var container = configuration.CreateContainer())
+        #region ·   Methods ·
+        /// <summary>
+        /// Gets a new rule engine given assembly path.
+        /// </summary>
+        /// <returns>The rule engine service.</returns>
+        public static IRuleEngineService<TTarget> RuleEngine
+        {
+            get
             {
-                engine = container.GetExport<IRuleEngineService<T>>();
+                ISerializer<TTarget> serializer = null!;
+                using (var container = containerConfiguration.CreateContainer())
+                {
+                    var constraints = new Dictionary<string, object>() { { "serializationFormat", Configuration.SerializationFormat.ToLowerInvariant() } };
+                    var cc = new System.Composition.Hosting.Core.CompositionContract(typeof(ISerializer<TTarget>), "serializer", constraints);
+                    container.TryGetExport(cc, out object serializerService);
+                    serializer = serializerService as ISerializer<TTarget> ?? new NullSerializer<TTarget>();
+                }
+                return new RuleEngineService<TTarget>(serializer);
             }
-
-            return engine;
         }
         #endregion
     }

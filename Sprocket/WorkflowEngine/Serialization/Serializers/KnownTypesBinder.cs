@@ -1,25 +1,25 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
-using RaraAvis.Sprocket.RuleEngine.Interfaces;
+﻿using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Serialization
 {
-    public class KnownTypesBinder : ISerializationBinder
+    internal class KnownTypesBinder : ISerializationBinder
     {
-        public IList<Type> KnownTypes { get; set; }
-
-        public Type BindToType(string assemblyName, string typeName)
+        [DisallowNull]
+        public IList<Type> KnownTypes { get; set; } = new List<Type>();
+        public KnownTypesBinder(IList<Type> knownTypes)
+        {
+            this.KnownTypes = knownTypes;
+        }
+        [return: MaybeNull]
+        public Type BindToType(string? assemblyName, [DisallowNull] string typeName)
         {
             var type = KnownTypes.SingleOrDefault(t => t.Name == typeName);
-            return (type?.ContainsGenericParameters ?? false) ? Type.GetType(assemblyName) : type;
+            return (type?.ContainsGenericParameters ?? false) ? Type.GetType(assemblyName) : type!;
         }
-
         public void BindToName(Type serializedType, out string assemblyName, out string typeName)
         {
             assemblyName = serializedType.AssemblyQualifiedName;

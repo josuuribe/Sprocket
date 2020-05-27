@@ -1,45 +1,53 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Interfaces;
-using System.Collections.Generic;
+﻿using RaraAvis.Sprocket.RuleEngine;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Entities
 {
     /// <summary>
-    /// Class that defines base rule container, a workflow to process, a state machine with the result, an element with the information for the rule and dynamic data with information created by the rule.
+    /// Class that stores the target and information related to the execution context.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Rule<T>
-        where T : IElement
+    /// <typeparam name="T">Target type.</typeparam>
+    public sealed class Rule<TTarget>
+        where TTarget : notnull
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         public Rule()
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         {
             this.ExecutionResult = ExecutionResult.None;
             this.UserStatus = 0;
-            this.Parameters = new Dictionary<string, object>();
-        }
-
-        public Rule(T element) : this()
-        {
-            this.Element = element;
         }
         /// <summary>
-        /// Element to process.
+        /// Contructor with element, useful for castings.
         /// </summary>
-        public T Element { get; set; }
-
-        public int UserStatus { get; set; }
-        public ExecutionResult ExecutionResult { get; set; }
-
-        public Dictionary<string, object> Parameters { get; }
-
-        public static implicit operator Rule<T>(T person)
+        /// <param name="element"></param>
+        public Rule([DisallowNull]TTarget element) : this()
         {
-            return new Rule<T>(person);
+            this.Target = element;
         }
-
-        public static implicit operator T(Rule<T> rule)
+        /// <summary>
+        /// Target object using during the execution.
+        /// </summary>
+        [DisallowNull]
+        public TTarget Target { get; set; }
+        /// <summary>
+        /// User status set by operators '>>' and '<<' during execution.
+        /// </summary>
+        public int UserStatus { get; set; }
+        /// <summary>
+        /// Result returned when this operator finishes.
+        /// </summary>
+        public ExecutionResult ExecutionResult { get; set; }
+        public static implicit operator Rule<TTarget>(TTarget target)
         {
-            return rule.Element;
+            return new Rule<TTarget>(target);
+        }
+        public static implicit operator TTarget(Rule<TTarget> rule)
+        {
+            return rule.Target;
         }
     }
 }

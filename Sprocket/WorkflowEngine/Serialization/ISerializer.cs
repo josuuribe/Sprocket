@@ -1,15 +1,28 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Serialization
 {
-    public interface ISerializer<TElement>
-        where TElement:IElement
+    /// <summary>
+    /// Interface to be used to serialize targets.
+    /// </summary>
+    /// <typeparam name="TTarget"></typeparam>
+    public interface ISerializer<TTarget>
+        where TTarget : notnull
     {
-        string Serialize(IOperator<TElement> @operator);
-
-        IOperator<TElement> Deserialize(string text);
+        /// <summary>
+        /// Serializes a <see cref="IOperator{TTarget}"/>.
+        /// </summary>
+        /// <param name="operator">Operator to serialize.</param>
+        /// <returns>Serialized string.</returns>
+        [return: NotNull]
+        string Serialize([NotNull]IOperator<TTarget> @operator);
+        /// <summary>
+        /// Deserializes a string to get a <see cref="IOperator{TTarget}" />.
+        /// </summary>
+        /// <param name="serialized">String to be deserialized.</param>
+        /// <returns>A <see cref="IOperator{TTarget}"/> object or null if object can not be deserialized.</returns>
+        [return: MaybeNull]
+        IOperator<TTarget> Deserialize([NotNull]string serialized);
     }
 }

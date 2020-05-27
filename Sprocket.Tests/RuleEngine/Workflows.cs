@@ -1,135 +1,72 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Elements.Flows;
+﻿using RaraAvis.Sprocket.RuleEngine;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
-using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
-using RaraAvis.Sprocket.Tests.Fakes.System;
-using System;
-using System.IO;
-using System.Linq;
+using RaraAvis.Sprocket.Tests.Fakes.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.SyworflowEngineTestem;
 using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.EngineEngine
 {
-    public class Engines : IDisposable
+    public class Engines : IClassFixture<WorkflowEngineTest>
     {
-        private WorflowEngineTest st = null;
-        private Operator<Person> op = null;
+        private readonly WorkflowEngineTest workflowEngineTest = null;
 
-        public Engines()
+        public Engines(WorkflowEngineTest worflowEngineTest)
         {
-            st = new WorflowEngineTest();
-        }
-
-        public void Dispose()
-        {
-            st = null;
+            this.workflowEngineTest = worflowEngineTest;
         }
 
         [Trait("Engine", "Positive")]
         [Fact]
-        public void OneStageEngine_Positive()
+        public void One_WorflowEngine_Positive()
         {
             GetDistanceCommand dc = new GetDistanceCommand();
             Operator<Person> op = (dc < 10);
             Person p = new Person();
 
-            var result = st.Start(op, p);
+            var result = workflowEngineTest.Start(op, p);
 
             Assert.Equal(ExecutionResult.Positive, result.ExecutionResult);
         }
 
         [Trait("Engine", "Positive")]
         [Fact]
-        public void OneStageEngine_Negative()
+        public void One_WorflowEngine_Negative()
         {
             GetDistanceCommand dc = new GetDistanceCommand();
             Operator<Person> op = (dc > 10);
             Person p = new Person();
 
-            var result = st.Start(op, p);
+            var result = workflowEngineTest.Start(op, p);
 
             Assert.Equal(ExecutionResult.Negative, result.ExecutionResult);
         }
 
         [Trait("Engine", "Error")]
         [Fact]
-        public void OneStageEngine_Error()
+        public void One_WorflowEngine_Error()
         {
-            Guid id1 = Guid.NewGuid();
             IsFamilyCommand ifc = new IsFamilyCommand();
-            Person p = new Person();
-            p.Family = null;
-            op = (ifc);
+            Person p = new Person
+            {
+                Family = null
+            };
+            Operator<Person> op = (ifc);
 
-            var result = st.Start(op, p);
+            var result = workflowEngineTest.Start(op, p);
 
             Assert.Equal(ExecutionResult.Error, result.ExecutionResult);
         }
 
         [Trait("Engine", "Exception")]
         [Fact]
-        public void OneStageEngine_WrongAssemblyPath()
+        public void One_WorflowEngine_NullOperator()
         {
-            Guid id1 = Guid.NewGuid();
-            IsFamilyCommand ifc = new IsFamilyCommand();
             Person p = new Person();
-            p.Family = null;
+            Operator<Person>.NullOperator nullOperator = new Operator<Person>.NullOperator();
 
-            Operator<Person> op = (ifc);            
-        }
+            var res = workflowEngineTest.MatchNullSerializer(nullOperator, p);
 
-        [Trait("Engine", "Exception")]
-        [Fact]
-        public void Function_Parameter_True()
-        {
-            var p = new Person();
-            SetParameter sp = new SetParameter("10");
-            Operator<Person> op = sp;
-
-            var result = st.Start(op, p);
-
-            Assert.Equal("10", result.Parameters["id"]);
-            Assert.Equal(ExecutionResult.Positive, result.ExecutionResult);
-        }
-
-        [Trait("Engine", "Exception")]
-        [Fact]
-        public void Function_Parameter_False()
-        {
-            var p = new Person();
-            SetParameter sp = new SetParameter("10");
-            Operator<Person> op = sp;
-
-            var result = st.Start(-op, p);
-
-            Assert.Equal("10", result.Parameters["id"]);
-            Assert.Equal(ExecutionResult.Negative, result.ExecutionResult);
-        }
-
-        [Trait("Engine", "Exception")]
-        [Fact]
-        public void Begin()
-        {
-            var p = new Person();
-            var begin = new Begin<Person>();
-
-            bool b = begin.Process(p);
-
-            Assert.True(b);
-            Assert.Null(begin.Next);
-            Assert.Equal(begin, begin.Previous);
-        }
-
-        [Trait("Engine", "Exception")]
-        [Fact]
-        public void End()
-        {
-            var p = new Person();
-            var end = new End<Person>();
-
-            bool b = end.Process(p);
-
-            Assert.True(b);
+            Assert.False(res);
         }
     }
 }

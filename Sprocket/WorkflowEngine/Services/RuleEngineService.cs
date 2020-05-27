@@ -1,61 +1,48 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements;
+﻿using RaraAvis.Sprocket.RuleEngine;
 using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
+using RaraAvis.Sprocket.WorkflowEngine.Serialization;
 using System;
-using System.Composition;
-
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Services
 {
     /// <summary>
     /// Engine manager, inits, process and creates rule related information.
     /// </summary>
-    /// <typeparam name="T">An IElement object.</typeparam>
-    //[PartMetadata(CreationPolicy.NonShared)]
-    [Export(typeof(IRuleEngineService<>))]
-    internal class RuleEngineService<T> : IRuleEngineService<T>
-        where T : IElement
+    /// <typeparam name="TTarget">An IElement object.</typeparam>
+    internal class RuleEngineService<TTarget> : IRuleEngineService<TTarget>
+        where TTarget : notnull
     {
-        private SerializationManager<T> serializationEngine = null;
+        /// <inheritdoc/>
+        public ISerializer<TTarget> Serializer { get; private set; }
 
-        public RuleEngineService()
+        public RuleEngineService(ISerializer<TTarget> serializer)
         {
-            serializationEngine = new SerializationManager<T>(RuleEngineActivatorService<T>.Configuration);//RuleEngineActivatorService<T>.Configuration);
+            this.Serializer = serializer;
         }
-
         #region ·   Methods ·
-        public Rule<T> Init(IOperator<T> op, T element)
+        /// <inheritdoc />
+        public Rule<TTarget> Init(IOperator<TTarget> op, TTarget element)
         {
-            Rule<T> rule = new Rule<T>(element);
-            rule.ExecutionResult = ExecutionResult.Positive;
+            Rule<TTarget> rule = new Rule<TTarget>(element)
+            {
+                ExecutionResult = ExecutionResult.Positive
+            };
             this.Process(op, rule);
             return rule;
         }
-
-        /// <summary>
-        /// Starts an engine manager.
-        /// </summary>
-        /// <param name="element">Element  to process.</param>
-        private void Process(IOperator<T> op, Rule<T> rule)
+        private void Process(IOperator<TTarget> op, Rule<TTarget> rule)
         {
             try
             {
                 rule.ExecutionResult = op.Process(rule) ? rule.ExecutionResult : ExecutionResult.Negative;
             }
+#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)
             {
                 rule.ExecutionResult = ExecutionResult.Error;
             }
-        }
-
-        public string Serialize(IOperator<T> @operator)
-        {
-            return serializationEngine.Serialize(@operator);
-        }
-
-        public IOperator<T> Deserialize(string serialized)
-        {
-            return serializationEngine.Deserialize(serialized);
+#pragma warning restore CA1031 // Do not catch general exception types
         }
         #endregion
     }

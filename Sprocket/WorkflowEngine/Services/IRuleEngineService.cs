@@ -1,27 +1,29 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Interfaces;
+﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
-using System.Collections.Generic;
+using RaraAvis.Sprocket.WorkflowEngine.Serialization;
+using System.Diagnostics.CodeAnalysis;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Services
 {
     /// <summary>
     /// Expose all requires functionality a rule engine must adopt.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    //[InheritedExport(typeof(IRuleEngineService<>))]
-    public interface IRuleEngineService<T>
-        where T : IElement
+    /// <typeparam name="TTarget">Target to be used for serialization purposes.</typeparam>
+    public interface IRuleEngineService<TTarget>
+        where TTarget : notnull
     {
         /// <summary>
-        /// Starts an engine manager.
+        /// Starts a rule engine.
         /// </summary>
-        /// <param name="stages">Woorkflow stages.</param>
-        /// <param name="stags">Element to process.</param>
-        Rule<T> Init(IOperator<T> op, T element);
-
-        string Serialize(IOperator<T> @operator);
-
-        IOperator<T> Deserialize(string serialized);
+        /// <param name="operator">Operator to be executed.</param>
+        /// <param name="target">Target to be used.</param>
+        /// <returns>Processed rule with all information.</returns>
+        [return: NotNull]
+        Rule<TTarget> Init([DisallowNull]IOperator<TTarget> @operator, [DisallowNull]TTarget target);
+        /// <summary>
+        /// Serializer that is being used, this can be injected with a custom implementation via MEF.
+        /// </summary>
+        [DisallowNull]
+        ISerializer<TTarget> Serializer { get; }
     }
 }

@@ -4,33 +4,29 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>RaraAvis.Sprocket</RootNamespace>
     <AssemblyName>RaraAvis.Sprocket</AssemblyName>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RuleEngine\Elements\Operates\**" />
-    <Compile Remove="RuleEngine\Elements\Operators\ConditionalOperators\**" />
+    <Compile Remove="RuleEngine\Operators\ConditionalOperators\**" />
     <Compile Remove="WorkflowEngine\Entities\Enums\**" />
-    <EmbeddedResource Remove="RuleEngine\Elements\Operates\**" />
-    <EmbeddedResource Remove="RuleEngine\Elements\Operators\ConditionalOperators\**" />
+    <EmbeddedResource Remove="RuleEngine\Operators\ConditionalOperators\**" />
     <EmbeddedResource Remove="WorkflowEngine\Entities\Enums\**" />
-    <None Remove="RuleEngine\Elements\Operates\**" />
-    <None Remove="RuleEngine\Elements\Operators\ConditionalOperators\**" />
+    <None Remove="RuleEngine\Operators\ConditionalOperators\**" />
     <None Remove="WorkflowEngine\Entities\Enums\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="RuleEngine\Elements\Casts\BooleanCommandWrapper.cs" />
-    <Compile Remove="RuleEngine\Elements\Casts\CommandAsOperator.cs" />
-    <Compile Remove="RuleEngine\Elements\Casts\FunctionWrapper.cs" />
-    <Compile Remove="RuleEngine\Elements\Casts\OperatorAsOperate.cs" />
-    <Compile Remove="RuleEngine\Elements\Flows\Roamable.cs" />
-    <Compile Remove="RuleEngine\Elements\Method.cs" />
-    <Compile Remove="RuleEngine\Elements\Casts\BooleanFunctionWrapper.cs" />
-    <Compile Remove="RuleEngine\Elements\Operators\ConditionalOperator.cs" />
-    <Compile Remove="RuleEngine\Elements\Operators\Kernel\Batch.cs" />
-    <Compile Remove="RuleEngine\Elements\Operators\Kernel\End.cs" />
-    <Compile Remove="RuleEngine\Elements\Operators\UnaryOperators\FalseCommand.cs" />
-    <Compile Remove="RuleEngine\Elements\Operators\UnaryOperators\TrueCommand.cs" />
+    <Compile Remove="RuleEngine\Casts\BooleanCommandWrapper.cs" />
+    <Compile Remove="RuleEngine\Casts\CommandAsOperator.cs" />
+    <Compile Remove="RuleEngine\Casts\FunctionWrapper.cs" />
+    <Compile Remove="RuleEngine\Casts\OperatorAsOperate.cs" />
+    <Compile Remove="RuleEngine\Casts\BooleanFunctionWrapper.cs" />
+    <Compile Remove="RuleEngine\Operators\ConditionalOperator.cs" />
+    <Compile Remove="RuleEngine\Operators\Kernel\Batch.cs" />
+    <Compile Remove="RuleEngine\Operators\Kernel\End.cs" />
+    <Compile Remove="RuleEngine\Operators\UnaryOperators\FalseCommand.cs" />
+    <Compile Remove="RuleEngine\Operators\UnaryOperators\TrueCommand.cs" />
     <Compile Remove="WorkflowEngine\Entities\ActivityAssemblyName.cs" />
     <Compile Remove="WorkflowEngine\Entities\Stage.cs" />
     <Compile Remove="WorkflowEngine\Services\IRuleEngineActivatorService.cs" />

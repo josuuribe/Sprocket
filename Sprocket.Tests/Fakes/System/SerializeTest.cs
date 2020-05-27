@@ -1,24 +1,22 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Interfaces;
+﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using RaraAvis.Sprocket.WorkflowEngine.Services;
 using System;
-using System.Linq;
 
-namespace RaraAvis.Sprocket.Tests.Fakes.System
+namespace RaraAvis.Sprocket.Tests.Fakes.SyworflowEngineTestem
 {
-    public class WorflowEngineTest
+    public class WorkflowEngineTest
     {
         private readonly IRuleEngineService<Person> ruleEngineServiceXml;
         private readonly IRuleEngineService<Person> ruleEngineServiceJson;
 
-        public WorflowEngineTest()
+        public WorkflowEngineTest()
         {
             RuleEngineActivatorService<Person>.Configuration.SerializationFormat = "xml";
-            ruleEngineServiceXml = RuleEngineActivatorService<Person>.GetRuleEngine();
+            ruleEngineServiceXml = RuleEngineActivatorService<Person>.RuleEngine;
             RuleEngineActivatorService<Person>.Configuration.SerializationFormat = "json";
-            ruleEngineServiceJson = RuleEngineActivatorService<Person>.GetRuleEngine();
+            ruleEngineServiceJson = RuleEngineActivatorService<Person>.RuleEngine;
         }
 
         public Rule<Person> Start(IOperator<Person> @operator, Person p)
@@ -26,11 +24,11 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
             Person personXml = p;
             Person personJson = (Person)p.Clone();
 
-            var xml = ruleEngineServiceXml.Serialize(@operator);
-            var opXml = ruleEngineServiceXml.Deserialize(xml);
+            var xml = ruleEngineServiceXml.Serializer.Serialize(@operator);
+            var opXml = ruleEngineServiceXml.Serializer.Deserialize(xml);
 
-            var json = ruleEngineServiceJson.Serialize(@operator);
-            var opJson = ruleEngineServiceJson.Deserialize(json);
+            var json = ruleEngineServiceJson.Serializer.Serialize(@operator);
+            var opJson = ruleEngineServiceJson.Serializer.Deserialize(json);
 
             var resJson = ruleEngineServiceXml.Init(opXml, personJson);
             var resXml = ruleEngineServiceXml.Init(opJson, personXml);
@@ -47,11 +45,11 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
             Person personXml = p;
             Person personJson = (Person)p.Clone();
 
-            var xml = ruleEngineServiceXml.Serialize(@operator);
-            var opXml = ruleEngineServiceXml.Deserialize(xml);
+            var xml = ruleEngineServiceXml.Serializer.Serialize(@operator);
+            var opXml = ruleEngineServiceXml.Serializer.Deserialize(xml);
 
-            var json = ruleEngineServiceJson.Serialize(@operator);
-            var opJson = ruleEngineServiceJson.Deserialize(json);
+            var json = ruleEngineServiceJson.Serializer.Serialize(@operator);
+            var opJson = ruleEngineServiceJson.Serializer.Deserialize(json);
 
             var resJson = opXml.Process(personJson);
             var resXml = opJson.Process(personXml);
@@ -60,6 +58,15 @@ namespace RaraAvis.Sprocket.Tests.Fakes.System
             equals &= resJson == resXml;
 
             return equals ? resXml : throw new Exception("Mismatch json/xml");
+        }
+
+        public bool MatchNullSerializer(IOperator<Person> @operator, Person p)
+        {
+            RuleEngineActivatorService<Person>.Configuration.SerializationFormat = "wrong";
+            var ruleEngineService = RuleEngineActivatorService<Person>.RuleEngine;
+            var serialized = ruleEngineService.Serializer.Serialize(@operator);
+            var op = ruleEngineService.Serializer.Deserialize(serialized);
+            return op.Process(p);
         }
     }
 }

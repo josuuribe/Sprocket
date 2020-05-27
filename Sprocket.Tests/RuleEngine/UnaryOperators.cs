@@ -1,29 +1,20 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Elements.Operators.UnaryOperators;
+﻿using RaraAvis.Sprocket.RuleEngine;
+using RaraAvis.Sprocket.RuleEngine.Operators.UnaryOperators;
 using RaraAvis.Sprocket.Tests.Fakes.Entities;
-using RaraAvis.Sprocket.Tests.Fakes.Entities.Commands.PersonCommands;
 using RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions;
-using RaraAvis.Sprocket.Tests.Fakes.System;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using RaraAvis.Sprocket.Tests.Fakes.PersonCommands;
+using RaraAvis.Sprocket.Tests.Fakes.SyworflowEngineTestem;
 using Xunit;
 
 namespace RaraAvis.Sprocket.Tests.RuleEngine
 {
-    public class UnaryOperators : IDisposable
+    public class UnaryOperators : IClassFixture<WorkflowEngineTest>
     {
-        private WorflowEngineTest st = null;
-        private Operator<Person> op = null;
+        private readonly WorkflowEngineTest workflowEngineTest = null;
 
-        public UnaryOperators()
+        public UnaryOperators(WorkflowEngineTest worflowEngineTest)
         {
-            st = new WorflowEngineTest();
-        }
-
-        public void Dispose()
-        {
-            st = null;
+            this.workflowEngineTest = worflowEngineTest;
         }
 
         [Trait("UnaryOperators", "Not")]
@@ -31,10 +22,10 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         public void Not_Command()
         {
             var p = new Person();
-            var rc = new RightCommand();
-            op = !rc;
+            Operator<Person> rc = new RightCommand();
+            var op = !rc;
 
-            var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
             Assert.IsType<Not<Person>>(op);
             Assert.False(res);
@@ -47,9 +38,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             var p = new Person();
             var rc = new RightCommand();
-            op = +rc;
+            var op = +rc;
 
-            var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
             Assert.IsType<True<Person>>(op);
             Assert.True(res);
@@ -62,9 +53,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             var p = new Person();
             var rc = new RightCommand();
-            op = -rc;
+            var op = -rc;
 
-            var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
             Assert.IsType<False<Person>>(op);
             Assert.False(res);
@@ -79,7 +70,7 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             var dc = new GetDistanceCommand();
             Operator<Person> op = +(dc < 10);
 
-            var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
             Assert.IsType<True<Person>>(op);
             Assert.True(res);
@@ -91,9 +82,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             var p = new Person();
             var dc = new GetDistanceCommand();
-            op = -(dc < 10);
+            var op = -(dc < 10);
 
-            var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
             Assert.IsType<False<Person>>(op);
             Assert.False(res);
@@ -105,9 +96,9 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             var p = new Person();
             var dc = new GetDistanceCommand();
-            op = !(dc > 10);
+            var op = !(dc > 10);
 
-            var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
             Assert.IsType<Not<Person>>(op);
             Assert.True(res);
@@ -119,26 +110,27 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
         {
             var p = new Person();
             var dc = new GetDistanceCommand();
-            op = !(dc < 10);
+            var op = !(dc < 10);
 
-            var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
             Assert.IsType<Not<Person>>(op);
             Assert.False(res);
         }
 
-        //[Trait("UnaryOperators", "Not")]
-        //[Fact]
-        //public void Not_Function_False()
-        //{
-        //    var p = new Person();
-        //    var snf = new SetNameFunction();
-        //    op = !snf;
+        [Trait("UnaryOperators", "Not")]
+        [Fact]
+        public void Not_Function_False()
+        {
+            var p = new Person();
+            Operator<Person> snf = new SetNameFunction("new name");
+            var op = !snf;
 
-        //    var res = st.Match(op, p);
+            var res = workflowEngineTest.Match(op, p);
 
-        //    Assert.IsType<Not<Person>>(op);
-        //    Assert.False(res);
-        //}
+            Assert.IsType<Not<Person>>(op);
+            Assert.Equal("new name", p.Name);
+            Assert.False(res);
+        }
     }
 }

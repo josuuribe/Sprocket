@@ -1,7 +1,7 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Elements;
-using RaraAvis.Sprocket.RuleEngine.Interfaces;
+﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using System;
-using System.Collections.Generic;
+using System.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
@@ -9,35 +9,38 @@ using System.Text;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
 {
-    internal class XmlOperatorSerializer<TElement> : ISerializer<TElement>
-        where TElement : IElement
+    [Export("serializer", typeof(ISerializer<>))]
+    [ExportMetadata("serializationFormat", "xml")]
+    internal class XmlOperatorSerializer<TTarget> : Serializer<TTarget>, ISerializer<TTarget>
+        where TTarget : notnull
     {
-        private DataContractSerializer dataContractSerializer;
-
-        public XmlOperatorSerializer(List<Type> knownTypes)
+        [DisallowNull]
+        private readonly DataContractSerializer dataContractSerializer;
+        [ImportingConstructor]
+        public XmlOperatorSerializer():base()
         {
-            DataContractSerializerSettings dcss = new DataContractSerializerSettings();
-            dcss.MaxItemsInObjectGraph = int.MaxValue;
-            dcss.PreserveObjectReferences = true;
+            DataContractSerializerSettings dcss = new DataContractSerializerSettings
+            {
+                MaxItemsInObjectGraph = int.MaxValue,
+                PreserveObjectReferences = true
+            };
             knownTypes.Add(typeof(Expression<>));
             knownTypes.Add(typeof(Func<>));
             dcss.KnownTypes = knownTypes;
-            dcss.DataContractResolver = new RuleTypeResolver<TElement>();
-            dataContractSerializer = new DataContractSerializer(typeof(IOperator<TElement>), dcss);
+            dcss.DataContractResolver = new RuleTypeResolver<TTarget>();
+            dataContractSerializer = new DataContractSerializer(typeof(IOperator<TTarget>), dcss);
         }
-
-        public IOperator<TElement> Deserialize(string xml)
+        public override IOperator<TTarget> Deserialize(string xml)
         {
             byte[] byteArray = Encoding.UTF8.GetBytes(xml);
 
             using (var ms = new MemoryStream(byteArray))
             {
-                IOperator<TElement> logicalOperator = (IOperator<TElement>)dataContractSerializer.ReadObject(ms);
+                IOperator<TTarget> logicalOperator = (IOperator<TTarget>)dataContractSerializer.ReadObject(ms);
                 return logicalOperator;
             }
         }
-
-        public string Serialize(IOperator<TElement> @operator)
+        public override string Serialize(IOperator<TTarget> @operator)
         {
             using (var ms = new MemoryStream())
             {
