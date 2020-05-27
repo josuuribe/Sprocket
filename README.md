@@ -1,11 +1,11 @@
 # Simple example
 
-This section will provide a simple example about the main idea, wiki explain more features in detail like serialize rules. 
+This section will provide a simple example about the main idea, wiki explains more features in detail like rules serialization. 
 
 ## Creating entity
 First you need an entity, a class where rules will act on.
 ```C#
-public class Person : IElement
+public class Person
 {
     public string Name { get; set; }
 
@@ -32,44 +32,44 @@ public class Person : IElement
 ```
 
 ## Creating command
-Now we need to create commands, commands are objects that will perform actions on the object, e.g:
+Now we need to create commands, commands are objects that will perform actions on the object, the only requirement is inherit from *Operand<TTarget, TValue>* class where *TTarget* is the class that contains the methods to be executed by commands and *TValue* is the value returned by the command, e.g:
 ```C#
-public class RunCommand : BooleanCommand<Person>
+public class RunCommand : Operand<Person, bool>
 {
-    public override bool Value(RuleElement<Person> element)
+    public override bool Process(Person element)
     {
         element.Element.Run();
         return true;
     }
 }
 
-public class WalkCommand : BooleanCommand<Person>
+public class WalkCommand : Operand<Person, bool>
 {
-    public override bool Value(RuleElement<Person> element)
+    public override bool Process(Person element)
     {
-        element.Element.Walk();
+        element.Walk();
         return true;
     }
 }
 ```
 
-This command will call method ``` Run() ``` on ```Person``` class, the class ```BooleanCommand``` is a command class that returns a boolean and execute some code, in this case calls ```Run()``` and ```Walk()```.
+These commands will call method ``` Run() ``` and ``` Walk() ``` on a ```Person``` object.
 
 ## Creating rule
-Now we create the rule, we are going to use the commands ```RunCommand``` and ```WalkCommand
-```, so we create the commands and invoke ```Match()``` on the object person ```p``` using the created expression ```op```.
+Now we are going to create the rule, we are going to use the commands ```RunCommand``` and ```WalkCommand
+```, with this will call method ```Process()``` on the object person ```perspn``` using the created rule ```rule```.
 
-There are different expressions that can be used, in this case ```op``` represents a batch operation, all commands will be executed in order given, ```Match``` returns true if it matches or false if it does not match or there has been some error, in this case the rule only executes methods so ```res``` only indicates the success about the process.
+There are different expressions that can be used, in this case ```rule``` represents a batch operation, all commands will be executed in order given, ```Process()``` returns true if it matches or false if it does not match or there has been some error, in this case the rule only executes methods so ```res``` only indicates the success about the process.
 ```C#
 public void RunAndWalk()
 {
     RunCommand rc = new RunCommand();
     WalkCommand wc = new WalkCommand();
-    Person p = new Person();
+    Person person = new Person();
     
-    var op = (rc + wc);
+    var rule = rc / wc;
 
-    var res = st.Match(op, p);
+    var res = rule.Process(p);
 
     if(res==3)
     {
