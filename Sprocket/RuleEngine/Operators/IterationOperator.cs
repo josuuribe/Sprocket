@@ -11,7 +11,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         [DisallowNull]
         [NotNull]
         public Operator<TTarget> Condition { get; set; }
-        public IterationOperator([DisallowNull]Operator<TTarget> condition)
+        protected IterationOperator([DisallowNull]Operator<TTarget> condition)
         {
             this.Condition = condition;
         }

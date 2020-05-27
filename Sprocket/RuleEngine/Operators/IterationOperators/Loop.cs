@@ -16,14 +16,14 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.IterationOperators
             this.Block = block;
         }
 
-        public override bool Process(Rule<TTarget> element)
+        public override bool Process(Rule<TTarget> rule)
         {
-            while (Condition.Process(element))
+            while (Condition.Process(rule))
             {
                 var next = Block;
                 do
                 {
-                    next.Process(element);
+                    next.Process(rule);
                     next = next.Next;
                 } while (!(next is Operand<TTarget, TValue>.Noop));
             }

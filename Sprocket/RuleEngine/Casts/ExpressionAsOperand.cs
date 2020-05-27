@@ -31,13 +31,13 @@ namespace RaraAvis.Sprocket.RuleEngine.Casts
         }
 
         [OnSerializing()]
-        internal void OnSerializing(StreamingContext c)
+        private void OnSerializing(StreamingContext c)
         {
             SerializedExpression = GetSerializer(c).SerializeText(Expression);
         }
 
         [OnDeserialized()]
-        internal void OnDeserialized(StreamingContext c)
+        private void OnDeserialized(StreamingContext c)
         {
             Expression = (GetSerializer(c).DeserializeText(SerializedExpression) as Expression<Func<Rule<TTarget>, TValue>>)!;
         }

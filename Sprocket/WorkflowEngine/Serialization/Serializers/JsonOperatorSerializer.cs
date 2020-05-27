@@ -26,9 +26,9 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
             jsonSerializerSettings.SerializationBinder = typesBinder;
         }
         [return: NotNull]
-        public override IOperator<TTarget> Deserialize([DisallowNull]string json)
+        public override IOperator<TTarget> Deserialize([DisallowNull]string text)
         {
-            return (IOperator<TTarget>)(JsonConvert.DeserializeObject(json, jsonSerializerSettings))!;
+            return (IOperator<TTarget>)(JsonConvert.DeserializeObject(text, jsonSerializerSettings))!;
         }
         [return: NotNull]
         public override string Serialize([DisallowNull]IOperator<TTarget> @operator)

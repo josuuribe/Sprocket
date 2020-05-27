@@ -7,7 +7,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Interfaces
     /// </summary>
     /// <typeparam name="TTarget">Root type object to be used by operands.</typeparam>
     /// <typeparam name="TValue">The type returned by any operand processed on target.</typeparam>
-    public interface IOperand<TTarget, TValue>
+    public interface IOperand<in TTarget, out TValue>
         where TTarget : notnull
     {
         /// <summary>

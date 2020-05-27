@@ -18,7 +18,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.ComparisonOperators
         {
             var u1 = OperateLeft.Process(element);
             var u2 = OperateRight.Process(element);
-            return u1.CompareTo((U)u2) >= 0;
+            return u1.CompareTo(u2) >= 0;
         }
     }
 }

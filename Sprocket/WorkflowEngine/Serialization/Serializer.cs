@@ -14,7 +14,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         protected List<Type> knownTypes = new List<Type>();
 
         #region ·   Constructor ·
-        public Serializer()
+        protected Serializer()
         {
             foreach (var path in RuleEngineActivatorService<TTarget>.Configuration.Paths)
             {
@@ -27,7 +27,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         #endregion
         #region ·   Methods   ·
         [return: NotNull]
-        public abstract string Serialize([NotNull]IOperator<TTarget> op);
+        public abstract string Serialize([NotNull]IOperator<TTarget> @operator);
         [return: MaybeNull]
         public abstract IOperator<TTarget> Deserialize([NotNull]string text);
         #endregion

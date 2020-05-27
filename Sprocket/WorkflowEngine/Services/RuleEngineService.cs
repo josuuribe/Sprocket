@@ -22,20 +22,20 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Services
         }
         #region ·   Methods ·
         /// <inheritdoc />
-        public Rule<TTarget> Init(IOperator<TTarget> op, TTarget element)
+        public Rule<TTarget> Init(IOperator<TTarget> op, TTarget target)
         {
-            Rule<TTarget> rule = new Rule<TTarget>(element)
+            Rule<TTarget> rule = new Rule<TTarget>(target)
             {
                 ExecutionResult = ExecutionResult.Positive
             };
             this.Process(op, rule);
             return rule;
         }
-        private void Process(IOperator<TTarget> op, Rule<TTarget> rule)
+        private void Process(IOperator<TTarget> @operator, Rule<TTarget> rule)
         {
             try
             {
-                rule.ExecutionResult = op.Process(rule) ? rule.ExecutionResult : ExecutionResult.Negative;
+                rule.ExecutionResult = @operator.Process(rule) ? rule.ExecutionResult : ExecutionResult.Negative;
             }
 #pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception)

@@ -17,7 +17,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         [NotNull]
         public IOperand<TTarget, TValue> OperateRight;
 
-        public ComparisonOperator([DisallowNull]IOperand<TTarget, TValue> operateLeft, [DisallowNull] IOperand<TTarget, TValue> operateRight)
+        protected ComparisonOperator([DisallowNull]IOperand<TTarget, TValue> operateLeft, [DisallowNull] IOperand<TTarget, TValue> operateRight)
         {
             this.OperateLeft = operateLeft;
             this.OperateRight = operateRight;

@@ -14,11 +14,11 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.ComparisonOperators
         {
         }
 
-        public override bool Process(Rule<T> element)
+        public override bool Process(Rule<T> target)
         {
-            var u1 = OperateLeft.Process(element.Target);
-            var u2 = OperateRight.Process(element.Target);
-            return u1.CompareTo((U)u2) <= 0;
+            var u1 = OperateLeft.Process(target.Target);
+            var u2 = OperateRight.Process(target.Target);
+            return u1.CompareTo(u2) <= 0;
         }
     }
 }

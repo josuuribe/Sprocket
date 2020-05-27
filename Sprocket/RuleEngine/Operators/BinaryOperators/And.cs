@@ -9,9 +9,9 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.BinaryOperators
     {
         public And() : base()
         { }
-        public override bool Process(Rule<TTarget> element)
+        public override bool Process(Rule<TTarget> rule)
         {
-            return OperatorLeft.Process(element) && OperatorRight.Process(element);
+            return OperatorLeft.Process(rule) && OperatorRight.Process(rule);
         }
     }
 }

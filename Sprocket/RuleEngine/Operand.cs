@@ -161,7 +161,6 @@ namespace RaraAvis.Sprocket.RuleEngine
                 {
                     return this;
                 }
-                protected set { }
             }
 
             public override TValue Process(TTarget target)

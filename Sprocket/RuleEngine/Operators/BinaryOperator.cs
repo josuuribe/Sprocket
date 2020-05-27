@@ -17,7 +17,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         [NotNull]
         public virtual Operator<TTarget> OperatorRight { get; set; }
 
-        public BinaryOperator()
+        protected BinaryOperator()
         {
             this.OperatorLeft = new Operator<TTarget>.NullOperator();
             this.OperatorRight = new Operator<TTarget>.NullOperator();

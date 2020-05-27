@@ -27,12 +27,12 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
             knownTypes.Add(typeof(Expression<>));
             knownTypes.Add(typeof(Func<>));
             dcss.KnownTypes = knownTypes;
-            dcss.DataContractResolver = new RuleTypeResolver<TTarget>();
+            dcss.DataContractResolver = new RuleTypeResolver();
             dataContractSerializer = new DataContractSerializer(typeof(IOperator<TTarget>), dcss);
         }
-        public override IOperator<TTarget> Deserialize(string xml)
+        public override IOperator<TTarget> Deserialize(string text)
         {
-            byte[] byteArray = Encoding.UTF8.GetBytes(xml);
+            byte[] byteArray = Encoding.UTF8.GetBytes(text);
 
             using (var ms = new MemoryStream(byteArray))
             {

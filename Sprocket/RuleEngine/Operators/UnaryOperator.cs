@@ -10,11 +10,11 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         [DataMember]
         [DisallowNull]
         public virtual Operator<TTarget> Operator { get; set; }
-        public UnaryOperator()
+        protected UnaryOperator()
         {
             this.Operator = new NullOperator();
         }
-        public UnaryOperator([DisallowNull]Operator<TTarget> @operator)
+        protected UnaryOperator([DisallowNull]Operator<TTarget> @operator)
         {
             this.Operator = @operator;
         }

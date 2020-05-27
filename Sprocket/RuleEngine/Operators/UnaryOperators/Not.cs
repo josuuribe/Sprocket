@@ -10,9 +10,9 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.UnaryOperators
         public Not() : base()
         { }
 
-        public override bool Process(Rule<TTarget> element)
+        public override bool Process(Rule<TTarget> rule)
         {
-            return !Operator.Process(element);
+            return !Operator.Process(rule);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         [NotNull]
         public virtual Operator<TTarget> Operator { get; set; }
 
-        public Kernel([DisallowNull]Operator<TTarget> @operator)
+        protected Kernel([DisallowNull]Operator<TTarget> @operator)
         {
             this.Operator = @operator;
         }

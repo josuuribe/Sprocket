@@ -4,8 +4,7 @@ using System.Xml;
 
 namespace RaraAvis.Sprocket.WorkflowEngine
 {
-    internal class RuleTypeResolver<T> : DataContractResolver
-        where T : notnull
+    internal class RuleTypeResolver : DataContractResolver
     {
         internal RuleTypeResolver()
         { }
