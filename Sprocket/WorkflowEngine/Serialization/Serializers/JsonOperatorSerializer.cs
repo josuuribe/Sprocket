@@ -7,7 +7,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
 {
-    [Export("serializer", typeof(ISerializer<>))]
+    [Export(typeof(ISerializer<>))]
     [ExportMetadata("serializationFormat", "json")]
     internal class JsonOperatorSerializer<TTarget> : Serializer<TTarget>, ISerializer<TTarget>
         where TTarget : notnull

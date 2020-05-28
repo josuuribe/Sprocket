@@ -55,7 +55,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Services
                 using (var container = containerConfiguration.CreateContainer())
                 {
                     var constraints = new Dictionary<string, object>() { { "serializationFormat", Configuration.SerializationFormat.ToLowerInvariant() } };
-                    var cc = new System.Composition.Hosting.Core.CompositionContract(typeof(ISerializer<TTarget>), "serializer", constraints);
+                    var cc = new System.Composition.Hosting.Core.CompositionContract(typeof(ISerializer<TTarget>), null, constraints);
                     container.TryGetExport(cc, out object serializerService);
                     serializer = serializerService as ISerializer<TTarget> ?? new NullSerializer<TTarget>();
                 }

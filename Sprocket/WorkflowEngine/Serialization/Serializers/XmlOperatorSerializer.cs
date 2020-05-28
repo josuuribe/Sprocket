@@ -9,7 +9,7 @@ using System.Text;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
 {
-    [Export("serializer", typeof(ISerializer<>))]
+    [Export(typeof(ISerializer<>))]
     [ExportMetadata("serializationFormat", "xml")]
     internal class XmlOperatorSerializer<TTarget> : Serializer<TTarget>, ISerializer<TTarget>
         where TTarget : notnull

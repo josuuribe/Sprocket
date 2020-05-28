@@ -17,6 +17,21 @@ namespace RaraAvis.Sprocket.Tests.RuleEngine
             this.workflowEngineTest = worflowEngineTest;
         }
 
+        [Trait("UnaryOperators", "True")]
+        [Fact]
+        public void Operand_Operator()
+        {
+            var p = new Person();
+            var wc = new WalkCommand();
+            Operator<Person> op = +(wc);
+
+            var res = op.Process(p);
+
+            Assert.IsType<True<Person>>(op);
+            Assert.True(res);
+            Assert.Equal(1, p.DistanceTravelled);
+        }
+
         [Trait("UnaryOperators", "Not")]
         [Fact]
         public void Not_Command()
