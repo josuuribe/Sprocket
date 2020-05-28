@@ -1,3 +1,9 @@
+This library creates simple business rules that can be serialized and save in a datastore, this is useful for create dynamic rules and avoid create application logic too much, these rules can also be created dinamically. This library has the next characteristics:
+
+- It does not use if
+- Flow guided by design
+- Anti-Null
+
 # Simple example
 
 This section will provide a simple example about the main idea, wiki explains more features in detail like rules serialization. 
