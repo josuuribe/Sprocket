@@ -1,11 +1,17 @@
+This library creates simple business rules that can be serialized and save in a datastore, this is useful for create dynamic rules and avoid create application logic too much, these rules can also be created dinamically. This library has the next characteristics:
+
+- It does not use if
+- Flow guided by design
+- Anti-Null
+
 # Simple example
 
-This section will provide a simple example about the main idea, wiki explain more features in detail like serialize rules. 
+This section will provide a simple example about the main idea, wiki explains more features in detail like rules serialization. 
 
 ## Creating entity
 First you need an entity, a class where rules will act on.
 ```C#
-public class Person : IElement
+public class Person
 {
     public string Name { get; set; }
 
@@ -32,46 +38,45 @@ public class Person : IElement
 ```
 
 ## Creating command
-Now we need to create commands, commands are objects that will perform actions on the object, e.g:
+Now we need to create commands, commands are objects that will perform actions on the object, the only requirement is inherit from *Operand<TTarget, TValue>* class where *TTarget* is the class that contains the methods to be executed by commands and *TValue* is the value returned by the command, e.g:
 ```C#
-public class RunCommand : BooleanCommand<Person>
+public class GetDistanceCommand : Operand<Person, int>
 {
-    public override bool Value(RuleElement<Person> element)
+    public override int Process(Person element)
     {
-        element.Element.Run();
-        return true;
+        return element.DistanceTravelled;
     }
 }
 
-public class WalkCommand : BooleanCommand<Person>
+public class WalkCommand : Operand<Person, bool>
 {
-    public override bool Value(RuleElement<Person> element)
+    public override bool Process(Person element)
     {
-        element.Element.Walk();
+        element.Walk();
         return true;
     }
 }
 ```
 
-This command will call method ``` Run() ``` on ```Person``` class, the class ```BooleanCommand``` is a command class that returns a boolean and execute some code, in this case calls ```Run()``` and ```Walk()```.
+These commands will call property ``` DistanceTravelled ``` and method ``` Walk() ``` on a ```Person``` object.
 
 ## Creating rule
-Now we create the rule, we are going to use the commands ```RunCommand``` and ```WalkCommand
-```, so we create the commands and invoke ```Match()``` on the object person ```p``` using the created expression ```op```.
+Now we are going to create the rule called ```rule```, we will do it using the previous commands, with these ones we will use method ```Process()``` in operator class using the object person ```person```.
 
-There are different expressions that can be used, in this case ```op``` represents a batch operation, all commands will be executed in order given, ```Match``` returns true if it matches or false if it does not match or there has been some error, in this case the rule only executes methods so ```res``` only indicates the success about the process.
+There are different expressions that can be used, in this case ```rule``` represents a conditional operation, it checks if the distance travelled by person object is less than 10, if the condition is true the command will be executed otherwise nothing will happen and false will be returned.
+
 ```C#
-public void RunAndWalk()
+public void Walk_If_True()
 {
-    RunCommand rc = new RunCommand();
-    WalkCommand wc = new WalkCommand();
-    Person p = new Person();
+    var gdc = new GetDistanceCommand();
+    var wc = new WalkCommand();
+    Person person = new Person();
     
-    var op = (rc + wc);
+    var rule = (gdc < 10) % wc;
 
-    var res = st.Match(op, p);
+    var res = rule.Process(p);
 
-    if(res==3)
+    if(rule)
     {
       Console.WriteLine("It runs!");
     }
@@ -82,6 +87,32 @@ public void RunAndWalk()
 }
 ```
 
+This is valid for simple rules, sometimes it's necessary save information in rule or get a more information, in that case we'll use RuleEngine, for it it's only necessary get one and use it, this is the same example with RuleEngine.
+
+```C#
+public void Walk_If_True()
+{
+    IRuleEngineService<Person> ruleEngineService = RuleEngineActivatorService<Person>.RuleEngine; // Get RuleEngine
+    var gdc = new GetDistanceCommand();
+    var wc = new WalkCommand();
+    Person person = new Person();
+    
+    var rule = (gdc < 10) % wc;
+
+    var res = ruleEngineService.Init(op, person); // Executes op in person 
+
+    var text = ruleEngineService.Serializer.Serialize(op); // Serializes op
+
+    if(res.ExecutionResult == ExecutionResult.Positive)
+    {
+      Console.WriteLine("It returns true and walk!");
+    }
+    else
+    {
+      Console.WriteLine("It returns false!");
+    }
+}
+
 ## Operators
 This table shows all operators available:
 - a, b, c ... n -> Commands
@@ -90,23 +121,25 @@ This table shows all operators available:
 
 |OP|Name|Description|
 |---|---|---|
-|a + b + c ... + n| Batch | Executes all commands in given order.
-|a > #| GreaterThan | Checks if result from command is greater than #
-|a > #| GreaterThanOrEquals | Checks if result from command is greater or equals than #
-|a < #| LessThan | Checks if result from command is less than #
-|a <= #| LessThanOrEquals | Checks if result from command is less or equals than #
-|(a)| Check | Executes command and returns command value that must be true or false
-| (a - (b - (c - (n))) | Function | Executes funcion a using b as parameter for a and c as parameter for b ...
-| !a | Not | Performs not operation on command result
+|a / b / c ... / n| Batch | Executes all operands in given order.
+|a > #| GreaterThan | Returns true if a is greater than #, otherwise false
+|a > #| GreaterThanOrEquals | Returns true if a is greater or equals than #, otherwise false
+|a < #| LessThan | Returns true if a is less than #, otherwise false
+|a <= #| LessThanOrEquals | Returns true if a is less or equals than #, otherwise false
+|a == b| Equals | Returns true if both operands are equals, otherwise false
+|a == b| NotEquals | Returns true if both operands are not equals, otherwise false
+|(a)| Check | Executes operand and returns operand value that must be true or false
+| !a | Not | Performs not operation on operand result
 | a & b | AndAlso | Processes and without short-circuit evaluation
-| a && b | And | Processes and
+| a && b | And | Processes and operation on operands a and b
 | a \| b | OrAlso | Processes or without short-circuit evaluation
-| a \|\| b | Or | Processes or
-| (op) % a | IfElse | Executes op and if result is true executes command a
-| (op) % a / b | IfElse | Executes op and if result is true executes command a otherwise executes b
+| a \|\| b | Or | Processes or on operands a and b
+| (op) % a | Jump | Executes op, if result is true executes operand a
+| (op) % (a,b) | Jump | Executes op, if result is true executes operand a otherwise executes b
 | (op1) * (op2) | Loop | Executes op2 while op1 be true
-| (op) >> # | Bitwise operator add | Shifts # based on op, if it's true it's shifted added
-| (op) << # | Bitwise operator remove | Shifts # based on op, if it's true it's shifted removed
+| (op) >> # | Bitwise operator add | Adds # to UserStatus variable in Rule object in a bitwise operation
+| (op) << # | Bitwise operator remove | Removes # to UserStatus variable in Rule object in a bitwise operation
 | (op1) % ~(op2) | Break | Stops execution if condition is met
-
+| +(op) | True | Executes op and returns true
+| -(op) | False | Executes op and returns false
 
