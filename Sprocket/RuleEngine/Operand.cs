@@ -26,7 +26,6 @@ namespace RaraAvis.Sprocket.RuleEngine
     {
         [MaybeNull]
         protected TTarget target;
-        [DisallowNull]
         protected Operand<TTarget, TValue> next = null!;
 
         /// <summary>
@@ -63,41 +62,41 @@ namespace RaraAvis.Sprocket.RuleEngine
 
         /// <inheritdoc/>
         [return: MaybeNull]
-        public abstract TValue Process([DisallowNull]TTarget target);
+        public abstract TValue Process(TTarget target);
 
-        public static Operator<TTarget> operator *([DisallowNull]Operand<TTarget, bool> condition, [DisallowNull]Operand<TTarget, TValue> operand)
+        public static Operator<TTarget> operator *(Operand<TTarget, bool> condition, Operand<TTarget, TValue> operand)
         {
             Loop<TTarget, TValue> loop = new Loop<TTarget, TValue>(condition, operand);
             return loop;
         }
 
-        public static Operator<TTarget> operator *([DisallowNull]Operator<TTarget> condition, [DisallowNull]Operand<TTarget, TValue> operand)
+        public static Operator<TTarget> operator *(Operator<TTarget> condition, Operand<TTarget, TValue> operand)
         {
             Loop<TTarget, TValue> loop = new Loop<TTarget, TValue>(condition, operand);
             return loop;
         }
 
-        public static Operator<TTarget> operator ==([DisallowNull]Operand<TTarget, TValue> command, [DisallowNull]TValue o)
+        public static Operator<TTarget> operator ==(Operand<TTarget, TValue> command, TValue o)
         {
             var left = new ValueAsOperand<TTarget, TValue>(o);
             Equals<TTarget, TValue> oe = new Equals<TTarget, TValue>(left, command);
             return oe;
         }
 
-        public static Operator<TTarget> operator !=([DisallowNull]Operand<TTarget, TValue> command, [DisallowNull]TValue o)
+        public static Operator<TTarget> operator !=(Operand<TTarget, TValue> command, TValue o)
         {
             var right = new ValueAsOperand<TTarget, TValue>(o);
             NotEquals<TTarget, TValue> oe = new NotEquals<TTarget, TValue>(command, right);
             return oe;
         }
 
-        public static Operand<TTarget, TValue> operator /([DisallowNull]Operand<TTarget, TValue> left, [DisallowNull] Operand<TTarget, TValue> right)
+        public static Operand<TTarget, TValue> operator /(Operand<TTarget, TValue> left,  Operand<TTarget, TValue> right)
         {
             left.Next = right;
             return left;
         }
 
-        public static Operator<TTarget> operator >=([DisallowNull]Operand<TTarget, TValue> operateLeft, [DisallowNull]TValue operateRight)
+        public static Operator<TTarget> operator >=(Operand<TTarget, TValue> operateLeft, TValue operateRight)
         {
             var left = new OperandAsComparable<TTarget, TValue>(operateLeft);
             var right = new ValueAsComparable<TTarget, TValue>(operateRight);
@@ -105,7 +104,7 @@ namespace RaraAvis.Sprocket.RuleEngine
             return gtoe;
         }
 
-        public static Operator<TTarget> operator <=([DisallowNull]Operand<TTarget, TValue> operateLeft, [DisallowNull]TValue operateRight)
+        public static Operator<TTarget> operator <=(Operand<TTarget, TValue> operateLeft, TValue operateRight)
         {
             var left = new OperandAsComparable<TTarget, TValue>(operateLeft);
             var right = new ValueAsComparable<TTarget, TValue>(operateRight);
@@ -113,7 +112,7 @@ namespace RaraAvis.Sprocket.RuleEngine
             return ltoe;
         }
 
-        public static Operator<TTarget> operator >([DisallowNull]Operand<TTarget, TValue> operateLeft, [DisallowNull] TValue operateRight)
+        public static Operator<TTarget> operator >(Operand<TTarget, TValue> operateLeft,  TValue operateRight)
         {
             var left = new OperandAsComparable<TTarget, TValue>(operateLeft);
             var right = new ValueAsComparable<TTarget, TValue>(operateRight);
@@ -121,7 +120,7 @@ namespace RaraAvis.Sprocket.RuleEngine
             return gtoe;
         }
 
-        public static Operator<TTarget> operator <([DisallowNull]Operand<TTarget, TValue> operateLeft, [DisallowNull]TValue operateRight)
+        public static Operator<TTarget> operator <(Operand<TTarget, TValue> operateLeft, TValue operateRight)
         {
             var left = new OperandAsComparable<TTarget, TValue>(operateLeft);
             var right = new ValueAsComparable<TTarget, TValue>(operateRight);
@@ -129,24 +128,24 @@ namespace RaraAvis.Sprocket.RuleEngine
             return gtoe;
         }
 
-        public static Operator<TTarget> operator +([DisallowNull]Operand<TTarget, TValue> operand)
+        public static Operator<TTarget> operator +(Operand<TTarget, TValue> operand)
         {
             var @operator = new OperandAsOperator<TTarget, TValue>(operand);
             return new True<TTarget>(@operator);
         }
 
-        public static Operator<TTarget> operator -([DisallowNull]Operand<TTarget, TValue> operand)
+        public static Operator<TTarget> operator -(Operand<TTarget, TValue> operand)
         {
             var @operator = new OperandAsOperator<TTarget, TValue>(operand);
             return new False<TTarget>(@operator);
         }
 
-        public static implicit operator TValue([DisallowNull]Operand<TTarget, TValue> operate)
+        public static implicit operator TValue(Operand<TTarget, TValue> operate)
         {
             return operate.Process(operate.target);
         }
 
-        public static implicit operator Operand<TTarget, TValue>([DisallowNull]Expression<Func<Rule<TTarget>, TValue>> operand)
+        public static implicit operator Operand<TTarget, TValue>(Expression<Func<Rule<TTarget>, TValue>> operand)
         {
             ExpressionAsOperand<TTarget, TValue> brk = new ExpressionAsOperand<TTarget, TValue>(operand);
             return brk;

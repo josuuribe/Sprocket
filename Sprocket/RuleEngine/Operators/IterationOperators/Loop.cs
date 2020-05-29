@@ -11,7 +11,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.IterationOperators
         [DataMember]
         public Operand<TTarget, TValue> Block { get; set; }
 
-        public Loop(Operator<TTarget> condition, [DisallowNull]Operand<TTarget, TValue> block) : base(condition)
+        public Loop(Operator<TTarget> condition, Operand<TTarget, TValue> block) : base(condition)
         {
             this.Block = block;
         }

@@ -51,7 +51,7 @@ namespace RaraAvis.Sprocket.RuleEngine
         private static BinaryOperator<TTarget> or = new OrElse<TTarget>();
 
         /// <inheritdoc/>
-        public abstract bool Process([DisallowNull]Rule<TTarget> rule);
+        public abstract bool Process(Rule<TTarget> rule);
 
 #pragma warning disable IDE0060 // Remove unused parameter
         public static bool operator true(Operator<TTarget> operatorTrue)

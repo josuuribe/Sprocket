@@ -8,13 +8,13 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         where TTarget : notnull
     {
         [DataMember]
-        [DisallowNull]
+        
         public virtual Operator<TTarget> Operator { get; set; }
         protected UnaryOperator()
         {
             this.Operator = new NullOperator();
         }
-        protected UnaryOperator([DisallowNull]Operator<TTarget> @operator)
+        protected UnaryOperator(Operator<TTarget> @operator)
         {
             this.Operator = @operator;
         }

@@ -8,10 +8,10 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         where TTarget : notnull
     {
         [DataMember]
-        [DisallowNull]
+        
         [NotNull]
         public Operator<TTarget> Condition { get; set; }
-        protected IterationOperator([DisallowNull]Operator<TTarget> condition)
+        protected IterationOperator(Operator<TTarget> condition)
         {
             this.Condition = condition;
         }

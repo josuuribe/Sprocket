@@ -11,7 +11,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.ComparisonOperators
         where T : notnull
         where U : IComparable
     {
-        public GreaterThan([DisallowNull] IOperand<T, U> operateLeft, [DisallowNull] IOperand<T, U> operateRight) : base(operateLeft, operateRight)
+        public GreaterThan( IOperand<T, U> operateLeft,  IOperand<T, U> operateRight) : base(operateLeft, operateRight)
         {
         }
 

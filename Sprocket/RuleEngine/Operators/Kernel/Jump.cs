@@ -18,12 +18,12 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.Kernel
         {
         }
 
-        public Jump([DisallowNull]Operator<TTarget> condition, [DisallowNull]IOperand<TTarget, bool> target) : this(condition)
+        public Jump(Operator<TTarget> condition, IOperand<TTarget, bool> target) : this(condition)
         {
             Target = (target, new Operand<TTarget, bool>.Noop());
         }
 
-        public Jump([DisallowNull]Operator<TTarget> condition, [DisallowNull](IOperand<TTarget, bool>, IOperand<TTarget, bool>) target) : this(condition)
+        public Jump(Operator<TTarget> condition, (IOperand<TTarget, bool>, IOperand<TTarget, bool>) target) : this(condition)
         {
             Target = target;
         }

@@ -14,13 +14,12 @@ namespace RaraAvis.Sprocket.RuleEngine.Casts
         private Expression<Func<Rule<TTarget>, TValue>> Expression { get; set; }
 
         [DataMember]
-        [DisallowNull]
         private string SerializedExpression
         {
             get; set;
         } = string.Empty;
 
-        public ExpressionAsOperand([DisallowNull]Expression<Func<Rule<TTarget>, TValue>> expression)
+        public ExpressionAsOperand(Expression<Func<Rule<TTarget>, TValue>> expression)
         {
             this.Expression = expression;
         }

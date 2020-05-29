@@ -24,14 +24,14 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Entities
         /// Contructor with element, useful for castings.
         /// </summary>
         /// <param name="element"></param>
-        public Rule([DisallowNull]TTarget element) : this()
+        public Rule(TTarget element) : this()
         {
             this.Target = element;
         }
         /// <summary>
         /// Target object using during the execution.
         /// </summary>
-        [DisallowNull]
+        
         public TTarget Target { get; set; }
         /// <summary>
         /// User status set by operators '>>' and '<<' during execution.

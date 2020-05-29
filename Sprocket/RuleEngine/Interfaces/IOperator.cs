@@ -15,6 +15,6 @@ namespace RaraAvis.Sprocket.RuleEngine.Interfaces
         /// </summary>
         /// <param name="rule">Rule object to be used specific to this <see cref="Rule{TTarget}"/>.</param>
         /// <returns>True if the operation has returned true, false otherwise.</returns>
-        bool Process([DisallowNull]Rule<TTarget> rule);
+        bool Process(Rule<TTarget> rule);
     }
 }

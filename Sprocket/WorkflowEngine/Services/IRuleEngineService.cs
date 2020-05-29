@@ -19,11 +19,10 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Services
         /// <param name="target">Target to be used.</param>
         /// <returns>Processed rule with all information.</returns>
         [return: NotNull]
-        Rule<TTarget> Init([DisallowNull]IOperator<TTarget> @operator, [DisallowNull]TTarget target);
+        Rule<TTarget> Init(IOperator<TTarget> @operator, TTarget target);
         /// <summary>
         /// Serializer that is being used, this can be injected with a custom implementation via MEF.
         /// </summary>
-        [DisallowNull]
         ISerializer<TTarget> Serializer { get; }
     }
 }

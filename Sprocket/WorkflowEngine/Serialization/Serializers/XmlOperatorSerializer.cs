@@ -14,7 +14,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
     internal class XmlOperatorSerializer<TTarget> : Serializer<TTarget>, ISerializer<TTarget>
         where TTarget : notnull
     {
-        [DisallowNull]
+        
         private readonly DataContractSerializer dataContractSerializer;
         [ImportingConstructor]
         public XmlOperatorSerializer():base()

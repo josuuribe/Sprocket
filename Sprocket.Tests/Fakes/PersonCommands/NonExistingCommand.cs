@@ -7,7 +7,7 @@ namespace RaraAvis.Sprocket.Tests.Fakes.PersonCommands
     internal class NonExistingCommand : Operand<Person, bool>
     {
         [return: MaybeNull]
-        public override bool Process([DisallowNull] Person target)
+        public override bool Process( Person target)
         {
             return false;
         }

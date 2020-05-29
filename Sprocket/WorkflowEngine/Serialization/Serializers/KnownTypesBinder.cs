@@ -8,14 +8,14 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization
 {
     internal class KnownTypesBinder : ISerializationBinder
     {
-        [DisallowNull]
+        
         public IList<Type> KnownTypes { get; set; } = new List<Type>();
         public KnownTypesBinder(IList<Type> knownTypes)
         {
             this.KnownTypes = knownTypes;
         }
         [return: MaybeNull]
-        public Type BindToType(string? assemblyName, [DisallowNull] string typeName)
+        public Type BindToType(string? assemblyName,  string typeName)
         {
             var type = KnownTypes.SingleOrDefault(t => t.Name == typeName);
             return (type?.ContainsGenericParameters ?? false) ? Type.GetType(assemblyName) : type!;

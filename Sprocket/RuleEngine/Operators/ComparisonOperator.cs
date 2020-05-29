@@ -9,15 +9,15 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         where TTarget : notnull
     {
         [DataMember]
-        [DisallowNull]
+        
         [NotNull]
         public IOperand<TTarget, TValue> OperateLeft;
         [DataMember]
-        [DisallowNull]
+        
         [NotNull]
         public IOperand<TTarget, TValue> OperateRight;
 
-        protected ComparisonOperator([DisallowNull]IOperand<TTarget, TValue> operateLeft, [DisallowNull] IOperand<TTarget, TValue> operateRight)
+        protected ComparisonOperator(IOperand<TTarget, TValue> operateLeft,  IOperand<TTarget, TValue> operateRight)
         {
             this.OperateLeft = operateLeft;
             this.OperateRight = operateRight;

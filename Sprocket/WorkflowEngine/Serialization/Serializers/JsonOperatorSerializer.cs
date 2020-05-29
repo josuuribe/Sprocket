@@ -12,7 +12,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
     internal class JsonOperatorSerializer<TTarget> : Serializer<TTarget>, ISerializer<TTarget>
         where TTarget : notnull
     {
-        [DisallowNull]
+        
         readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
         [ImportingConstructor]
         public JsonOperatorSerializer()
@@ -26,12 +26,12 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
             jsonSerializerSettings.SerializationBinder = typesBinder;
         }
         [return: NotNull]
-        public override IOperator<TTarget> Deserialize([DisallowNull]string text)
+        public override IOperator<TTarget> Deserialize(string text)
         {
             return (IOperator<TTarget>)(JsonConvert.DeserializeObject(text, jsonSerializerSettings))!;
         }
         [return: NotNull]
-        public override string Serialize([DisallowNull]IOperator<TTarget> @operator)
+        public override string Serialize(IOperator<TTarget> @operator)
         {
             return JsonConvert.SerializeObject(@operator, @operator.GetType(), jsonSerializerSettings);
         }

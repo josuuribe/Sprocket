@@ -9,7 +9,6 @@ namespace RaraAvis.Sprocket.RuleEngine.Casts
         where TTarget : notnull
     {
         [DataMember]
-        [DisallowNull]
         public TValue Value { get; set; }
 
         public ValueAsComparable(TValue comparable)
