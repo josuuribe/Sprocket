@@ -134,8 +134,8 @@ This table shows all operators available:
 | a && b | And | Processes and operation on operands a and b|
 | a \| b | OrAlso | Processes or without short-circuit evaluation|
 | a \|\| b | Or | Processes or on operands a and b|
-| (op) % a | Jump | Executes op, if result is true executes operand a|
-| (op) % (a,b) | Jump | Executes op, if result is true executes operand a otherwise executes b|
+| (op) % a | Jump (If-Then) | Executes op, if result is true executes operand a|
+| (op) % (a,b) | Jump (If-Then-Else) | Executes op, if result is true executes operand a otherwise executes b|
 | (op1) * (op2) | Loop | Executes op2 while op1 be true|
 | (op) >> # | Bitwise operator add | Adds # to UserStatus variable in Rule object in a bitwise operation|
 | (op) << # | Bitwise operator remove | Removes # to UserStatus variable in Rule object in a bitwise operation|
