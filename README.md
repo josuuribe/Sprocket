@@ -87,7 +87,7 @@ public void Walk_If_True()
 }
 ```
 
-This is valid for simple rules, sometimes it's necessary save information in rule or get a more information, in that case we'll use RuleEngine, for it it's only necessary get one and use it, this is the same example with RuleEngine.
+This is valid for simple rules, sometimes it's necessary save information in rule or get more information, in that case we'll use RuleEngine, for it it's only necessary get one and use it, this is the same example with RuleEngine.
 
 ```C#
 public void Walk_If_True()
