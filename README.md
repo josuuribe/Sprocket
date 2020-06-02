@@ -1,15 +1,17 @@
-This library creates simple business rules that can be serialized and save in a datastore, this is useful for create dynamic rules and avoid create application logic too much, these rules can also be created dinamically. This library has the next characteristics:
+This library creates simple business rules that can be serialized and save in a datastore, this is useful for create dynamic rules and avoid to create application logic that changes too often, these rules can also be created dinamically. For example you can have an application with little pieces of logic that can be joined or executed based on rules.
 
-- It does not use if
-- Flow guided by design
-- Anti-Null
+This library has the next characteristics:
+
+- It does not use if clause, _no decission no error_
+- Flow guided by design, _it's what it is_
+- No-Null, _get something always_
 
 # Simple example
 
 This section will provide a simple example about the main idea, wiki explains more features in detail like rules serialization. 
 
 ## Creating entity
-First you need an entity, a class where rules will act on.
+First you need an entity which contains the data to be used by rule.
 ```C#
 public class Person
 {
