@@ -112,6 +112,7 @@ public void Walk_If_True()
       Console.WriteLine("It returns false!");
     }
 }
+```
 
 ## Operators
 This table shows all operators available:
@@ -119,27 +120,27 @@ This table shows all operators available:
 - \# -> Number
 - op -> operation
 
-|OP|Name|Description|
+|Operator|Name|Description|
 |---|---|---|
-|a / b / c ... / n| Batch | Executes all operands in given order.
-|a > #| GreaterThan | Returns true if a is greater than #, otherwise false
-|a > #| GreaterThanOrEquals | Returns true if a is greater or equals than #, otherwise false
-|a < #| LessThan | Returns true if a is less than #, otherwise false
-|a <= #| LessThanOrEquals | Returns true if a is less or equals than #, otherwise false
-|a == b| Equals | Returns true if both operands are equals, otherwise false
-|a == b| NotEquals | Returns true if both operands are not equals, otherwise false
-|(a)| Check | Executes operand and returns operand value that must be true or false
-| !a | Not | Performs not operation on operand result
-| a & b | AndAlso | Processes and without short-circuit evaluation
-| a && b | And | Processes and operation on operands a and b
-| a \| b | OrAlso | Processes or without short-circuit evaluation
-| a \|\| b | Or | Processes or on operands a and b
-| (op) % a | Jump | Executes op, if result is true executes operand a
-| (op) % (a,b) | Jump | Executes op, if result is true executes operand a otherwise executes b
-| (op1) * (op2) | Loop | Executes op2 while op1 be true
-| (op) >> # | Bitwise operator add | Adds # to UserStatus variable in Rule object in a bitwise operation
-| (op) << # | Bitwise operator remove | Removes # to UserStatus variable in Rule object in a bitwise operation
-| (op1) % ~(op2) | Break | Stops execution if condition is met
-| +(op) | True | Executes op and returns true
-| -(op) | False | Executes op and returns false
+|a / b / c ... / n| Batch | Executes all operands in given order|
+|a > # | GreaterThan | Returns true if a is greater than #, otherwise false|
+|a > # | GreaterThanOrEquals | Returns true if a is greater or equals than #, otherwise false|
+|a < # | LessThan | Returns true if a is less than #, otherwise false|
+|a <= # | LessThanOrEquals | Returns true if a is less or equals than #, otherwise false|
+|a == b | Equals | Returns true if both operands are equals, otherwise false|
+|a == b | NotEquals | Returns true if both operands are not equals, otherwise false|
+| !a | Not | Performs not operation on operand result|
+| a & b | AndAlso | Processes and without short-circuit evaluation|
+| a && b | And | Processes and operation on operands a and b|
+| a \| b | OrAlso | Processes or without short-circuit evaluation|
+| a \|\| b | Or | Processes or on operands a and b|
+| (op) % a | Jump | Executes op, if result is true executes operand a|
+| (op) % (a,b) | Jump | Executes op, if result is true executes operand a otherwise executes b|
+| (op1) * (op2) | Loop | Executes op2 while op1 be true|
+| (op) >> # | Bitwise operator add | Adds # to UserStatus variable in Rule object in a bitwise operation|
+| (op) << # | Bitwise operator remove | Removes # to UserStatus variable in Rule object in a bitwise operation|
+| (op1) % ~(op2) | Break | Stops execution if condition is met|
+| +(op) | True | Executes op and returns true|
+| -(op) | False | Executes op and returns false|
+
 
