@@ -5,10 +5,24 @@
     <RootNamespace>RaraAvis.Sprocket</RootNamespace>
     <AssemblyName>RaraAvis.Sprocket</AssemblyName>
     <Nullable>enable</Nullable>
+    <Authors>Josu Uribe</Authors>
+    <Company>RaraAvis</Company>
+    <Product>Sprocket</Product>
+    <Description>This library creates simple business rules that can be serialized and save in a datastore, this is useful for create dynamic rules and avoid to create application logic that changes too often, these rules can also be created dinamically. For example you can have an application with little pieces of logic that can be joined or executed based on rules.</Description>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/josuuribe/Sprocket</PackageProjectUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile></DocumentationFile>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
   <ItemGroup>
