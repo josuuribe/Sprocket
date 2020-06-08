@@ -18,6 +18,14 @@
     <PackageIcon>nuget.png</PackageIcon>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Deterministic>True</Deterministic>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
@@ -31,12 +39,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RuleEngine\Operators\ConditionalOperators\**" />
-    <Compile Remove="WorkflowEngine\Entities\Enums\**" />
-    <EmbeddedResource Remove="RuleEngine\Operators\ConditionalOperators\**" />
-    <EmbeddedResource Remove="WorkflowEngine\Entities\Enums\**" />
-    <None Remove="RuleEngine\Operators\ConditionalOperators\**" />
-    <None Remove="WorkflowEngine\Entities\Enums\**" />
     <None Include="images\nuget.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -66,6 +68,10 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.4" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.4" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Serialize.Linq" Version="1.8.1" />
     <PackageReference Include="System.Composition" Version="1.4.1" />
