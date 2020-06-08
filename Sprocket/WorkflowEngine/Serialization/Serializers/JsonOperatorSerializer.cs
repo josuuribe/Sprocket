@@ -9,7 +9,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
 {
     [Export(typeof(ISerializer<>))]
     [ExportMetadata("serializationFormat", "json")]
-    internal class JsonOperatorSerializer<TTarget> : Serializer<TTarget>, ISerializer<TTarget>
+    internal class JsonOperatorSerializer<TTarget> : Serializer<TTarget>
         where TTarget : notnull
     {
         

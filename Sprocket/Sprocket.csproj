@@ -11,6 +11,11 @@
     <Description>This library creates simple business rules that can be serialized and save in a datastore, this is useful for create dynamic rules and avoid to create application logic that changes too often, these rules can also be created dinamically. For example you can have an application with little pieces of logic that can be joined or executed based on rules.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/josuuribe/Sprocket</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/josuuribe/Sprocket</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>raraavis sprocket rule engine</PackageTags>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageIcon>nuget.png</PackageIcon>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -32,6 +37,10 @@
     <EmbeddedResource Remove="WorkflowEngine\Entities\Enums\**" />
     <None Remove="RuleEngine\Operators\ConditionalOperators\**" />
     <None Remove="WorkflowEngine\Entities\Enums\**" />
+    <None Include="images\nuget.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

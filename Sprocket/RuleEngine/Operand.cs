@@ -55,7 +55,7 @@ namespace RaraAvis.Sprocket.RuleEngine
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
         }
 
-        protected Operand([NotNull]TTarget target)
+        protected Operand([NotNull] TTarget target)
         {
             this.target = target;
         }
@@ -90,7 +90,7 @@ namespace RaraAvis.Sprocket.RuleEngine
             return oe;
         }
 
-        public static Operand<TTarget, TValue> operator /(Operand<TTarget, TValue> left,  Operand<TTarget, TValue> right)
+        public static Operand<TTarget, TValue> operator /(Operand<TTarget, TValue> left, Operand<TTarget, TValue> right)
         {
             left.Next = right;
             return left;
@@ -112,7 +112,7 @@ namespace RaraAvis.Sprocket.RuleEngine
             return ltoe;
         }
 
-        public static Operator<TTarget> operator >(Operand<TTarget, TValue> operateLeft,  TValue operateRight)
+        public static Operator<TTarget> operator >(Operand<TTarget, TValue> operateLeft, TValue operateRight)
         {
             var left = new OperandAsComparable<TTarget, TValue>(operateLeft);
             var right = new ValueAsComparable<TTarget, TValue>(operateRight);

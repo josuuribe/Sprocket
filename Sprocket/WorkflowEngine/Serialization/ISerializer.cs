@@ -16,13 +16,13 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization
         /// <param name="operator">Operator to serialize.</param>
         /// <returns>Serialized string.</returns>
         [return: NotNull]
-        string Serialize([NotNull]IOperator<TTarget> @operator);
+        string Serialize(IOperator<TTarget> @operator);
         /// <summary>
         /// Deserializes a string to get a <see cref="IOperator{TTarget}" />.
         /// </summary>
         /// <param name="serialized">String to be deserialized.</param>
         /// <returns>A <see cref="IOperator{TTarget}"/> object or null if object can not be deserialized.</returns>
         [return: MaybeNull]
-        IOperator<TTarget> Deserialize([NotNull]string serialized);
+        IOperator<TTarget> Deserialize(string serialized);
     }
 }

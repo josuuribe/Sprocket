@@ -14,7 +14,6 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization
         {
             this.KnownTypes = knownTypes;
         }
-        [return: MaybeNull]
         public Type BindToType(string? assemblyName,  string typeName)
         {
             var type = KnownTypes.SingleOrDefault(t => t.Name == typeName);

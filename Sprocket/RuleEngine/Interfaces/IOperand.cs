@@ -15,6 +15,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Interfaces
         /// </summary>
         /// <param name="target">Target to be used.</param>
         /// <returns>The value computed by operand.</returns>
+        [return: MaybeNull]
         TValue Process(TTarget target);
     }
 }

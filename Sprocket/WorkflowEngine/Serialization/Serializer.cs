@@ -1,4 +1,5 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
+using RaraAvis.Sprocket.WorkflowEngine.Serialization;
 using RaraAvis.Sprocket.WorkflowEngine.Services;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Runtime.Loader;
 
 namespace RaraAvis.Sprocket.WorkflowEngine
 {
-    internal abstract class Serializer<TTarget>
+    internal abstract class Serializer<TTarget>: ISerializer<TTarget>
         where TTarget : notnull
     {
         protected List<Type> knownTypes = new List<Type>();
@@ -27,9 +28,9 @@ namespace RaraAvis.Sprocket.WorkflowEngine
         #endregion
         #region ·   Methods   ·
         [return: NotNull]
-        public abstract string Serialize([NotNull]IOperator<TTarget> @operator);
+        public abstract string Serialize(IOperator<TTarget> @operator);
         [return: MaybeNull]
-        public abstract IOperator<TTarget> Deserialize([NotNull]string text);
+        public abstract IOperator<TTarget> Deserialize(string text);
         #endregion
     }
 }
