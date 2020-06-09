@@ -16,7 +16,7 @@
     <PackageTags>raraavis sprocket rule engine</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageIcon>nuget.png</PackageIcon>
-    <Version>1.0.0</Version>
+    <Version>1.0</Version>
   </PropertyGroup>
 
   <PropertyGroup>
