@@ -9,7 +9,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
     {
 
         [DataMember]
-        
+
         [NotNull]
         public virtual Operator<TTarget> Operator { get; set; }
 

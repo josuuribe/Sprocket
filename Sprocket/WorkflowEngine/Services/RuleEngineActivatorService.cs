@@ -13,7 +13,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Services
     /// <summary>
     /// Bootstrap for Rule engine.
     /// </summary>
-    /// <typeparam name="T">Target type to use.</typeparam>
+    /// <typeparam name="TTarget">Target type to use.</typeparam>
     public static class RuleEngineActivatorService<TTarget>
         where TTarget : notnull
     {

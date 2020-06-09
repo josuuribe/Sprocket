@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.RuleEngine.Operators
 {
@@ -8,7 +7,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators
         where TTarget : notnull
     {
         [DataMember]
-        
+
         public virtual Operator<TTarget> Operator { get; set; }
         protected UnaryOperator()
         {

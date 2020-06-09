@@ -12,7 +12,7 @@ using System.Runtime.Serialization;
 namespace RaraAvis.Sprocket.RuleEngine
 {
     /// <summary>
-    /// Operand to execute on <see cref="TTarget"/> and return a value.
+    /// Operand to execute on target and return a value.
     /// </summary>
     /// <typeparam name="TTarget">Target type to use.</typeparam>
     /// <typeparam name="TValue">Value type returned.</typeparam>

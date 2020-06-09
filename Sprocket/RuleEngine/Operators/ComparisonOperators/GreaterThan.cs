@@ -1,7 +1,6 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.RuleEngine.Operators.ComparisonOperators
@@ -11,7 +10,7 @@ namespace RaraAvis.Sprocket.RuleEngine.Operators.ComparisonOperators
         where T : notnull
         where U : IComparable
     {
-        public GreaterThan( IOperand<T, U> operateLeft,  IOperand<T, U> operateRight) : base(operateLeft, operateRight)
+        public GreaterThan(IOperand<T, U> operateLeft, IOperand<T, U> operateRight) : base(operateLeft, operateRight)
         {
         }
 

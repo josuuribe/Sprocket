@@ -9,7 +9,7 @@ namespace RaraAvis.Sprocket.Tests.Fakes.Entities.Functions.PersonFunctions
         [DataMember]
         public Operand<Person, Person> Parameter { get; set; }
 
-        public GetNameFunction(Operand<Person, Person> op) { }
+        public GetNameFunction() { }
 
         public override string Process(Person element)
         {

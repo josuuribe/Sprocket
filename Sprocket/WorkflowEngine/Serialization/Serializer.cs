@@ -9,7 +9,7 @@ using System.Runtime.Loader;
 
 namespace RaraAvis.Sprocket.WorkflowEngine
 {
-    internal abstract class Serializer<TTarget>: ISerializer<TTarget>
+    internal abstract class Serializer<TTarget> : ISerializer<TTarget>
         where TTarget : notnull
     {
         protected List<Type> knownTypes = new List<Type>();

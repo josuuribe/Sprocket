@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Composition;
 using System.Diagnostics.CodeAnalysis;
 
@@ -12,7 +11,7 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
     internal class JsonOperatorSerializer<TTarget> : Serializer<TTarget>
         where TTarget : notnull
     {
-        
+
         readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings();
         [ImportingConstructor]
         public JsonOperatorSerializer()

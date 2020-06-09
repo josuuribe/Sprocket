@@ -1,5 +1,4 @@
 ﻿using RaraAvis.Sprocket.WorkflowEngine.Entities;
-using System.Diagnostics.CodeAnalysis;
 
 namespace RaraAvis.Sprocket.RuleEngine.Interfaces
 {

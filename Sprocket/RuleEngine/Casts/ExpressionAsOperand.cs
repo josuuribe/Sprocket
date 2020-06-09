@@ -1,7 +1,6 @@
 ﻿using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using Serialize.Linq.Serializers;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 

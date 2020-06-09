@@ -1,5 +1,4 @@
 ﻿using RaraAvis.Sprocket.WorkflowEngine.Entities;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace RaraAvis.Sprocket.RuleEngine.Operators.IterationOperators

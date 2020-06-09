@@ -1,7 +1,6 @@
 ﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
 using System;
 using System.Composition;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
@@ -14,10 +13,10 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Serialization.Serializers
     internal class XmlOperatorSerializer<TTarget> : Serializer<TTarget>, ISerializer<TTarget>
         where TTarget : notnull
     {
-        
+
         private readonly DataContractSerializer dataContractSerializer;
         [ImportingConstructor]
-        public XmlOperatorSerializer():base()
+        public XmlOperatorSerializer() : base()
         {
             DataContractSerializerSettings dcss = new DataContractSerializerSettings
             {

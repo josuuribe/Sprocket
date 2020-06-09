@@ -1,5 +1,4 @@
-﻿using RaraAvis.Sprocket.RuleEngine.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.Runtime.Serialization;

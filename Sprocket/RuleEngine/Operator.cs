@@ -7,7 +7,6 @@ using RaraAvis.Sprocket.RuleEngine.Operators.Kernel;
 using RaraAvis.Sprocket.RuleEngine.Operators.UnaryOperators;
 using RaraAvis.Sprocket.WorkflowEngine.Entities;
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 
@@ -120,7 +119,7 @@ namespace RaraAvis.Sprocket.RuleEngine
         {
             AddFlag<TTarget> addFlag = new AddFlag<TTarget>(@operator, shift);
             return addFlag;
-        }        
+        }
         public static Operator<TTarget> operator <<(Operator<TTarget> @operator, int shift)
         {
             RemoveFlag<TTarget> removeFlag = new RemoveFlag<TTarget>(@operator, shift);

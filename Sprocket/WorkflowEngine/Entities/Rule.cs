@@ -1,12 +1,11 @@
 ﻿using RaraAvis.Sprocket.RuleEngine;
-using System.Diagnostics.CodeAnalysis;
 
 namespace RaraAvis.Sprocket.WorkflowEngine.Entities
 {
     /// <summary>
     /// Class that stores the target and information related to the execution context.
     /// </summary>
-    /// <typeparam name="T">Target type.</typeparam>
+    /// <typeparam name="TTarget">Target type.</typeparam>
     public sealed class Rule<TTarget>
         where TTarget : notnull
     {
@@ -31,10 +30,10 @@ namespace RaraAvis.Sprocket.WorkflowEngine.Entities
         /// <summary>
         /// Target object using during the execution.
         /// </summary>
-        
+
         public TTarget Target { get; set; }
         /// <summary>
-        /// User status set by operators '>>' and '<<' during execution.
+        /// User status set by operators '&gt;&gt;' and '&lt;&lt;' during execution.
         /// </summary>
         public int UserStatus { get; set; }
         /// <summary>
