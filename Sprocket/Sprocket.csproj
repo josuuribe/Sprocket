@@ -23,9 +23,9 @@
     <Deterministic>True</Deterministic>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
+  <!--<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
+  </PropertyGroup>-->
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
