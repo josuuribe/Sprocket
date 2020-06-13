@@ -1,3 +1,5 @@
+[![Build Status](https://tfsprodweu2.visualstudio.com/Ab1015571-a4cf-4375-8c55-56c5c90abe5d/Sprocket/_apis/build/status/Sprocket-ASP.NET%20Core-CI?branchName=master)](https://tfsprodweu2.visualstudio.com/Ab1015571-a4cf-4375-8c55-56c5c90abe5d/Sprocket/_build/latest?definitionId=18&branchName=master)
+
 This library creates simple business rules that can be serialized and save in a datastore, this is useful for create dynamic rules and avoid to create application logic that changes too often, these rules can also be created dinamically. For example you can have an application with little pieces of logic that can be joined or executed based on rules.
 
 This library has the next characteristics:
