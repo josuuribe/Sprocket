@@ -1,5 +1,6 @@
-[![Build Status](https://tfsprodweu2.visualstudio.com/Ab1015571-a4cf-4375-8c55-56c5c90abe5d/Sprocket/_apis/build/status/Sprocket-ASP.NET%20Core-CI?branchName=master)](https://tfsprodweu2.visualstudio.com/Ab1015571-a4cf-4375-8c55-56c5c90abe5d/Sprocket/_build/latest?definitionId=18&branchName=master)[![NuGet version](https://img.shields.io/nuget/v/RaraAvis.Sprocket?label=NuGet)](https://img.shields.io/nuget/v/RaraAvis.Sprocket?label=NuGet)[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=sonar.sprocket&branch=master&metric=coverage
-)](https://sonarcloud.io/api/project_badges/measure?project=sonar.sprocket&branch=master&metric=coverage)  
+[![Build Status](https://tfsprodweu2.visualstudio.com/Ab1015571-a4cf-4375-8c55-56c5c90abe5d/Sprocket/_apis/build/status/Sprocket-ASP.NET%20Core-CI?branchName=master)](https://tfsprodweu2.visualstudio.com/Ab1015571-a4cf-4375-8c55-56c5c90abe5d/Sprocket/_build/latest?definitionId=18&branchName=master)[![NuGet version](https://img.shields.io/nuget/v/RaraAvis.Sprocket?label=NuGet)](https://img.shields.io/nuget/v/RaraAvis.Sprocket?label=NuGet)[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=sonar.sprocket&branch=master&metric=coverage
+)](https://sonarcloud.io/api/project_badges/measure?project=sonar.sprocket&branch=master&metric=coverage)[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=sonar.sprocket&branch=master&metric=reliability_rating
+)](https://sonarcloud.io/api/project_badges/measure?project=sonar.sprocket&branch=master&metric=reliability_rating)
 
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/quality_gate?project=sonar.sprocket&branch=master
