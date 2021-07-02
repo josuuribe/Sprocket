@@ -71,9 +71,9 @@ public class WalkCommand : Operand<Person, bool>
 These commands will call property ``` DistanceTravelled ``` and method ``` Walk() ``` on a ```Person``` object.
 
 ## Creating rule
-Now we are going to create the rule called ```rule```, we will do it using the previous commands, with these ones we will use method ```Process()``` in operator class using the object person ```person```.
+Now we are going to create the rule called ```rule```, we will do it using the previous commands, then with ```rule``` we will use ```Process()``` method using the object  ```person```, in this case an empty object tipically it will be a preconfigure object.
 
-There are different expressions that can be used, in this case ```rule``` represents a conditional operation, it checks if the distance travelled by person object is less than 10, if the condition is true the command ```wc``` will be executed and the distance travelled will be increased in 1, otherwise nothing will happen and false will be returned.
+There are different expressions that can be used, in this case ```rule``` represents a conditional operation, so we use the overloaded **%** operator, it checks (using ```gdc``` command) if the distance travelled by person object is less than 10, if the condition is true the command ```wc``` will be executed and the distance travelled will be increased in 1, otherwise nothing will happen and false will be returned.
 
 ```C#
 public void Walk_If_True()
